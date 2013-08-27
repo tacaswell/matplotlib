@@ -17,13 +17,18 @@
 # * Movies
 #   * Can blit be enabled for movies?
 # * Need to consider event sources to allow clicking through multiple figures
+from __future__ import absolute_import
+
 import sys
 import itertools
+import collections
 import contextlib
+import matplotlib.transforms as mtransforms
 from matplotlib.cbook import iterable, is_string_like
 from matplotlib.compat import subprocess
 from matplotlib import verbose
 from matplotlib import rcParams
+from tight_layout import get_renderer
 
 # Other potential writing methods:
 # * http://pymedia.org/
@@ -552,6 +557,8 @@ class Animation(object):
         # fire events and try to draw to a deleted figure.
         self._close_id = self._fig.canvas.mpl_connect('close_event',
                                                       self._stop)
+
+        self._renderer = get_renderer(self._fig)
         if self._blit:
             self._setup_blit()
 
@@ -783,19 +790,25 @@ class Animation(object):
     def _blit_draw(self, artists, bg_cache):
         # Handles blitted drawing, which renders only the artists given instead
         # of the entire figure.
-        updated_ax = []
+        updated_ax = collections.defaultdict(list)
+        # get list of artists in each axes
         for a in artists:
-            # If we haven't cached the background for this axes object, do
-            # so now. This might not always be reliable, but it's an attempt
-            # to automate the process.
-            if a.axes not in bg_cache:
-                bg_cache[a.axes] = a.figure.canvas.copy_from_bbox(a.axes.bbox)
-            a.axes.draw_artist(a)
-            updated_ax.append(a.axes)
+            updated_ax[a.axes].append(a)
 
-        # After rendering all the needed artists, blit each axes individually.
-        for ax in set(updated_ax):
-            ax.figure.canvas.blit(ax.bbox)
+        # iterate over the axes and artists we found
+        for ax, arts in updated_ax.iteritems():
+            # make a bbox that surrounds all the artists and the axis
+            bbox = mtransforms.Bbox.union(
+                    [b for b in (a.get_window_extent(self._renderer) for a in arts)
+                     if b.width != 0 or b.height != 0] + [ax.bbox, ])
+            # if we haven't seen this axes yet cache it
+            if ax not in bg_cache:
+                bg_cache[ax] = ax.figure.canvas.copy_from_bbox(bbox)
+            # draw all of the artists
+            for a in arts:
+                ax.draw_artist(a)
+            # blit the axes
+            ax.figure.canvas.blit(bbox)
 
     def _blit_clear(self, artists, bg_cache):
         # Get a list of the axes that need clearing from the artists that
