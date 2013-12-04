@@ -7,6 +7,7 @@ from . import backend_gtk3
 from . import backend_cairo
 from matplotlib.figure import Figure
 
+
 class RendererGTK3Cairo(backend_cairo.RendererCairo):
     def set_context(self, ctx):
         self.gc.ctx = ctx
@@ -22,8 +23,8 @@ class FigureCanvasGTK3Cairo(backend_gtk3.FigureCanvasGTK3,
         self._renderer = RendererGTK3Cairo(self.figure.dpi)
 
     def _render_figure(self, width, height):
-        self._renderer.set_width_height (width, height)
-        self.figure.draw (self._renderer)
+        self._renderer.set_width_height(width, height)
+        self.figure.draw(self._renderer)
 
     def on_draw_event(self, widget, ctx):
         """ GtkDrawable draw event, like expose_event in GTK 2.X
@@ -33,7 +34,8 @@ class FigureCanvasGTK3Cairo(backend_gtk3.FigureCanvasGTK3,
         #if self._need_redraw:
         self._renderer.set_context(ctx)
         allocation = self.get_allocation()
-        x, y, w, h = allocation.x, allocation.y, allocation.width, allocation.height
+        x, y, w, h = (allocation.x, allocation.y,
+                        allocation.width, allocation.height)
         self._render_figure(w, h)
         #self._need_redraw = False
 
