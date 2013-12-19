@@ -51,9 +51,6 @@ def _gtk_cleanup():
         Gtk.main_quit()
 
 
-FigureCanvas = FigureCanvasGTK3
-FigureManager = FigureManagerGTK3
-
-FigureManager._key_press_handler = staticmethod(key_press_handler)
-FigureManager._destroy_callback = staticmethod(Gcf.destroy)
-FigureManager._gtk_cleanup = staticmethod(_gtk_cleanup)
+FigureManagerGTK3._key_press_handler = staticmethod(key_press_handler)
+FigureManagerGTK3._destroy_callback = staticmethod(Gcf.destroy)
+FigureManagerGTK3._gtk_cleanup = staticmethod(_gtk_cleanup)

@@ -22,8 +22,3 @@ if six.PY3:
 
 FigureCanvas = FigureCanvasGTK3Cairo
 FigureManager = FigureManagerGTK3
-
-# set the call backs
-FigureManager._key_press_handler = staticmethod(key_press_handler)
-FigureManager._destroy_callback = staticmethod(Gcf.destroy)
-FigureManager._gtk_cleanup = staticmethod(_gtk_cleanup)

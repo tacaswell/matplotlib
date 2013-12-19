@@ -42,9 +42,8 @@ class Show(ShowBase):
         QtGui.qApp.exec_()
 show = Show()
 
-FigureCanvas = FigureCanvasQT
 
-FigureManager = FigureManagerQT
 # register default key_handlers
-FigureManager._key_press_handler = staticmethod(key_press_handler)
-FigureManager._destroy_callback = staticmethod(Gcf.destroy)
+FigureManagerQT._key_press_handler = staticmethod(key_press_handler)
+FigureManagerQT._destroy_callback = staticmethod(Gcf.destroy)
+
