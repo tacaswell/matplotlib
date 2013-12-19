@@ -900,7 +900,3 @@ def error_msg_gtk(msg, parent=None):
         message_format=msg)
     dialog.run()
     dialog.destroy()
-
-
-FigureCanvas = FigureCanvasGTK3
-FigureManager = FigureManagerGTK3
