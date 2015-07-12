@@ -11,6 +11,7 @@ from IPython.utils.traitlets import (Int, Float, Bool, Dict, List, Instance,
                                      Union, TraitError, HasTraits, 
                                      NoDefaultSpecified, TraitType)
 import numpy as np
+import re
 
 class Configurable(Configurable): pass
 
@@ -92,6 +93,7 @@ class Color(TraitType):
     info_text = 'float, int, tuple of float or int, or a hex string color'
     default_value = (0.0,0.0,0.0,0.0)
     named_colors = {}
+    _is_hex16 = re.compile(r'#[a-fA-F0-9]{3}(?:[a-fA-F0-9]{3})?$')
 
     def _int_to_float(self, value):
         as_float = (np.array(value)/255).tolist()
@@ -107,17 +109,12 @@ class Color(TraitType):
         return as_hex
 
     def _hex_to_float(self, value):
-        # Expects #FFFFFF format
-        split_hex = (value[1:3],value[3:5],value[5:7])
-        as_float = (np.array([int(v,16) for v in split_hex])/255.0).tolist()
+        if len(value) == 7:
+            split_hex = (value[1:3],value[3:5],value[5:7])
+            as_float = (np.array([int(v,16) for v in split_hex])/255.0).tolist()
+        elif len(value) == 4:
+            as_float = (np.array([int(v+v,16) for v in value[1:]])/255.0).tolist()
         return as_float
-
-    def _is_hex16(self, value):
-        try:
-            int(value, 16)
-            return True
-        except:
-            return False
 
     def _float_to_shade(self, value):
         grade = value*255.0
@@ -129,21 +126,28 @@ class Color(TraitType):
 
     def validate(self, obj, value):
         in_range = False
-        if value is None or value is False or value in ['none','']:
-            # Return transparent if no other default alpha was set
-            return (0.0, 0.0, 0.0, 1.0)
+        if value is True:
+            self.error(obj, value)
 
-        if isinstance(value, float) and 0 <= value <= 1:
-            value = self._float_to_shade(value)
-        else:
-            in_range = False
+        elif value is None or value is False or value in ['none','']:
+            value = (0.0, 0.0, 0.0, 1.0)
+            in_range = True
 
-        if isinstance(value, int) and 0 <= value <= 255:
-            value = self._int_to_shade(value)
-        else:
-            in_range = False
+        elif isinstance(value, float):
+            if 0 <= value <= 1:
+                value = self._float_to_shade(value)
+                in_range = True
+            else:
+                in_range = False
 
-        if isinstance(value, (tuple, list)) and len(value) in (3,4):
+        elif isinstance(value, int):
+            if 0 <= value <= 255:
+                value = self._int_to_shade(value)
+                in_range = True
+            else:
+                in_range = False
+
+        elif isinstance(value, (tuple, list)) and len(value) in (3,4):
             is_all_float = np.prod([isinstance(v, (float)) for v in value])
             in_range = np.prod([(0 <= v <= 1) for v in value])
             if is_all_float and in_range:
@@ -154,10 +158,8 @@ class Color(TraitType):
                 if is_all_int and in_range:
                     value = self._int_to_float(value)
 
-        if isinstance(value, str) and len(value) == 7 and value[0] == '#':
-            is_all_hex16 = np.prod([self._is_hex16(v) for v in\
-                                    (value[1:3],value[3:5],value[5:7])])
-            if is_all_hex16:
+        elif isinstance(value, str) and len(value) in [4,7] and value[0] == '#':
+            if self._is_hex16.match(value):
                 value = self._hex_to_float(value)
                 in_range = np.prod([(0 <= v <= 1) for v in value])
                 if in_range:
@@ -166,7 +168,7 @@ class Color(TraitType):
         elif isinstance(value, str) and value in self.named_colors:
             value = self.validate(obj, self.named_colors[value])
             in_range = True
-
+            
         if in_range:
             if self._metadata['as_hex']:
                 return self._float_to_hex(value)

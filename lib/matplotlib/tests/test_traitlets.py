@@ -3,22 +3,24 @@ from __future__ import absolute_import
 from nose.tools import *
 from unittest import TestCase
 from matplotlib.mpl_traitlets import Color, HasTraits
+from IPython.utils.traitlets import TraitError
 
 class ColorTestCase(TestCase):
     """Tests for the Color traits"""
 
     def setUp(self):
         self.transparent_values = [None, False, '', 'none']
-        self.black_values = ['#000000', (0,0,0,0), 0, 0.0, (.0,.0,.0), (.0,.0,.0,.0)]
+        self.black_values = ['#000000', '#000',(0,0,0,0), 0, 0.0, (.0,.0,.0), (.0,.0,.0,.0)]
         self.colored_values = ['#BE3537', (190,53,55), (0.7451, 0.20784, 0.21569)]
-        self.unvalid_values = ['áfaef', '#FFF', '#0SX#$S', (0,0,0), (0.45,0.3), (()), {}, True]
+        self.unvalid_values = ['áfaef', '#0SX#$S', (0.45,0.3), 3.4, 344, (()), {}, True]
 
     def _evaluate_unvalids(self, a):
         for values in self.unvalid_values:
             try:
                 a.color = values
-            except:
-                assert_raises(TypeError)
+                assert_true(False)
+            except TraitError:
+                assert_raises(TraitError)
 
     def test_noargs(self):
         class A(HasTraits):
