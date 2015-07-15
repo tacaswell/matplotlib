@@ -10,7 +10,7 @@ class ColorTestCase(TestCase):
 
     def setUp(self):
         self.transparent_values = [None, False, '', 'none']
-        self.black_values = ['#000000', '#000',(0,0,0,0), 0, 0.0, (.0,.0,.0), (.0,.0,.0,.0)]
+        self.black_values = ['#000000', '#000',(0,0,0,255), 0, 0.0, (.0,.0,.0), (.0,.0,.0,1.0)]
         self.colored_values = ['#BE3537', (190,53,55), (0.7451, 0.20784, 0.21569)]
         self.unvalid_values = ['áfaef', '#0SX#$S', (0.45,0.3), 3.4, 344, (()), {}, True]
 
@@ -28,11 +28,11 @@ class ColorTestCase(TestCase):
         a = A()
         for values in self.black_values:
             a.color = values
-            assert_equal(a.color, (0.0,0.0,0.0,0.0))
+            assert_equal(a.color, (0.0,0.0,0.0,1.0))
 
         for values in self.colored_values:
             a.color = values
-            assert_equal(a.color, (0.7451, 0.20784, 0.21569, 0.0))
+            assert_equal(a.color, (0.7451, 0.20784, 0.21569, 1.0))
         self._evaluate_unvalids(a)
         
 
@@ -81,7 +81,7 @@ class ColorTestCase(TestCase):
 
         for colorname in ncolors:
             a.color = colorname
-            assert_equal(a.color, (0.0,0.0,1.0,0.0))
+            assert_equal(a.color, (0.0,0.0,1.0,1.0))
 
     def test_alpha(self):
         class A(HasTraits):
@@ -89,17 +89,18 @@ class ColorTestCase(TestCase):
 
         a = A()
 
-        assert_equal(a.color, (0.0, 0.0, 0.0, 0.0))
+        assert_equal(a.color, (0.0, 0.0, 0.0, 1.0))
 
         for values in self.transparent_values:
             a.color = values
-            assert_equal(a.color, (0.0,0.0,0.0,1.0))
+            assert_equal(a.color, (0.0,0.0,0.0,0.0))
 
         for values in self.black_values:
             a.color = values
             if isinstance(values, (tuple,list)) and len(values) == 4:
-                assert_equal(a.color, (0.0,0.0,0.0,0.0))
+                assert_equal(a.color, (0.0,0.0,0.0,1.0))
             else:
+                # User not provide alpha value so return default_alpha
                 assert_equal(a.color, (0.0,0.0,0.0,0.4))
 
         for values in self.colored_values:

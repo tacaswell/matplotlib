@@ -68,32 +68,30 @@ class Color(TraitType):
     Arguments:
         force_rgb: bool: Force the return in RGB format instead of RGB. Default: False
         as_hex: bool: Return the hex value instead. Default: False
-        default_alpha: float (0.0-1.0) or integer (0-255) default alpha value.
+        default_alpha: float (0.0-1.0) or integer (0-255). Default alpha value (1.0)
 
     Accepts:
-        string: a valid hex  color string (i.e. #FFFFFF). 7 chars
+        string: a valid hex color string (i.e. #FFFFFF). With 4 or 7 chars.
         tuple: a tuple of ints (0-255), or tuple of floats (0.0-1.0)
         float: A gray shade (0-1)
         integer: A gray shade (0-255)
 
-    Defaults: RGBA tuple, color black (0.0, 0.0, 0.0, 0.0)
+    Defaults: RGBA tuple, color black (0.0, 0.0, 0.0, 1.0)
 
     Return:
-       A hex color string, a rgb or a rgba tuple. Defaults to rgba. When
-       returning hex string, the alpha property will be ignored. A warning
-       will be emitted if alpha information is passed different then 0.0
+       A tuple of floats (r,g,b,a), (r,g,b) or a hex color string. i.e. "#FFFFFF".
 
     """
     metadata = {
         'force_rgb': False,
         'as_hex' : False,
-        'default_alpha' : 0.0,
+        'default_alpha' : 1.0,
         }
     allow_none = False
     info_text = 'float, int, tuple of float or int, or a hex string color'
-    default_value = (0.0,0.0,0.0,0.0)
+    default_value = (0.0,0.0,0.0, metadata['default_alpha'])
     named_colors = {}
-    _is_hex16 = re.compile(r'#[a-fA-F0-9]{3}(?:[a-fA-F0-9]{3})?$')
+    _re_color_hex = re.compile(r'#[a-fA-F0-9]{3}(?:[a-fA-F0-9]{3})?$')
 
     def _int_to_float(self, value):
         as_float = (np.array(value)/255).tolist()
@@ -130,7 +128,7 @@ class Color(TraitType):
             self.error(obj, value)
 
         elif value is None or value is False or value in ['none','']:
-            value = (0.0, 0.0, 0.0, 1.0)
+            value = (0.0, 0.0, 0.0, 0.0)
             in_range = True
 
         elif isinstance(value, float):
@@ -159,7 +157,7 @@ class Color(TraitType):
                     value = self._int_to_float(value)
 
         elif isinstance(value, str) and len(value) in [4,7] and value[0] == '#':
-            if self._is_hex16.match(value):
+            if self._re_color_hex.match(value):
                 value = self._hex_to_float(value)
                 in_range = np.prod([(0 <= v <= 1) for v in value])
                 if in_range:
@@ -170,16 +168,22 @@ class Color(TraitType):
             in_range = True
             
         if in_range:
+            # Convert to hex color string
             if self._metadata['as_hex']:
                 return self._float_to_hex(value)
+
+            # Ignores alpha and return rgb
             if self._metadata['force_rgb'] and in_range:
                 return tuple(np.round(value[:3],5).tolist())
-            else:
-                if len(value) == 3:
-                    value = tuple(np.round((value[0], value[1], value[2], 
-                                 self._metadata['default_alpha']),5).tolist())
-                elif len(value) == 4:
-                    value = tuple(np.round(value,5).tolist())
+
+            # If no alpha provided, use default_alpha, also round the output
+            if len(value) == 3:
+                value = tuple(np.round((value[0], value[1], value[2], 
+                             self._metadata['default_alpha']),5).tolist())
+            elif len(value) == 4:
+            # If no alpha provided, use default_alpha
+                value = tuple(np.round(value,5).tolist())
+
             return value
 
         self.error(obj, value)
