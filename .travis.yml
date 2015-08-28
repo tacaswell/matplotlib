@@ -57,9 +57,9 @@ before_install:
 install:
   # Install only from travis wheelhouse
   - if [ -z "$PRE" ]; then
-        wheelhouse_pip_install python-dateutil $NUMPY pyparsing pillow sphinx!=1.3.0;
+        wheelhouse_pip_install python-dateutil $NUMPY pyparsing pillow sphinx!=1.3.0 traitlets;
     else
-        pip install $PRE python-dateutil $NUMPY pyparsing pillow sphinx!=1.3.0;
+        pip install $PRE python-dateutil $NUMPY pyparsing pillow sphinx!=1.3.0 traitlets;
     fi
   # Always install from pypi
   - pip install $PRE nose pep8
