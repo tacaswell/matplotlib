@@ -970,25 +970,24 @@ class PiecewiseLinearNorm(Normalize):
 
     Normalizes data into the ``[0.0, 1.0]`` interval.
     """
-    def __init__(self, vmin=None, vcenter=None, vmax=None, clip=False):
-        """Normalize data with an offset midpoint
+    def __init__(self, data_points, map_points, clip=False):
+        """Normalize data with piecewise linear map
 
-        Useful when mapping data unequally centered around a conceptual
-        center, e.g., data that range from -2 to 4, with 0 as the midpoint.
+        This useful for color mapping values on to color maps that
+        have distinct break points in them, such as diverging color maps,
+        meteorological plots and terrain mapping.
+
 
         Parameters
         ----------
-        vmin : float, optional
-            The data value that defines ``0.0`` in the normalized data.
-            Defaults to the min value of the dataset.
+        data_points : array
+            Must be monotonic.  The data values where the break points should be.
 
-        vcenter : float, optional
-            The data value that defines ``0.5`` in the normalized data.
-            Defaults to halfway between *vmin* and *vmax*.
+        map_points : array
+            The map points in [0, 1].  All values must be in range [0, 1] and the first
+            and last points must be 0 and 1 respectively.
 
-        vmax : float, optional
-            The data value that defines ``1.0`` in the normalized data.
-            Defaults to the the max value of the dataset.
+            Must be same length as data_points
 
         clip : bool, optional (default is False)
             If *clip* is True, values beyond *vmin* and *vmax* will be set
@@ -1004,10 +1003,28 @@ class PiecewiseLinearNorm(Normalize):
         array([0., 0.25, 0.5, 0.625, 0.75, 0.875, 1.0])
 
         """
+        data_points = np.asarray(data_points)
+        map_points = np.asarray(map_points)
+        # make sure only 1D
+        if data_points.ndim != 1:
+            raise ValueError("data_points must be 1D")
+        # make sure at least 2 points
+        if len(data_points) < 2:
+            raise ValueError("data_points must have atleast 2 entries")
 
-        self.vmin = vmin
-        self.vcenter = vcenter
-        self.vmax = vmax
+        if data_points.shape != map_points.shape:
+            raise ValueError("data_points and map_points must be same shape")
+
+        if not np.all(np.diff(map_points) > 0):
+            raise ValueError("map_points must be monotonically increasing")
+        if not np.all(np.diff(data_points) > 0):
+            raise ValueError("data_points must be monotonically increasing")
+
+
+
+
+        self._data_points = data_points
+        self._map_points = map_points
         self.clip = clip
 
     def __call__(self, value, clip=None):
