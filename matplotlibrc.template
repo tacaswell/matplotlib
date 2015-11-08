@@ -368,7 +368,7 @@ backend      : %(backend)s
 #contour.corner_mask        : True   # True | False | legacy
 
 ### ERRORBAR PLOTS
-#errorbar.capsize : 3             # length of end cap on error bars in pixels
+#errorbar.capsize : 0             # length of end cap on error bars in pixels
 
 ### Agg rendering
 ### Warning: experimental, 2008/10/10
