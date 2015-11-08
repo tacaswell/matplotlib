@@ -982,7 +982,7 @@ class _AxesBase(martist.Artist):
         self._autoscaleYon = True
         self._xmargin = rcParams['axes.xmargin']
         self._ymargin = rcParams['axes.ymargin']
-        self._tight = False
+        self._tight = None
         self._update_transScale()  # needed?
 
         self._get_lines = _process_plot_var_args(self)
@@ -2120,10 +2120,11 @@ class _AxesBase(martist.Artist):
         autoscale_view.
         """
         if tight is None:
-            # if image data only just use the datalim
-            _tight = self._tight or (len(self.images) > 0 and
-                                     len(self.lines) == 0 and
-                                     len(self.patches) == 0)
+            if self._tight is None:
+                _tight = rcParams['axes.autolimit_mode'] == 'data'
+            else:
+                # if image data only just use the datalim
+                _tight = self._tight
         else:
             _tight = self._tight = bool(tight)
 

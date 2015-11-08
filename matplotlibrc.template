@@ -273,8 +273,10 @@ backend      : %(backend)s
                                             # as list of string colorspecs:
                                             # single letter, long name, or
                                             # web-style hex
-#axes.xmargin        : 0  # x margin.  See `axes.Axes.margins`
-#axes.ymargin        : 0  # y margin See `axes.Axes.margins`
+#axes.autolimit_mode : data # scale axes limits to the data.
+                            # Use "round_numbers" to round to nearest round numbers
+#axes.xmargin        : .05  # x margin.  See `axes.Axes.margins`
+#axes.ymargin        : .05  # y margin See `axes.Axes.margins`
 
 #polaraxes.grid      : True    # display grid on polar axes
 #axes3d.grid         : True    # display grid on 3d axes
