@@ -848,12 +848,7 @@ class Line2D(Artist):
     def get_markeredgecolor(self):
         mec = self._markeredgecolor
         if (is_string_like(mec) and mec == 'auto'):
-            if self._marker.get_marker() in ('.', ','):
-                return self._color
-            if self._marker.is_filled() and self.get_fillstyle() != 'none':
-                return 'k'  # Bad hard-wired default...
-            else:
-                return self._color
+            return self._color
         else:
             return mec
 

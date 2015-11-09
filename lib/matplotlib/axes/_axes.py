@@ -3709,7 +3709,7 @@ class Axes(_AxesBase):
     @docstring.dedent_interpd
     def scatter(self, x, y, s=20, c=None, marker='o', cmap=None, norm=None,
                 vmin=None, vmax=None, alpha=None, linewidths=None,
-                verts=None, edgecolors=None,
+                verts=None, edgecolors='face',
                 **kwargs):
         """
         Make a scatter plot of x vs y, where x and y are sequence like objects
@@ -3762,11 +3762,16 @@ class Axes(_AxesBase):
             If None, defaults to (lines.linewidth,).
 
         edgecolors : color or sequence of color, optional, default: None
-            If None, defaults to (patch.edgecolor).
+            If None, defaults to 'face'
+
             If 'face', the edge color will always be the same as
-            the face color.  If it is 'none', the patch boundary will not
-            be drawn.  For non-filled markers, the `edgecolors` kwarg
-            is ignored; color is determined by `c`.
+            the face color.
+
+            If it is 'none', the patch boundary will not
+            be drawn.
+
+            For non-filled markers, the `edgecolors` kwarg
+            is ignored and forced to 'face' internally.
 
         Returns
         -------
@@ -3822,6 +3827,8 @@ class Axes(_AxesBase):
                 c = facecolors
             else:
                 c = 'b'  # The original default
+        if edgecolors is None:
+            edgecolors = 'face'
 
         self._process_unit_info(xdata=x, ydata=y, kwargs=kwargs)
         x = self.convert_xunits(x)
