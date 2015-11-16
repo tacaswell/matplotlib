@@ -808,7 +808,7 @@ defaultParams = {
     'markers.fillstyle': ['full', validate_fillstyle],
 
     ## patch props
-    'patch.linewidth':   [2.5, validate_float],  # line width in points
+    'patch.linewidth':   [0.0, validate_float],  # line width in points
     'patch.edgecolor':   ['k', validate_color],  # black
     'patch.facecolor':   ['b', validate_color],  # blue
     'patch.antialiased': [True, validate_bool],  # antialiased (no jaggies)
