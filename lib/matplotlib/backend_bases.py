@@ -2007,9 +2007,7 @@ class FigureCanvasBase:
         strategy to prevent multiple renderings.
 
         """
-        if not self._is_idle_drawing:
-            with self._idle_draw_cntx():
-                self.draw(*args, **kwargs)
+        pass
 
     @cbook.deprecated("3.2")
     def draw_cursor(self, event):
