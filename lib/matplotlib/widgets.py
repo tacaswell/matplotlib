@@ -981,7 +981,6 @@ class Cursor(AxesWidget):
         else:
             self.__pressed = True
 
-
         self.connect_event('draw_event', self.clear)
 
         self.visible = True
@@ -993,9 +992,9 @@ class Cursor(AxesWidget):
             lineprops['animated'] = True
 
         self._coord = np.array([
-            0.5*(ax.get_xbound()[0] + ax.get_xbound()[1]),
-            0.5*(ax.get_ybound()[0] + ax.get_ybound()[1])
-            ])
+            0.5 * (ax.get_xbound()[0] + ax.get_xbound()[1]),
+            0.5 * (ax.get_ybound()[0] + ax.get_ybound()[1])
+        ])
 
         self.lineh = ax.axhline(self._coord[1], visible=False, **lineprops)
         self.linev = ax.axvline(self._coord[0], visible=False, **lineprops)
@@ -1090,6 +1089,7 @@ class Cursor(AxesWidget):
 
             self._draw_cursor()
 
+
 class Cursors(AxesWidget):
     """
     Several Cursors: horizontal and vertical lines that span the axes and
@@ -1147,10 +1147,9 @@ class Cursors(AxesWidget):
 
         .. plot :: mpl_examples/widgets/cursor.py
         """
-        #TODO: add to setup dictionary
+        # TODO: add to setup dictionary
         # coord : np.array
         # Initial location of cursor
-
 
         # TODO: Is the GTKAgg limitation still true?
         super().__init__(ax)
@@ -1177,9 +1176,9 @@ class Cursors(AxesWidget):
             new_prop['vertOn'] = prop.pop('vertOn', True)
 
             new_prop['coord'] = np.array([
-                0.5*(ax.get_xbound()[0] + ax.get_xbound()[1]),
-                0.5*(ax.get_ybound()[0] + ax.get_ybound()[1])
-                ])
+                0.5 * (ax.get_xbound()[0] + ax.get_xbound()[1]),
+                0.5 * (ax.get_ybound()[0] + ax.get_ybound()[1])
+            ])
 
             if self.useblit:
                 prop['animated'] = True
@@ -1195,7 +1194,6 @@ class Cursors(AxesWidget):
 
         self.__selected = None
         self._draw_cursor()
-
 
     def _update(self):
 
@@ -1301,6 +1299,7 @@ class Cursors(AxesWidget):
             self.__selected['coord'][1] = float(event.ydata)
 
             self._draw_cursor()
+
 
 class MultiCursor(Widget):
     """
@@ -2041,7 +2040,8 @@ class RectangleSelector(_SelectorWidget):
             rectprops['animated'] = self.useblit
             self.rectprops = rectprops
             self.to_draw = self._shape_klass((0, 0),
-                                     0, 1, visible=False, **self.rectprops)
+                                             0, 1, visible=False,
+                                             **self.rectprops)
             self.ax.add_patch(self.to_draw)
         if drawtype == 'line':
             if lineprops is None:
@@ -2157,7 +2157,7 @@ class RectangleSelector(_SelectorWidget):
         self.eventrelease.x, self.eventrelease.y = xy2
 
         self.onselect(self.eventpress, self.eventrelease)
-                                              # call desired function
+        # call desired function
         self.update()
 
         return False
@@ -2451,8 +2451,9 @@ class LassoSelector(_SelectorWidget):
     """
 
     def __init__(self, ax, onselect=None, useblit=True, lineprops=None,
-            button=None):
-        _SelectorWidget.__init__(self, ax, onselect, useblit=useblit, button=button)
+                 button=None):
+        _SelectorWidget.__init__(self, ax, onselect,
+                                 useblit=useblit, button=button)
 
         self.verts = None
 
