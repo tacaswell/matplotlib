@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Customizing matplotlib &mdash; Matplotlib 2.0.0b3.post121.dev0+g6f3de46 documentation</title>
+    <title>Customizing matplotlib &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
     
     <link rel="stylesheet" href="../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0.0b3.post121.dev0+g6f3de46',
+        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post121.dev0+g6f3de46 documentation"
+          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
           href="../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post121.dev0+g6f3de46 documentation" href="../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../index.html" />
     <link rel="up" title="User’s Guide" href="index.html" />
     <link rel="next" title="Interactive plots" href="interactive.html" />
     <link rel="prev" title="Colormap Normalization" href="colormapnorms.html" /> 
@@ -171,12 +171,13 @@ just add:</p>
 <div class="section" id="defining-your-own-style">
 <h3>Defining your own style<a class="headerlink" href="#defining-your-own-style" title="Permalink to this headline">¶</a></h3>
 <p>You can create custom styles and use them by calling <code class="docutils literal"><span class="pre">style.use</span></code> with the
-path or URL to the style sheet. Alternatively, if you add your <code class="docutils literal"><span class="pre">&lt;style-name&gt;.mplstyle</span></code>
-file to <code class="docutils literal"><span class="pre">mpl_configdir/stylelib</span></code>, you can reuse your custom style sheet with a call to
-<code class="docutils literal"><span class="pre">style.use(&lt;style-name&gt;)</span></code>. By default <code class="docutils literal"><span class="pre">mpl_configdir</span></code> should be <code class="docutils literal"><span class="pre">~/.config/matplotlib</span></code>,
-but you can check where yours is with <code class="docutils literal"><span class="pre">matplotlib.get_configdir()</span></code>, you may need to
-create this directory. Note that a custom style sheet in <code class="docutils literal"><span class="pre">mpl_configdir/stylelib</span></code>
-will override a style sheet defined by matplotlib if the styles have the same name.</p>
+path or URL to the style sheet. Additionally, if you add your
+<code class="docutils literal"><span class="pre">&lt;style-name&gt;.mplstyle</span></code> file to <code class="docutils literal"><span class="pre">mpl_configdir/stylelib</span></code>, you can reuse
+your custom style sheet with a call to <code class="docutils literal"><span class="pre">style.use(&lt;style-name&gt;)</span></code>. By default
+<code class="docutils literal"><span class="pre">mpl_configdir</span></code> should be <code class="docutils literal"><span class="pre">~/.config/matplotlib</span></code>, but you can check where
+yours is with <code class="docutils literal"><span class="pre">matplotlib.get_configdir()</span></code>; you may need to create this
+directory. Note that a custom style sheet in <code class="docutils literal"><span class="pre">mpl_configdir/stylelib</span></code> will
+override a style sheet defined by matplotlib if the styles have the same name.</p>
 <p>For example, you might want to create
 <code class="docutils literal"><span class="pre">mpl_configdir/stylelib/presentation.mplstyle</span></code> with the following:</p>
 <div class="highlight-python"><div class="highlight"><pre>axes.titlesize : 24
@@ -211,7 +212,7 @@ defined by styles on the left.</p>
 <h3>Temporary styling<a class="headerlink" href="#temporary-styling" title="Permalink to this headline">¶</a></h3>
 <p>If you only want to use a style for a specific block of code but don&#8217;t want
 to change the global styling, the style package provides a context manager
-for limiting your changes to a specific scope. To isolate the your styling
+for limiting your changes to a specific scope. To isolate your styling
 changes, you can write something like the following:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
@@ -388,7 +389,8 @@ backend      : qt4agg
 # The three standard dash patterns.  These are scaled by the linewidth.
 #lines.dashed_pattern : 2.8, 1.2
 #lines.dashdot_pattern : 4.8, 1.2, 0.8, 1.2
-#lines.dotted_pattern : 1.2, 0.6
+#lines.dotted_pattern : 1.1, 1.1
+#lines.scale_dashes : True
 
 #markers.fillstyle: full # full|left|right|bottom|top|none
 

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Specifying Colors &mdash; Matplotlib 2.0.0b3.post121.dev0+g6f3de46 documentation</title>
+    <title>Specifying Colors &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
     
     <link rel="stylesheet" href="../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0.0b3.post121.dev0+g6f3de46',
+        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post121.dev0+g6f3de46 documentation"
+          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
           href="../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post121.dev0+g6f3de46 documentation" href="../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../index.html" />
     <link rel="up" title="Colors" href="color_index.html" />
     <link rel="next" title="Choosing Colormaps" href="colormaps.html" />
     <link rel="prev" title="Colors" href="color_index.html" /> 
@@ -148,11 +148,11 @@ it can be provided as:</p>
 <ul class="simple">
 <li>a <code class="docutils literal"><span class="pre">(r,</span> <span class="pre">g,</span> <span class="pre">b)</span></code> tuple</li>
 <li>a <code class="docutils literal"><span class="pre">(r,</span> <span class="pre">g,</span> <span class="pre">b,</span> <span class="pre">a)</span></code> tuple</li>
-<li>a hex string RGB or RGBA string (ex <code class="docutils literal"><span class="pre">'#0F0F0F'</span></code> or <code class="docutils literal"><span class="pre">'#0F0F0F0F'</span></code>)</li>
+<li>a hex RGB or RGBA string (ex <code class="docutils literal"><span class="pre">'#0F0F0F'</span></code> or <code class="docutils literal"><span class="pre">'#0F0F0F0F'</span></code>)</li>
 <li>a float value in <code class="docutils literal"><span class="pre">[0,</span> <span class="pre">1]</span></code> inclusive for gray level</li>
 <li>one of <code class="docutils literal"><span class="pre">{'b',</span> <span class="pre">'g',</span> <span class="pre">'r',</span> <span class="pre">'c',</span> <span class="pre">'m',</span> <span class="pre">'y',</span> <span class="pre">'k',</span> <span class="pre">'w'}</span></code></li>
 <li>a X11/CSS4 color name</li>
-<li>a name from the <a class="reference external" href="http://xkcd.com/color/rgb/">xkcd color survey</a>
+<li>a name from the <a class="reference external" href="https://xkcd.com/color/rgb/">xkcd color survey</a>
 prefixed with <code class="docutils literal"><span class="pre">'xkcd:'</span></code> (e.g., <code class="docutils literal"><span class="pre">'xkcd:sky</span> <span class="pre">blue'</span></code>)</li>
 <li>one of <code class="docutils literal"><span class="pre">{'C0',</span> <span class="pre">'C1',</span> <span class="pre">'C2',</span> <span class="pre">'C3',</span> <span class="pre">'C4',</span> <span class="pre">'C5',</span> <span class="pre">'C6',</span> <span class="pre">'C7',</span> <span class="pre">'C8',</span> <span class="pre">'C9'}</span></code></li>
 </ul>
@@ -163,9 +163,13 @@ prefixed with <code class="docutils literal"><span class="pre">'xkcd:'</span></c
 This can be passed any place that a color is currently accepted and
 can be used as a &#8216;single character color&#8217; in format-string to
 <code class="xref py py-obj docutils literal"><span class="pre">matplotlib.Axes.plot</span></code>.</p>
-<p>This allows easy access to the color is the propriety cycle and to write code
-that will integrate with global changes to the style.  For example</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
+<p>The single digit is the index into the default property cycle
+(<code class="docutils literal"><span class="pre">matplotlib.rcParams['axes.prop_cycle']</span></code>).  If the property cycle does not
+include <code class="docutils literal"><span class="pre">'color</span></code> then black is returned.  The color is evaluated when the
+artist is created.  For example</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
 <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">demo</span><span class="p">(</span><span class="n">sty</span><span class="p">):</span>
@@ -191,13 +195,13 @@ that will integrate with global changes to the style.  For example</p>
 <img alt="../_images/colors-1_01.png" src="../_images/colors-1_01.png" />
 <p class="caption"><span class="caption-text">(<a class="reference external" href="../users/colors-1_01.png">png</a>, <a class="reference external" href="../users/colors-1_01.pdf">pdf</a>)</span></p>
 </div>
-<p>will plot using the color of the first and sixth styles in
-<code class="docutils literal"><span class="pre">mpl.rcParams['axes.prop_cycle']</span></code>.</p>
+<p>will use the first color for the title and then plot using the second
+and third colors of the styles <code class="docutils literal"><span class="pre">mpl.rcParams['axes.prop_cycle']</span></code>.</p>
 </div>
 <div class="section" id="xkcd-v-x11-css4">
 <h2>xkcd v X11/CSS4<a class="headerlink" href="#xkcd-v-x11-css4" title="Permalink to this headline">¶</a></h2>
 <p>The xkcd colors are derived from a user survey conducted by the
-webcomic xkcd.  <a class="reference external" href="http://blog.xkcd.com/2010/05/03/color-survey-results/">Details of the survey are available on the xkcd blog</a>.</p>
+webcomic xkcd.  <a class="reference external" href="https://blog.xkcd.com/2010/05/03/color-survey-results/">Details of the survey are available on the xkcd blog</a>.</p>
 <p>There are 95 (out of 148 colors in the css color list) name collisions
 between the X11/CSS4 names and the xkcd names, all but 3 of which have
 different hex values.  For example <code class="docutils literal"><span class="pre">'blue'</span></code> maps to <code class="docutils literal"><span class="pre">'#0000FF'</span></code>

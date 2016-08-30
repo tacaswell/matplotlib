@@ -32,8 +32,7 @@ Colors in default property cycle
 --------------------------------
 
 The colors in the default proprety cycle have been changed from
-``['b', 'g', 'r', 'c', 'm', 'y', 'k']`` to the `Vega
-category10 palette
+``['b', 'g', 'r', 'c', 'm', 'y', 'k']`` to the `Vega category10 palette
 <https://github.com/vega/vega/wiki/Scales#scale-range-literals>`__
 
 .. plot::
@@ -81,14 +80,13 @@ In addition to changing the colors, an additional method to specify
 colors was added.  Previously, the default colors were the single
 character short-hand notations for red, green, blue, cyan, magenta,
 yellow, and black.  This made them easy to type and usable in the
-abbreviated style string in ``plot``.  On the other hand, the new
-colors are only specified via a hex value.  To make in easy to access
-these colors the notation for colors ``'CN'`` was added to access
-colors.  This allows the first 10 colors in
-``mpl.rcParms['axes.prop_cycle']`` to be easily accessed.  See
+abbreviated style string in ``plot``, however the new default colors
+are only specified via hex values.  To access these colors outside of
+the property cycling the notation for colors ``'CN'`` was added to
+denote the first 10 colors in ``mpl.rcParams['axes.prop_cycle']`` See
 :ref:`colors` for more details.
 
-To restore only the old color cycle use
+To restore the old color cycle use
 
 .. code::
 
@@ -103,11 +101,12 @@ or setting
 
 in your :file:`matplotlibrc` file.
 
+
 Colormap
 --------
 
 The new default color map used by `matplotlib.cm.ScalarMappable` instances is
- `'viridis'` (aka `option D <http://bids.github.io/colormap/>`__).
+ `'viridis'` (aka `option D <https://bids.github.io/colormap/>`__).
 
 .. plot::
 
@@ -129,7 +128,7 @@ The new default color map used by `matplotlib.cm.ScalarMappable` instances is
 
 For an introduction to color theory and how 'viridis' was generated
 watch Nathaniel Smith and Stéfan van der Walt's talk from SciPy2015.
-See `here for many more deatils <http://bids.github.io/colormap/>`__
+See `here for many more details <https://bids.github.io/colormap/>`__
 about the other alternatives and the tools used to create the color
 map.  For details on all of color maps available in matplotlib see
 :ref:`colormaps`.
@@ -151,7 +150,7 @@ or setting
 
    image.cmap    : 'jet'
 
-in your :file:`matplotlibrc` file, however this is strongly discouraged.
+in your :file:`matplotlibrc` file; however this is strongly discouraged.
 
 Interactive figures
 -------------------
@@ -169,6 +168,45 @@ or setting ::
     figure.facecolor : '0.75'
 
 in your :file:`matplotlibrc` file.
+
+Figure size, font size, and screen dpi
+--------------------------------------
+
+The default dpi used for on-screen display was changed from 80dpi to
+100dpi, the same as the default dpi for saving files.  Due to this
+change, the on-screen display is now more what-you-see-is-what-you-get
+for saved files.  To keep figure the same size in terms of pixels, in
+order to maintain approximately the same size on the screen, the
+default figure size was reduced from 8in by 6in to 6.4in by 4.8in.  As
+a consequence of this the default font sizes used for the title, tick
+labels, and axes labels were reduced to maintain their size relative
+to the overall size of the figure.  By default the dpi of the saved
+image is now the dpi of the `~matplotlib.figure.Figure` instance being
+saved.
+
+
+The previous defaults can be restored by ::
+
+   mpl.rcParams['figure.figsize'] = [8.0, 6.0]
+   mpl.rcParams['figure.dpi'] = 80
+   mpl.rcParams['savefig.dpi'] = 100
+
+   mpl.rcParams['font.size'] = 12
+   mpl.rcParams['legend.fontsize'] = 'large'
+   mpl.rcParams['figure.titlesize'] = 'medium'
+
+or set::
+
+   figure.figsize   : [8.0, 6.0]
+   figure.dpi       : 80
+   savefig.dpi      : 100
+
+   font.size        : 12.0
+   legend.fontsize  : 'large'
+   figure.titlesize : 'medium'
+
+In your :file:`matplotlibrc` file.
+
 
 Grid lines
 ----------
@@ -319,11 +357,66 @@ or by setting::
 
 in your :file:`matplotlibrc` file.
 
+Patch edges and color
+---------------------
+
+Artists drawn with a patch (``~matplotlib.axes.Axes.bar``,
+``~matplotlib.axes.Axes.pie``, etc) no longer have a black edge by
+default.  The default face color is now ``'C0'`` instead of ``'b'``.
+
+.. plot::
+
+   import matplotlib.pyplot as plt
+   import numpy as np
+   from matplotlib import rc_context
+   import matplotlib.patches as mpatches
+
+   fig, all_ax = plt.subplots(3, 2, figsize=(4, 6), tight_layout=True)
+
+   def demo(ax_top, ax_mid, ax_bottom, rcparams, label):
+       labels = 'Frogs', 'Hogs', 'Dogs', 'Logs'
+       fracs = [15, 30, 45, 10]
+
+       explode = (0, 0.05, 0, 0)
+
+       ax_top.set_title(label)
+
+       with rc_context(rc=rcparams):
+           ax_top.pie(fracs, labels=labels)
+           ax_top.set_aspect('equal')
+           ax_mid.bar(range(len(fracs)), fracs, tick_label=labels, align='center')
+           plt.setp(ax_mid.get_xticklabels(), rotation=-45)
+           grid = np.mgrid[0.2:0.8:3j, 0.2:0.8:3j].reshape(2, -1).T
+
+           ax_bottom.set_xlim(0, .75)
+           ax_bottom.set_ylim(0, .75)
+           ax_bottom.add_artist(mpatches.Rectangle(grid[1] - [0.025, 0.05], 0.05, 0.1))
+           ax_bottom.add_artist(mpatches.RegularPolygon(grid[3], 5, 0.1))
+           ax_bottom.add_artist(mpatches.Ellipse(grid[4], 0.2, 0.1))
+           ax_bottom.add_artist(mpatches.Circle(grid[0], 0.1))
+           ax_bottom.axis('off')
+
+   demo(*all_ax[:, 0], rcparams={'patch.force_edgecolor': True,
+                                 'patch.facecolor': 'b'}, label='classic')
+   demo(*all_ax[:, 1], rcparams={}, label='v2.0')
+
+The previous defaults can be restored by setting::
+
+    mpl.rcParams['patch.force_edgecolor'] = True
+    mpl.rcParams['patch.facecolor'] = True
+
+or by setting::
+
+   patch.facecolor        : b
+   patch.force_edgecolor  : True
+
+in your :file:`matplotlibrc` file.
+
+
+
 Other
 =====
 
-- For markers, scatter plots, bar charts and pie charts, there is no
-  longer a black outline around filled markers by default.
 - lines.color change, only hits raw usage of Line2D
 
 Hatching
@@ -341,18 +434,14 @@ Hatching
 Plot layout
 ===========
 
-- The default dpi used for on-screen is now 100, which is the same as
-  the old default for saving files.  Due to this, the on-screen
-  display is now more what-you-see-is-what-you-get.
-
 - The number of ticks on an axis is now automatically determined based
   on the length of the axis.
 
-- The limits are scaled to exactly the dimensions of the data, plus 5%
-  padding.  The old behavior was to scale to the nearest "round"
+- The limits of an axes are scaled to exactly the dimensions of the data,
+  plus 5% padding.  The old behavior was to scale to the nearest "round"
   numbers.  To use the old behavior, set the ``rcParam``
   ``axes.autolimit_mode`` to ``round_numbers``.  To control the
-  margins on particular side individually, pass any of the following
+  margins on a particular side individually, pass any of the following
   to any artist or plotting function:
 
   - ``top_margin=False``

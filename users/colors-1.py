@@ -1,3 +1,5 @@
+import numpy as np
+import matplotlib.pyplot as plt
 import matplotlib as mpl
 th = np.linspace(0, 2*np.pi, 128)
 

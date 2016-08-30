@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Changes &mdash; Matplotlib 2.0.0b3.post121.dev0+g6f3de46 documentation</title>
+    <title>API Changes &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
     
     <link rel="stylesheet" href="../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0.0b3.post121.dev0+g6f3de46',
+        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post121.dev0+g6f3de46 documentation"
+          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
           href="../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post121.dev0+g6f3de46 documentation" href="../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../index.html" />
     <link rel="up" title="The Matplotlib API" href="index.html" />
     <link rel="next" title="The top level matplotlib module" href="matplotlib_configuration_api.html" />
     <link rel="prev" title="Plotting commands summary" href="pyplot_summary.html" /> 
@@ -352,7 +352,7 @@ properties.</p>
 <h3><code class="xref py py-obj docutils literal"><span class="pre">Legend</span></code> initializers gain edgecolor and facecolor kwargs<a class="headerlink" href="#legend-initializers-gain-edgecolor-and-facecolor-kwargs" title="Permalink to this headline">¶</a></h3>
 <p>The <a class="reference internal" href="legend_api.html#matplotlib.legend.Legend" title="matplotlib.legend.Legend"><code class="xref py py-class docutils literal"><span class="pre">Legend</span></code></a> background patch (or &#8216;frame&#8217;)
 can have its <code class="xref py py-obj docutils literal"><span class="pre">edgecolor</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">facecolor</span></code> determined by the
-corresponding keyword arguments to its initializer, or to any of the
+corresponding keyword arguments to the <code class="xref py py-obj docutils literal"><span class="pre">Legend</span></code> initializer, or to any of the
 methods or functions that call that initializer.  If left to
 their default values of <code class="xref py py-obj docutils literal"><span class="pre">None</span></code>, their values will be taken from
 <code class="xref py py-obj docutils literal"><span class="pre">rcParams</span></code>.  The previously-existing <code class="xref py py-obj docutils literal"><span class="pre">framealpha</span></code> kwarg still
@@ -379,14 +379,14 @@ See the <code class="docutils literal"><span class="pre">draw_image</span></code
 <div class="section" id="matplotlib-ticker-linearlocator-algorithm-update">
 <h3><a class="reference internal" href="ticker_api.html#matplotlib.ticker.LinearLocator" title="matplotlib.ticker.LinearLocator"><code class="xref py py-obj docutils literal"><span class="pre">matplotlib.ticker.LinearLocator</span></code></a> algorithm update<a class="headerlink" href="#matplotlib-ticker-linearlocator-algorithm-update" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">matplotlib.ticker.LinearLocator</span></code> is used to define the range and location
-of tickmarks of a plot when the user wants a exact number of ticks.
+of tick marks of a plot when the user wants an exact number of ticks.
 <code class="docutils literal"><span class="pre">LinearLocator</span></code> thus differs from the default locator <code class="docutils literal"><span class="pre">MaxNLocator</span></code>, which
 does not necessarily return the exact user requested number of ticks.</p>
 <p>The view range algorithm in <code class="docutils literal"><span class="pre">matplotlib.ticker.LinearLocator</span></code> has been
-changed so that more convenient tick location are chosen. The new algorithm
-returns a plot view range that is a multiple of the user requested number of
-ticks. This ensures tick marks to be located at whole integers more
-constistently. For example, when both y-axis of a``twinx`` plot use
+changed so that more convenient tick locations are chosen. The new algorithm
+returns a plot view range that is a multiple of the user-requested number of
+ticks. This ensures tick marks will be located at whole integers more
+consistently. For example, when both y-axes of a``twinx`` plot use
 <code class="docutils literal"><span class="pre">matplotlib.ticker.LinearLocator</span></code> with the same number of ticks, the grids of
 both axis will be properly aligned at convenient tick locations.</p>
 </div>
@@ -394,7 +394,7 @@ both axis will be properly aligned at convenient tick locations.</p>
 <h3>New defaults for 3D quiver function in mpl_toolkits.mplot3d.axes3d.py<a class="headerlink" href="#new-defaults-for-3d-quiver-function-in-mpl-toolkits-mplot3d-axes3d-py" title="Permalink to this headline">¶</a></h3>
 <p>Matplotlib has both a 2D and a 3D <code class="docutils literal"><span class="pre">quiver</span></code> function. These changes
 affect only the 3D function and make the default behavior of the 3D
-function match 2D version. There are two changes:</p>
+function match the 2D version. There are two changes:</p>
 <ol class="arabic simple">
 <li>The 3D quiver function previously normalized the arrows to be the
 same length, which makes it unusable for situations where the
@@ -410,7 +410,7 @@ call the function with</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ax</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">pivot</span><span class="o">=</span><span class="s1">&#39;tip&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>where &#8220;ax&#8221; is a axes3d object created with something like</p>
+<p>where &#8220;ax&#8221; is an <code class="docutils literal"><span class="pre">Axes3d</span></code> object created with something like</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">mpl_toolkits.mplot3d.axes3d</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">sublot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
 </pre></div>
