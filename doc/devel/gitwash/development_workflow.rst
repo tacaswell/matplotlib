@@ -38,17 +38,17 @@ use::
    git fetch origin
    git checkout -b my-new-feature origin/v1.0.x
 
-Generally, you will want to keep this also on your public github_ fork
-of matplotlib_.  To do this, you `git push`_ this new branch up to your github_
+Generally, you will want to keep this also on your public GitHub_ fork
+of matplotlib_.  To do this, you `git push`_ this new branch up to your GitHub_
 repo.  Generally (if you followed the instructions in these pages, and
-by default), git will have a link to your github_ repo, called
-``origin``.  You push up to your own repo on github_ with::
+by default), git will have a link to your GitHub_ repo, called
+``origin``.  You push up to your own repo on GitHub_ with::
 
    git push origin my-new-feature
 
 You will need to use this exact command, rather than simply ``git
 push`` every time you want to push changes on your feature branch to
-your github_ repo.  However, in git >1.7 you can set up a link by
+your GitHub_ repo.  However, in git >1.7 you can set up a link by
 using the ``--set-upstream`` option::
 
    git push --set-upstream origin my-new-feature
@@ -100,7 +100,7 @@ In more detail
    faith |emdash| or see `why the -a flag?`_ |emdash| and the helpful use-case
    description in the `tangled working copy problem`_. The `git commit`_ manual
    page might also be useful.
-#. To push the changes up to your forked repo on github_, do a ``git
+#. To push the changes up to your forked repo on GitHub_, do a ``git
    push`` (see `git push`).
 
 Asking for code review
@@ -155,7 +155,7 @@ When you are ready to ask for the merge of your code:
 
 #. If the branch is to be merged into a maintenance branch on the main
    repo, make sure the "base branch" indicates the maintenance branch
-   and not master.  Github can not automatically determine the branch
+   and not master.  GitHub can not automatically determine the branch
    to merge into.
 
 Rebasing a Pull Request (PR)
@@ -167,7 +167,7 @@ trivial: for example both the parent branch and your branch add an entry to
 the top of `CHANGELOG`.  Git can not unambiguously tell what to with both
 changes (should one go above the other? if so, which order? should it try to
 merge them?) so it declares the branches can not be merged
-cleanly. Github can only automatically merge PR without conflicts, so you will
+cleanly. GitHub can only automatically merge PR without conflicts, so you will
 need to manually 'rebase'. This is the process of updating your branch with
 upstream changes, and resolving conflicts.
 
@@ -180,8 +180,8 @@ explanation (with pictures!) see `this nice write up
 In general, re-writing history, particularly published history, is considered
 bad practice, but in this case it is very useful.
 
-The following example assumes that the remote of _your_ github
-repository is called `github` and the remote of the official
+The following example assumes that the remote of _your_ GitHub
+repository is called `origin` and the remote of the official
 repository is called `matplotlib`.
 
 The first step is to make sure that your local copy of the upstream repository is
@@ -283,13 +283,13 @@ properly.
 
 Your branch is now rebased, however, because of the way git
 determines the hash of each commit, it now shares no commits with your
-old branch published on github so you can not push to that branch as
+old branch published on GitHub so you can not push to that branch as
 you would when simply adding commits.  In order to publish your newly
 rebased (and tested!) branch you need to use the `--force` flag::
 
-    $ git push --force github
+    $ git push --force origin
 
-which will _replace_ all of the commits under your branch on github
+which will _replace_ all of the commits under your branch on GitHub
 with the new versions of the commit.
 
 Congratulations, you have rebased your branch!
@@ -297,7 +297,7 @@ Congratulations, you have rebased your branch!
 Staying up to date with changes in the central repository
 =========================================================
 
-This updates your working copy from the upstream `matplotlib github`_
+This updates your working copy from the upstream `matplotlib GitHub`_
 repo.
 
 Overview
@@ -308,9 +308,9 @@ Overview
    # go to your master branch
    git checkout master
    # pull changes from github
-   git fetch upstream
-   # merge from upstream
-   git merge --ff-only upstream/master
+   git fetch matplotlib
+   # merge from matplotlib
+   git merge --ff-only matplotlib/master
 
 In detail
 ---------
@@ -348,7 +348,7 @@ Other integration branches
 --------------------------
 
 Some people like to keep separate local branches corresponding to the
-maintenance branches on github. At the time of this writing, ``v1.0.x``
+maintenance branches on GitHub. At the time of this writing, ``v1.0.x``
 is the active maintenance branch. If you have such a local branch,
 treat is just as ``master``: don't commit on it, and before starting
 new branches off of it, update it from upstream::
@@ -397,7 +397,7 @@ make sure to reset the correct branch::
    git reset --hard upstream/master
 
 
-Deleting a branch on github_
+Deleting a branch on GitHub_
 ============================
 
 ::
@@ -405,7 +405,7 @@ Deleting a branch on github_
    git checkout master
    # delete branch locally
    git branch -D my-unwanted-branch
-   # delete branch on github
+   # delete branch on GitHub
    git push origin :my-unwanted-branch
 
 (Note the colon ``:`` before ``test-branch``.  See also:
@@ -416,11 +416,11 @@ Several people sharing a single repository
 
 If you want to work on some stuff with other people, where you are all
 committing into the same repository, or even the same branch, then just
-share it via github_.
+share it via GitHub_.
 
 First fork matplotlib into your account, as from :ref:`forking`.
 
-Then, go to your forked repository github page, say
+Then, go to your forked repository GitHub page, say
 ``http://github.com/your-user-name/matplotlib``
 
 Click on the 'Admin' button, and add anyone else to the repo as a
@@ -430,7 +430,7 @@ collaborator:
 
 Now all those people can do::
 
-    git clone git@githhub.com:your-user-name/matplotlib.git
+    git clone git@github.com:your-user-name/matplotlib.git
 
 Remember that links starting with ``git@`` use the ssh protocol and are
 read-write; links starting with ``git://`` are read-only.
@@ -453,7 +453,7 @@ To see a linear list of commits for this branch::
 
    git log
 
-You can also look at the `network graph visualizer`_ for your github_
+You can also look at the `network graph visualizer`_ for your GitHub_
 repo.
 
 .. include:: links.inc
