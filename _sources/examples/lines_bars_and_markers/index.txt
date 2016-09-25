@@ -17,6 +17,7 @@ lines_bars_and_markers Examples
     fill_demo_features <fill_demo_features.rst>
     line_demo_dash_control <line_demo_dash_control.rst>
     line_styles_reference <line_styles_reference.rst>
+    linestyles <linestyles.rst>
     marker_fillstyle_reference <marker_fillstyle_reference.rst>
     marker_reference <marker_reference.rst>
     scatter_with_legend <scatter_with_legend.rst>

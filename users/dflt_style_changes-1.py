@@ -34,4 +34,5 @@ new_colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728',
 color_demo(ax1, old_colors, 'classic')
 color_demo(ax2, new_colors, 'v2.0')
 
-fig.subplots_adjust(**{'bottom': 0.0, 'left': 0.059, 'right': 0.869, 'top': 0.895})
+fig.subplots_adjust(**{'bottom': 0.0, 'left': 0.059,
+                       'right': 0.869, 'top': 0.895})

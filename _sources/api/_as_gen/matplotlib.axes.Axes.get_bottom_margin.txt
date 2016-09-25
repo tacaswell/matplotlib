@@ -1,0 +1,6 @@
+matplotlib.axes.Axes.get_bottom_margin
+======================================
+
+.. currentmodule:: matplotlib.axes
+
+.. automethod:: Axes.get_bottom_margin

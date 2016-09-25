@@ -1,0 +1,6 @@
+matplotlib.axes.Axes.bottom_margin
+==================================
+
+.. currentmodule:: matplotlib.axes
+
+.. autoattribute:: Axes.bottom_margin

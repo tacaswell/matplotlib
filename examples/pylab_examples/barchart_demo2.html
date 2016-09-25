@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylab_examples example code: barchart_demo2.py &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
+    <title>pylab_examples example code: barchart_demo2.py &mdash; Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation</title>
     
     <link rel="stylesheet" href="../../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
+        VERSION:     '2.0.0b4.post96.dev0+g0de8fed',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
+          title="Search within Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation"
           href="../../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation" href="../../index.html" />
     <link rel="up" title="pylab_examples Examples" href="index.html" />
     <link rel="next" title="pylab_examples example code: barcode_demo.py" href="barcode_demo.html" />
     <link rel="prev" title="pylab_examples example code: barchart_demo.py" href="barchart_demo.html" /> 
@@ -114,14 +114,11 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -138,7 +135,7 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <div class="figure">
 <img alt="../../_images/barchart_demo2.png" src="../../_images/barchart_demo2.png" />
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Thanks Josh Hemann for the example</span>
 
 <span class="sd">This examples comes from an application in which grade school gym</span>
@@ -148,10 +145,10 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <span class="sd">just make up some data for little Johnny Doe...</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">MaxNLocator</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="k">import</span> <span class="n">MaxNLocator</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
 
 <span class="n">Student</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Student&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;grade&#39;</span><span class="p">,</span> <span class="s1">&#39;gender&#39;</span><span class="p">])</span>
 <span class="n">Score</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Score&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;percentile&#39;</span><span class="p">])</span>
@@ -190,7 +187,7 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">md</span> <span class="o">=</span> <span class="n">testMeta</span><span class="p">[</span><span class="n">test</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">md</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;{0}</span><span class="se">\n</span><span class="s1">{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">scr</span><span class="p">,</span> <span class="n">md</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="se">\n</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">scr</span><span class="p">,</span> <span class="n">md</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">scr</span>
 
@@ -220,13 +217,13 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">MaxNLocator</span><span class="p">(</span><span class="mi">11</span><span class="p">))</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span>
                    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">25</span><span class="p">)</span>
 
     <span class="c1"># Plot a solid vertical gridline to highlight the median position</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
     <span class="c1"># set X-axis tick marks at the deciles</span>
-    <span class="n">cohort_label</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="o">-.</span><span class="mo">07</span><span class="p">,</span> <span class="s1">&#39;Cohort Size: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cohort_size</span><span class="p">),</span>
+    <span class="n">cohort_label</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="o">-.</span><span class="mi">07</span><span class="p">,</span> <span class="s1">&#39;Cohort Size: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cohort_size</span><span class="p">),</span>
                             <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">,</span>
                             <span class="n">transform</span><span class="o">=</span><span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
 
@@ -247,7 +244,7 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
     <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Test Scores&#39;</span><span class="p">)</span>
 
     <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">((</span><span class="s1">&#39;Percentile Ranking Across &#39;</span>
-                    <span class="s1">&#39;{grade} Grade {gender}s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="si">{grade}</span><span class="s1"> Grade </span><span class="si">{gender}</span><span class="s1">s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">grade</span><span class="o">=</span><span class="n">attach_ordinal</span><span class="p">(</span><span class="n">student</span><span class="o">.</span><span class="n">grade</span><span class="p">),</span>
                         <span class="n">gender</span><span class="o">=</span><span class="n">student</span><span class="o">.</span><span class="n">gender</span><span class="o">.</span><span class="n">title</span><span class="p">()))</span>
 
@@ -278,7 +275,7 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
         <span class="n">yloc</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">get_y</span><span class="p">()</span> <span class="o">+</span> <span class="n">rect</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">/</span><span class="mf">2.0</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xloc</span><span class="p">,</span> <span class="n">yloc</span><span class="p">,</span> <span class="n">rankStr</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="n">align</span><span class="p">,</span>
                          <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">clr</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span>
-                         <span class="n">clip_on</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                         <span class="n">clip_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">rect_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
 
     <span class="c1"># make the interactive mouse over give the bar title</span>
@@ -302,7 +299,7 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <span class="n">arts</span> <span class="o">=</span> <span class="n">plot_student_results</span><span class="p">(</span><span class="n">student</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">cohort_size</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Keywords: python, matplotlib, pylab, example, codex (see <a class="reference internal" href="../../faq/howto_faq.html#how-to-search-examples"><span>Search examples</span></a>)</p>
+<p>Keywords: python, matplotlib, pylab, example, codex (see <a class="reference internal" href="../../faq/howto_faq.html#how-to-search-examples"><span class="std std-ref">Search examples</span></a>)</p>
 </div>
 
 
@@ -313,10 +310,10 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
       <div class="clearer"></div>
     </div>
     <div class="footer">
-        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2014 The matplotlib development team.
-      Last updated on Aug 29, 2016.
+        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2016 The matplotlib development team.
+      Last updated on Sep 25, 2016.
       Created using <a
-href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
 
 <script>

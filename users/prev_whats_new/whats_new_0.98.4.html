@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>New in matplotlib 0.98.4 &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
+    <title>New in matplotlib 0.98.4 &mdash; Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation</title>
     
     <link rel="stylesheet" href="../../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
+        VERSION:     '2.0.0b4.post96.dev0+g0de8fed',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
+          title="Search within Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation"
           href="../../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation" href="../../index.html" />
     <link rel="up" title="What’s new in matplotlib" href="../whats_new.html" />
     <link rel="next" title="New in matplotlib 0.99" href="whats_new_0.99.html" />
     <link rel="prev" title="Changes to the default style" href="../dflt_style_changes.html" /> 
@@ -127,14 +127,11 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -206,7 +203,7 @@ interactive from the usual terminal application on Mac using regular
 Python. It hasn&#8217;t been tested with ipython yet, but in principle it
 should to work there as well.  Set &#8216;backend : macosx&#8217; in your
 matplotlibrc file, or run your script with:</p>
-<div class="highlight-python"><div class="highlight"><pre>&gt; python myfile.py -dmacosx
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">myfile</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">dmacosx</span>
 </pre></div>
 </div>
 </div>
@@ -214,7 +211,7 @@ matplotlibrc file, or run your script with:</p>
 <h2><a class="toc-backref" href="#id6">psd amplitude scaling</a><a class="headerlink" href="#psd-amplitude-scaling" title="Permalink to this headline">¶</a></h2>
 <p>Ryan May did a lot of work to rationalize the amplitude scaling of
 <a class="reference internal" href="../../api/pyplot_api.html#matplotlib.pyplot.psd" title="matplotlib.pyplot.psd"><code class="xref py py-func docutils literal"><span class="pre">psd()</span></code></a> and friends.  See
-<a class="reference internal" href="../../examples/pylab_examples/psd_demo2.html#pylab-examples-psd-demo2"><span>pylab_examples example code: psd_demo2.py</span></a>. and <a class="reference internal" href="../../examples/pylab_examples/psd_demo3.html#pylab-examples-psd-demo3"><span>pylab_examples example code: psd_demo3.py</span></a>.
+<a class="reference internal" href="../../examples/pylab_examples/psd_demo2.html#pylab-examples-psd-demo2"><span class="std std-ref">pylab_examples example code: psd_demo2.py</span></a>. and <a class="reference internal" href="../../examples/pylab_examples/psd_demo3.html#pylab-examples-psd-demo3"><span class="std std-ref">pylab_examples example code: psd_demo3.py</span></a>.
 The changes should increase MATLAB
 compatibility and increase scaling options.</p>
 </div>
@@ -233,198 +230,198 @@ where you want to do the filling.</p>
 <div class="section" id="lots-more">
 <h2><a class="toc-backref" href="#id8">Lots more</a><a class="headerlink" href="#lots-more" title="Permalink to this headline">¶</a></h2>
 <p>Here are the 0.98.4 notes from the CHANGELOG:</p>
-<div class="highlight-python"><div class="highlight"><pre>Added mdehoon&#39;s native macosx backend from sf patch 2179017 - JDH
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Added</span> <span class="n">mdehoon</span><span class="s1">&#39;s native macosx backend from sf patch 2179017 - JDH</span>
 
-Removed the prints in the set_*style commands.  Return the list of
-pretty-printed strings instead - JDH
+<span class="n">Removed</span> <span class="n">the</span> <span class="n">prints</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">set_</span><span class="o">*</span><span class="n">style</span> <span class="n">commands</span><span class="o">.</span>  <span class="n">Return</span> <span class="n">the</span> <span class="nb">list</span> <span class="n">of</span>
+<span class="n">pretty</span><span class="o">-</span><span class="n">printed</span> <span class="n">strings</span> <span class="n">instead</span> <span class="o">-</span> <span class="n">JDH</span>
 
-Some of the changes Michael made to improve the output of the
-property tables in the rest docs broke of made difficult to use
-some of the interactive doc helpers, e.g., setp and getp.  Having all
-the rest markup in the ipython shell also confused the docstrings.
-I added a new rc param docstring.harcopy, to format the docstrings
-differently for hardcopy and other use.  The ArtistInspector
-could use a little refactoring now since there is duplication of
-effort between the rest out put and the non-rest output - JDH
+<span class="n">Some</span> <span class="n">of</span> <span class="n">the</span> <span class="n">changes</span> <span class="n">Michael</span> <span class="n">made</span> <span class="n">to</span> <span class="n">improve</span> <span class="n">the</span> <span class="n">output</span> <span class="n">of</span> <span class="n">the</span>
+<span class="nb">property</span> <span class="n">tables</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">rest</span> <span class="n">docs</span> <span class="n">broke</span> <span class="n">of</span> <span class="n">made</span> <span class="n">difficult</span> <span class="n">to</span> <span class="n">use</span>
+<span class="n">some</span> <span class="n">of</span> <span class="n">the</span> <span class="n">interactive</span> <span class="n">doc</span> <span class="n">helpers</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="p">,</span> <span class="n">setp</span> <span class="ow">and</span> <span class="n">getp</span><span class="o">.</span>  <span class="n">Having</span> <span class="nb">all</span>
+<span class="n">the</span> <span class="n">rest</span> <span class="n">markup</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">ipython</span> <span class="n">shell</span> <span class="n">also</span> <span class="n">confused</span> <span class="n">the</span> <span class="n">docstrings</span><span class="o">.</span>
+<span class="n">I</span> <span class="n">added</span> <span class="n">a</span> <span class="n">new</span> <span class="n">rc</span> <span class="n">param</span> <span class="n">docstring</span><span class="o">.</span><span class="n">harcopy</span><span class="p">,</span> <span class="n">to</span> <span class="nb">format</span> <span class="n">the</span> <span class="n">docstrings</span>
+<span class="n">differently</span> <span class="k">for</span> <span class="n">hardcopy</span> <span class="ow">and</span> <span class="n">other</span> <span class="n">use</span><span class="o">.</span>  <span class="n">The</span> <span class="n">ArtistInspector</span>
+<span class="n">could</span> <span class="n">use</span> <span class="n">a</span> <span class="n">little</span> <span class="n">refactoring</span> <span class="n">now</span> <span class="n">since</span> <span class="n">there</span> <span class="ow">is</span> <span class="n">duplication</span> <span class="n">of</span>
+<span class="n">effort</span> <span class="n">between</span> <span class="n">the</span> <span class="n">rest</span> <span class="n">out</span> <span class="n">put</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">non</span><span class="o">-</span><span class="n">rest</span> <span class="n">output</span> <span class="o">-</span> <span class="n">JDH</span>
 
-Updated spectral methods (psd, csd, etc.) to scale one-sided
-densities by a factor of 2 and, optionally, scale all densities by
-the sampling frequency.  This gives better MATLAB
-compatibility. -RM
+<span class="n">Updated</span> <span class="n">spectral</span> <span class="n">methods</span> <span class="p">(</span><span class="n">psd</span><span class="p">,</span> <span class="n">csd</span><span class="p">,</span> <span class="n">etc</span><span class="o">.</span><span class="p">)</span> <span class="n">to</span> <span class="n">scale</span> <span class="n">one</span><span class="o">-</span><span class="n">sided</span>
+<span class="n">densities</span> <span class="n">by</span> <span class="n">a</span> <span class="n">factor</span> <span class="n">of</span> <span class="mi">2</span> <span class="ow">and</span><span class="p">,</span> <span class="n">optionally</span><span class="p">,</span> <span class="n">scale</span> <span class="nb">all</span> <span class="n">densities</span> <span class="n">by</span>
+<span class="n">the</span> <span class="n">sampling</span> <span class="n">frequency</span><span class="o">.</span>  <span class="n">This</span> <span class="n">gives</span> <span class="n">better</span> <span class="n">MATLAB</span>
+<span class="n">compatibility</span><span class="o">.</span> <span class="o">-</span><span class="n">RM</span>
 
-Fixed alignment of ticks in colorbars. -MGD
+<span class="n">Fixed</span> <span class="n">alignment</span> <span class="n">of</span> <span class="n">ticks</span> <span class="ow">in</span> <span class="n">colorbars</span><span class="o">.</span> <span class="o">-</span><span class="n">MGD</span>
 
-drop the deprecated &quot;new&quot; keyword of np.histogram() for numpy 1.2
-or later.  -JJL
+<span class="n">drop</span> <span class="n">the</span> <span class="n">deprecated</span> <span class="s2">&quot;new&quot;</span> <span class="n">keyword</span> <span class="n">of</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">()</span> <span class="k">for</span> <span class="n">numpy</span> <span class="mf">1.2</span>
+<span class="ow">or</span> <span class="n">later</span><span class="o">.</span>  <span class="o">-</span><span class="n">JJL</span>
 
-Fixed a bug in svg backend that new_figure_manager() ignores
-keywords arguments such as figsize, etc. -JJL
+<span class="n">Fixed</span> <span class="n">a</span> <span class="n">bug</span> <span class="ow">in</span> <span class="n">svg</span> <span class="n">backend</span> <span class="n">that</span> <span class="n">new_figure_manager</span><span class="p">()</span> <span class="n">ignores</span>
+<span class="n">keywords</span> <span class="n">arguments</span> <span class="n">such</span> <span class="k">as</span> <span class="n">figsize</span><span class="p">,</span> <span class="n">etc</span><span class="o">.</span> <span class="o">-</span><span class="n">JJL</span>
 
-Fixed a bug that the handlelength of the new legend class set too
-short when numpoints=1 -JJL
+<span class="n">Fixed</span> <span class="n">a</span> <span class="n">bug</span> <span class="n">that</span> <span class="n">the</span> <span class="n">handlelength</span> <span class="n">of</span> <span class="n">the</span> <span class="n">new</span> <span class="n">legend</span> <span class="k">class</span> <span class="nc">set</span> <span class="n">too</span>
+<span class="n">short</span> <span class="n">when</span> <span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span><span class="n">JJL</span>
 
-Added support for data with units (e.g., dates) to
-Axes.fill_between. -RM
+<span class="n">Added</span> <span class="n">support</span> <span class="k">for</span> <span class="n">data</span> <span class="k">with</span> <span class="n">units</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="p">,</span> <span class="n">dates</span><span class="p">)</span> <span class="n">to</span>
+<span class="n">Axes</span><span class="o">.</span><span class="n">fill_between</span><span class="o">.</span> <span class="o">-</span><span class="n">RM</span>
 
-Added fancybox keyword to legend. Also applied some changes for
-better look, including baseline adjustment of the multiline texts
-so that it is center aligned. -JJL
+<span class="n">Added</span> <span class="n">fancybox</span> <span class="n">keyword</span> <span class="n">to</span> <span class="n">legend</span><span class="o">.</span> <span class="n">Also</span> <span class="n">applied</span> <span class="n">some</span> <span class="n">changes</span> <span class="k">for</span>
+<span class="n">better</span> <span class="n">look</span><span class="p">,</span> <span class="n">including</span> <span class="n">baseline</span> <span class="n">adjustment</span> <span class="n">of</span> <span class="n">the</span> <span class="n">multiline</span> <span class="n">texts</span>
+<span class="n">so</span> <span class="n">that</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">center</span> <span class="n">aligned</span><span class="o">.</span> <span class="o">-</span><span class="n">JJL</span>
 
-The transmuter classes in the patches.py are reorganized as
-subclasses of the Style classes. A few more box and arrow styles
-are added. -JJL
+<span class="n">The</span> <span class="n">transmuter</span> <span class="n">classes</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">patches</span><span class="o">.</span><span class="n">py</span> <span class="n">are</span> <span class="n">reorganized</span> <span class="k">as</span>
+<span class="n">subclasses</span> <span class="n">of</span> <span class="n">the</span> <span class="n">Style</span> <span class="n">classes</span><span class="o">.</span> <span class="n">A</span> <span class="n">few</span> <span class="n">more</span> <span class="n">box</span> <span class="ow">and</span> <span class="n">arrow</span> <span class="n">styles</span>
+<span class="n">are</span> <span class="n">added</span><span class="o">.</span> <span class="o">-</span><span class="n">JJL</span>
 
-Fixed a bug in the new legend class that didn&#39;t allowed a tuple of
-coordinate values as loc. -JJL
+<span class="n">Fixed</span> <span class="n">a</span> <span class="n">bug</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">new</span> <span class="n">legend</span> <span class="k">class</span> <span class="nc">that</span> <span class="n">didn</span><span class="s1">&#39;t allowed a tuple of</span>
+<span class="n">coordinate</span> <span class="n">values</span> <span class="k">as</span> <span class="n">loc</span><span class="o">.</span> <span class="o">-</span><span class="n">JJL</span>
 
-Improve checks for external dependencies, using subprocess
-(instead of deprecated popen*) and distutils (for version
-checking) - DSD
+<span class="n">Improve</span> <span class="n">checks</span> <span class="k">for</span> <span class="n">external</span> <span class="n">dependencies</span><span class="p">,</span> <span class="n">using</span> <span class="n">subprocess</span>
+<span class="p">(</span><span class="n">instead</span> <span class="n">of</span> <span class="n">deprecated</span> <span class="n">popen</span><span class="o">*</span><span class="p">)</span> <span class="ow">and</span> <span class="n">distutils</span> <span class="p">(</span><span class="k">for</span> <span class="n">version</span>
+<span class="n">checking</span><span class="p">)</span> <span class="o">-</span> <span class="n">DSD</span>
 
-Reimplementation of the legend which supports baseline alignment,
-multi-column, and expand mode. - JJL
+<span class="n">Reimplementation</span> <span class="n">of</span> <span class="n">the</span> <span class="n">legend</span> <span class="n">which</span> <span class="n">supports</span> <span class="n">baseline</span> <span class="n">alignment</span><span class="p">,</span>
+<span class="n">multi</span><span class="o">-</span><span class="n">column</span><span class="p">,</span> <span class="ow">and</span> <span class="n">expand</span> <span class="n">mode</span><span class="o">.</span> <span class="o">-</span> <span class="n">JJL</span>
 
-Fixed histogram autoscaling bug when bins or range are given
-explicitly (fixes Debian bug 503148) - MM
+<span class="n">Fixed</span> <span class="n">histogram</span> <span class="n">autoscaling</span> <span class="n">bug</span> <span class="n">when</span> <span class="n">bins</span> <span class="ow">or</span> <span class="nb">range</span> <span class="n">are</span> <span class="n">given</span>
+<span class="n">explicitly</span> <span class="p">(</span><span class="n">fixes</span> <span class="n">Debian</span> <span class="n">bug</span> <span class="mi">503148</span><span class="p">)</span> <span class="o">-</span> <span class="n">MM</span>
 
-Added rcParam axes.unicode_minus which allows plain hyphen for
-minus when False - JDH
+<span class="n">Added</span> <span class="n">rcParam</span> <span class="n">axes</span><span class="o">.</span><span class="n">unicode_minus</span> <span class="n">which</span> <span class="n">allows</span> <span class="n">plain</span> <span class="n">hyphen</span> <span class="k">for</span>
+<span class="n">minus</span> <span class="n">when</span> <span class="kc">False</span> <span class="o">-</span> <span class="n">JDH</span>
 
-Added scatterpoints support in Legend. patch by Erik Tollerud -
-JJL
+<span class="n">Added</span> <span class="n">scatterpoints</span> <span class="n">support</span> <span class="ow">in</span> <span class="n">Legend</span><span class="o">.</span> <span class="n">patch</span> <span class="n">by</span> <span class="n">Erik</span> <span class="n">Tollerud</span> <span class="o">-</span>
+<span class="n">JJL</span>
 
-Fix crash in log ticking. - MGD
+<span class="n">Fix</span> <span class="n">crash</span> <span class="ow">in</span> <span class="n">log</span> <span class="n">ticking</span><span class="o">.</span> <span class="o">-</span> <span class="n">MGD</span>
 
-Added static helper method BrokenHBarCollection.span_where and
-Axes/pyplot method fill_between.  See
-examples/pylab/fill_between.py - JDH
+<span class="n">Added</span> <span class="n">static</span> <span class="n">helper</span> <span class="n">method</span> <span class="n">BrokenHBarCollection</span><span class="o">.</span><span class="n">span_where</span> <span class="ow">and</span>
+<span class="n">Axes</span><span class="o">/</span><span class="n">pyplot</span> <span class="n">method</span> <span class="n">fill_between</span><span class="o">.</span>  <span class="n">See</span>
+<span class="n">examples</span><span class="o">/</span><span class="n">pylab</span><span class="o">/</span><span class="n">fill_between</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span> <span class="n">JDH</span>
 
-Add x_isdata and y_isdata attributes to Artist instances, and use
-them to determine whether either or both coordinates are used when
-updating dataLim.  This is used to fix autoscaling problems that
-had been triggered by axhline, axhspan, axvline, axvspan. - EF
+<span class="n">Add</span> <span class="n">x_isdata</span> <span class="ow">and</span> <span class="n">y_isdata</span> <span class="n">attributes</span> <span class="n">to</span> <span class="n">Artist</span> <span class="n">instances</span><span class="p">,</span> <span class="ow">and</span> <span class="n">use</span>
+<span class="n">them</span> <span class="n">to</span> <span class="n">determine</span> <span class="n">whether</span> <span class="n">either</span> <span class="ow">or</span> <span class="n">both</span> <span class="n">coordinates</span> <span class="n">are</span> <span class="n">used</span> <span class="n">when</span>
+<span class="n">updating</span> <span class="n">dataLim</span><span class="o">.</span>  <span class="n">This</span> <span class="ow">is</span> <span class="n">used</span> <span class="n">to</span> <span class="n">fix</span> <span class="n">autoscaling</span> <span class="n">problems</span> <span class="n">that</span>
+<span class="n">had</span> <span class="n">been</span> <span class="n">triggered</span> <span class="n">by</span> <span class="n">axhline</span><span class="p">,</span> <span class="n">axhspan</span><span class="p">,</span> <span class="n">axvline</span><span class="p">,</span> <span class="n">axvspan</span><span class="o">.</span> <span class="o">-</span> <span class="n">EF</span>
 
-Update the psd(), csd(), cohere(), and specgram() methods of Axes
-and the csd() cohere(), and specgram() functions in mlab to be in
-sync with the changes to psd().  In fact, under the hood, these
-all call the same core to do computations. - RM
+<span class="n">Update</span> <span class="n">the</span> <span class="n">psd</span><span class="p">(),</span> <span class="n">csd</span><span class="p">(),</span> <span class="n">cohere</span><span class="p">(),</span> <span class="ow">and</span> <span class="n">specgram</span><span class="p">()</span> <span class="n">methods</span> <span class="n">of</span> <span class="n">Axes</span>
+<span class="ow">and</span> <span class="n">the</span> <span class="n">csd</span><span class="p">()</span> <span class="n">cohere</span><span class="p">(),</span> <span class="ow">and</span> <span class="n">specgram</span><span class="p">()</span> <span class="n">functions</span> <span class="ow">in</span> <span class="n">mlab</span> <span class="n">to</span> <span class="n">be</span> <span class="ow">in</span>
+<span class="n">sync</span> <span class="k">with</span> <span class="n">the</span> <span class="n">changes</span> <span class="n">to</span> <span class="n">psd</span><span class="p">()</span><span class="o">.</span>  <span class="n">In</span> <span class="n">fact</span><span class="p">,</span> <span class="n">under</span> <span class="n">the</span> <span class="n">hood</span><span class="p">,</span> <span class="n">these</span>
+<span class="nb">all</span> <span class="n">call</span> <span class="n">the</span> <span class="n">same</span> <span class="n">core</span> <span class="n">to</span> <span class="n">do</span> <span class="n">computations</span><span class="o">.</span> <span class="o">-</span> <span class="n">RM</span>
 
-Add &#39;pad_to&#39; and &#39;sides&#39; parameters to mlab.psd() to allow
-controlling of zero padding and returning of negative frequency
-components, respectively.  These are added in a way that does not
-change the API. - RM
+<span class="n">Add</span> <span class="s1">&#39;pad_to&#39;</span> <span class="ow">and</span> <span class="s1">&#39;sides&#39;</span> <span class="n">parameters</span> <span class="n">to</span> <span class="n">mlab</span><span class="o">.</span><span class="n">psd</span><span class="p">()</span> <span class="n">to</span> <span class="n">allow</span>
+<span class="n">controlling</span> <span class="n">of</span> <span class="n">zero</span> <span class="n">padding</span> <span class="ow">and</span> <span class="n">returning</span> <span class="n">of</span> <span class="n">negative</span> <span class="n">frequency</span>
+<span class="n">components</span><span class="p">,</span> <span class="n">respectively</span><span class="o">.</span>  <span class="n">These</span> <span class="n">are</span> <span class="n">added</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">way</span> <span class="n">that</span> <span class="n">does</span> <span class="ow">not</span>
+<span class="n">change</span> <span class="n">the</span> <span class="n">API</span><span class="o">.</span> <span class="o">-</span> <span class="n">RM</span>
 
-Fix handling of c kwarg by scatter; generalize is_string_like to
-accept numpy and numpy.ma string array scalars. - RM and EF
+<span class="n">Fix</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">c</span> <span class="n">kwarg</span> <span class="n">by</span> <span class="n">scatter</span><span class="p">;</span> <span class="n">generalize</span> <span class="n">is_string_like</span> <span class="n">to</span>
+<span class="n">accept</span> <span class="n">numpy</span> <span class="ow">and</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ma</span> <span class="n">string</span> <span class="n">array</span> <span class="n">scalars</span><span class="o">.</span> <span class="o">-</span> <span class="n">RM</span> <span class="ow">and</span> <span class="n">EF</span>
 
-Fix a possible EINTR problem in dviread, which might help when
-saving pdf files from the qt backend. - JKS
+<span class="n">Fix</span> <span class="n">a</span> <span class="n">possible</span> <span class="n">EINTR</span> <span class="n">problem</span> <span class="ow">in</span> <span class="n">dviread</span><span class="p">,</span> <span class="n">which</span> <span class="n">might</span> <span class="n">help</span> <span class="n">when</span>
+<span class="n">saving</span> <span class="n">pdf</span> <span class="n">files</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">qt</span> <span class="n">backend</span><span class="o">.</span> <span class="o">-</span> <span class="n">JKS</span>
 
-Fix bug with zoom to rectangle and twin axes - MGD
+<span class="n">Fix</span> <span class="n">bug</span> <span class="k">with</span> <span class="n">zoom</span> <span class="n">to</span> <span class="n">rectangle</span> <span class="ow">and</span> <span class="n">twin</span> <span class="n">axes</span> <span class="o">-</span> <span class="n">MGD</span>
 
-Added Jae Joon&#39;s fancy arrow, box and annotation enhancements --
-see examples/pylab_examples/annotation_demo2.py
+<span class="n">Added</span> <span class="n">Jae</span> <span class="n">Joon</span><span class="s1">&#39;s fancy arrow, box and annotation enhancements --</span>
+<span class="n">see</span> <span class="n">examples</span><span class="o">/</span><span class="n">pylab_examples</span><span class="o">/</span><span class="n">annotation_demo2</span><span class="o">.</span><span class="n">py</span>
 
-Autoscaling is now supported with shared axes - EF
+<span class="n">Autoscaling</span> <span class="ow">is</span> <span class="n">now</span> <span class="n">supported</span> <span class="k">with</span> <span class="n">shared</span> <span class="n">axes</span> <span class="o">-</span> <span class="n">EF</span>
 
-Fixed exception in dviread that happened with Minion - JKS
+<span class="n">Fixed</span> <span class="n">exception</span> <span class="ow">in</span> <span class="n">dviread</span> <span class="n">that</span> <span class="n">happened</span> <span class="k">with</span> <span class="n">Minion</span> <span class="o">-</span> <span class="n">JKS</span>
 
-set_xlim, ylim now return a copy of the viewlim array to avoid
-modify inplace surprises
+<span class="n">set_xlim</span><span class="p">,</span> <span class="n">ylim</span> <span class="n">now</span> <span class="k">return</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">viewlim</span> <span class="n">array</span> <span class="n">to</span> <span class="n">avoid</span>
+<span class="n">modify</span> <span class="n">inplace</span> <span class="n">surprises</span>
 
-Added image thumbnail generating function
-matplotlib.image.thumbnail.  See examples/misc/image_thumbnail.py
-- JDH
+<span class="n">Added</span> <span class="n">image</span> <span class="n">thumbnail</span> <span class="n">generating</span> <span class="n">function</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">thumbnail</span><span class="o">.</span>  <span class="n">See</span> <span class="n">examples</span><span class="o">/</span><span class="n">misc</span><span class="o">/</span><span class="n">image_thumbnail</span><span class="o">.</span><span class="n">py</span>
+<span class="o">-</span> <span class="n">JDH</span>
 
-Applied scatleg patch based on ideas and work by Erik Tollerud and
-Jae-Joon Lee. - MM
+<span class="n">Applied</span> <span class="n">scatleg</span> <span class="n">patch</span> <span class="n">based</span> <span class="n">on</span> <span class="n">ideas</span> <span class="ow">and</span> <span class="n">work</span> <span class="n">by</span> <span class="n">Erik</span> <span class="n">Tollerud</span> <span class="ow">and</span>
+<span class="n">Jae</span><span class="o">-</span><span class="n">Joon</span> <span class="n">Lee</span><span class="o">.</span> <span class="o">-</span> <span class="n">MM</span>
 
-Fixed bug in pdf backend: if you pass a file object for output
-instead of a filename, e.g., in a wep app, we now flush the object
-at the end. - JKS
+<span class="n">Fixed</span> <span class="n">bug</span> <span class="ow">in</span> <span class="n">pdf</span> <span class="n">backend</span><span class="p">:</span> <span class="k">if</span> <span class="n">you</span> <span class="k">pass</span> <span class="n">a</span> <span class="n">file</span> <span class="nb">object</span> <span class="k">for</span> <span class="n">output</span>
+<span class="n">instead</span> <span class="n">of</span> <span class="n">a</span> <span class="n">filename</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="p">,</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">wep</span> <span class="n">app</span><span class="p">,</span> <span class="n">we</span> <span class="n">now</span> <span class="n">flush</span> <span class="n">the</span> <span class="nb">object</span>
+<span class="n">at</span> <span class="n">the</span> <span class="n">end</span><span class="o">.</span> <span class="o">-</span> <span class="n">JKS</span>
 
-Add path simplification support to paths with gaps. - EF
+<span class="n">Add</span> <span class="n">path</span> <span class="n">simplification</span> <span class="n">support</span> <span class="n">to</span> <span class="n">paths</span> <span class="k">with</span> <span class="n">gaps</span><span class="o">.</span> <span class="o">-</span> <span class="n">EF</span>
 
-Fix problem with AFM files that don&#39;t specify the font&#39;s full name
-or family name. - JKS
+<span class="n">Fix</span> <span class="n">problem</span> <span class="k">with</span> <span class="n">AFM</span> <span class="n">files</span> <span class="n">that</span> <span class="n">don</span><span class="s1">&#39;t specify the font&#39;</span><span class="n">s</span> <span class="n">full</span> <span class="n">name</span>
+<span class="ow">or</span> <span class="n">family</span> <span class="n">name</span><span class="o">.</span> <span class="o">-</span> <span class="n">JKS</span>
 
-Added &#39;scilimits&#39; kwarg to Axes.ticklabel_format() method, for
-easy access to the set_powerlimits method of the major
-ScalarFormatter. - EF
+<span class="n">Added</span> <span class="s1">&#39;scilimits&#39;</span> <span class="n">kwarg</span> <span class="n">to</span> <span class="n">Axes</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">()</span> <span class="n">method</span><span class="p">,</span> <span class="k">for</span>
+<span class="n">easy</span> <span class="n">access</span> <span class="n">to</span> <span class="n">the</span> <span class="n">set_powerlimits</span> <span class="n">method</span> <span class="n">of</span> <span class="n">the</span> <span class="n">major</span>
+<span class="n">ScalarFormatter</span><span class="o">.</span> <span class="o">-</span> <span class="n">EF</span>
 
-Experimental new kwarg borderpad to replace pad in legend, based
-on suggestion by Jae-Joon Lee.  - EF
+<span class="n">Experimental</span> <span class="n">new</span> <span class="n">kwarg</span> <span class="n">borderpad</span> <span class="n">to</span> <span class="n">replace</span> <span class="n">pad</span> <span class="ow">in</span> <span class="n">legend</span><span class="p">,</span> <span class="n">based</span>
+<span class="n">on</span> <span class="n">suggestion</span> <span class="n">by</span> <span class="n">Jae</span><span class="o">-</span><span class="n">Joon</span> <span class="n">Lee</span><span class="o">.</span>  <span class="o">-</span> <span class="n">EF</span>
 
-Allow spy to ignore zero values in sparse arrays, based on patch
-by Tony Yu.  Also fixed plot to handle empty data arrays, and
-fixed handling of markers in figlegend. - EF
+<span class="n">Allow</span> <span class="n">spy</span> <span class="n">to</span> <span class="n">ignore</span> <span class="n">zero</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">sparse</span> <span class="n">arrays</span><span class="p">,</span> <span class="n">based</span> <span class="n">on</span> <span class="n">patch</span>
+<span class="n">by</span> <span class="n">Tony</span> <span class="n">Yu</span><span class="o">.</span>  <span class="n">Also</span> <span class="n">fixed</span> <span class="n">plot</span> <span class="n">to</span> <span class="n">handle</span> <span class="n">empty</span> <span class="n">data</span> <span class="n">arrays</span><span class="p">,</span> <span class="ow">and</span>
+<span class="n">fixed</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">markers</span> <span class="ow">in</span> <span class="n">figlegend</span><span class="o">.</span> <span class="o">-</span> <span class="n">EF</span>
 
-Introduce drawstyles for lines. Transparently split linestyles
-like &#39;steps--&#39; into drawstyle &#39;steps&#39; and linestyle &#39;--&#39;.  Legends
-always use drawstyle &#39;default&#39;. - MM
+<span class="n">Introduce</span> <span class="n">drawstyles</span> <span class="k">for</span> <span class="n">lines</span><span class="o">.</span> <span class="n">Transparently</span> <span class="n">split</span> <span class="n">linestyles</span>
+<span class="n">like</span> <span class="s1">&#39;steps--&#39;</span> <span class="n">into</span> <span class="n">drawstyle</span> <span class="s1">&#39;steps&#39;</span> <span class="ow">and</span> <span class="n">linestyle</span> <span class="s1">&#39;--&#39;</span><span class="o">.</span>  <span class="n">Legends</span>
+<span class="n">always</span> <span class="n">use</span> <span class="n">drawstyle</span> <span class="s1">&#39;default&#39;</span><span class="o">.</span> <span class="o">-</span> <span class="n">MM</span>
 
-Fixed quiver and quiverkey bugs (failure to scale properly when
-resizing) and added additional methods for determining the arrow
-angles - EF
+<span class="n">Fixed</span> <span class="n">quiver</span> <span class="ow">and</span> <span class="n">quiverkey</span> <span class="n">bugs</span> <span class="p">(</span><span class="n">failure</span> <span class="n">to</span> <span class="n">scale</span> <span class="n">properly</span> <span class="n">when</span>
+<span class="n">resizing</span><span class="p">)</span> <span class="ow">and</span> <span class="n">added</span> <span class="n">additional</span> <span class="n">methods</span> <span class="k">for</span> <span class="n">determining</span> <span class="n">the</span> <span class="n">arrow</span>
+<span class="n">angles</span> <span class="o">-</span> <span class="n">EF</span>
 
-Fix polar interpolation to handle negative values of theta - MGD
+<span class="n">Fix</span> <span class="n">polar</span> <span class="n">interpolation</span> <span class="n">to</span> <span class="n">handle</span> <span class="n">negative</span> <span class="n">values</span> <span class="n">of</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">MGD</span>
 
-Reorganized cbook and mlab methods related to numerical
-calculations that have little to do with the goals of those two
-modules into a separate module numerical_methods.py Also, added
-ability to select points and stop point selection with keyboard in
-ginput and manual contour labeling code.  Finally, fixed contour
-labeling bug. - DMK
+<span class="n">Reorganized</span> <span class="n">cbook</span> <span class="ow">and</span> <span class="n">mlab</span> <span class="n">methods</span> <span class="n">related</span> <span class="n">to</span> <span class="n">numerical</span>
+<span class="n">calculations</span> <span class="n">that</span> <span class="n">have</span> <span class="n">little</span> <span class="n">to</span> <span class="n">do</span> <span class="k">with</span> <span class="n">the</span> <span class="n">goals</span> <span class="n">of</span> <span class="n">those</span> <span class="n">two</span>
+<span class="n">modules</span> <span class="n">into</span> <span class="n">a</span> <span class="n">separate</span> <span class="n">module</span> <span class="n">numerical_methods</span><span class="o">.</span><span class="n">py</span> <span class="n">Also</span><span class="p">,</span> <span class="n">added</span>
+<span class="n">ability</span> <span class="n">to</span> <span class="n">select</span> <span class="n">points</span> <span class="ow">and</span> <span class="n">stop</span> <span class="n">point</span> <span class="n">selection</span> <span class="k">with</span> <span class="n">keyboard</span> <span class="ow">in</span>
+<span class="n">ginput</span> <span class="ow">and</span> <span class="n">manual</span> <span class="n">contour</span> <span class="n">labeling</span> <span class="n">code</span><span class="o">.</span>  <span class="n">Finally</span><span class="p">,</span> <span class="n">fixed</span> <span class="n">contour</span>
+<span class="n">labeling</span> <span class="n">bug</span><span class="o">.</span> <span class="o">-</span> <span class="n">DMK</span>
 
-Fix backtick in Postscript output. - MGD
+<span class="n">Fix</span> <span class="n">backtick</span> <span class="ow">in</span> <span class="n">Postscript</span> <span class="n">output</span><span class="o">.</span> <span class="o">-</span> <span class="n">MGD</span>
 
-[ 2089958 ] Path simplification for vector output backends
-Leverage the simplification code exposed through path_to_polygons
-to simplify certain well-behaved paths in the vector backends
-(PDF, PS and SVG).  &quot;path.simplify&quot; must be set to True in
-matplotlibrc for this to work.  - MGD
+<span class="p">[</span> <span class="mi">2089958</span> <span class="p">]</span> <span class="n">Path</span> <span class="n">simplification</span> <span class="k">for</span> <span class="n">vector</span> <span class="n">output</span> <span class="n">backends</span>
+<span class="n">Leverage</span> <span class="n">the</span> <span class="n">simplification</span> <span class="n">code</span> <span class="n">exposed</span> <span class="n">through</span> <span class="n">path_to_polygons</span>
+<span class="n">to</span> <span class="n">simplify</span> <span class="n">certain</span> <span class="n">well</span><span class="o">-</span><span class="n">behaved</span> <span class="n">paths</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">vector</span> <span class="n">backends</span>
+<span class="p">(</span><span class="n">PDF</span><span class="p">,</span> <span class="n">PS</span> <span class="ow">and</span> <span class="n">SVG</span><span class="p">)</span><span class="o">.</span>  <span class="s2">&quot;path.simplify&quot;</span> <span class="n">must</span> <span class="n">be</span> <span class="nb">set</span> <span class="n">to</span> <span class="kc">True</span> <span class="ow">in</span>
+<span class="n">matplotlibrc</span> <span class="k">for</span> <span class="n">this</span> <span class="n">to</span> <span class="n">work</span><span class="o">.</span>  <span class="o">-</span> <span class="n">MGD</span>
 
-Add &quot;filled&quot; kwarg to Path.intersects_path and
-Path.intersects_bbox. - MGD
+<span class="n">Add</span> <span class="s2">&quot;filled&quot;</span> <span class="n">kwarg</span> <span class="n">to</span> <span class="n">Path</span><span class="o">.</span><span class="n">intersects_path</span> <span class="ow">and</span>
+<span class="n">Path</span><span class="o">.</span><span class="n">intersects_bbox</span><span class="o">.</span> <span class="o">-</span> <span class="n">MGD</span>
 
-Changed full arrows slightly to avoid an xpdf rendering problem
-reported by Friedrich Hagedorn. - JKS
+<span class="n">Changed</span> <span class="n">full</span> <span class="n">arrows</span> <span class="n">slightly</span> <span class="n">to</span> <span class="n">avoid</span> <span class="n">an</span> <span class="n">xpdf</span> <span class="n">rendering</span> <span class="n">problem</span>
+<span class="n">reported</span> <span class="n">by</span> <span class="n">Friedrich</span> <span class="n">Hagedorn</span><span class="o">.</span> <span class="o">-</span> <span class="n">JKS</span>
 
-Fix conversion of quadratic to cubic Bezier curves in PDF and PS
-backends. Patch by Jae-Joon Lee. - JKS
+<span class="n">Fix</span> <span class="n">conversion</span> <span class="n">of</span> <span class="n">quadratic</span> <span class="n">to</span> <span class="n">cubic</span> <span class="n">Bezier</span> <span class="n">curves</span> <span class="ow">in</span> <span class="n">PDF</span> <span class="ow">and</span> <span class="n">PS</span>
+<span class="n">backends</span><span class="o">.</span> <span class="n">Patch</span> <span class="n">by</span> <span class="n">Jae</span><span class="o">-</span><span class="n">Joon</span> <span class="n">Lee</span><span class="o">.</span> <span class="o">-</span> <span class="n">JKS</span>
 
-Added 5-point star marker to plot command q- EF
+<span class="n">Added</span> <span class="mi">5</span><span class="o">-</span><span class="n">point</span> <span class="n">star</span> <span class="n">marker</span> <span class="n">to</span> <span class="n">plot</span> <span class="n">command</span> <span class="n">q</span><span class="o">-</span> <span class="n">EF</span>
 
-Fix hatching in PS backend - MGD
+<span class="n">Fix</span> <span class="n">hatching</span> <span class="ow">in</span> <span class="n">PS</span> <span class="n">backend</span> <span class="o">-</span> <span class="n">MGD</span>
 
-Fix log with base 2 - MGD
+<span class="n">Fix</span> <span class="n">log</span> <span class="k">with</span> <span class="n">base</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">MGD</span>
 
-Added support for bilinear interpolation in
-NonUniformImage; patch by Gregory Lielens. - EF
+<span class="n">Added</span> <span class="n">support</span> <span class="k">for</span> <span class="n">bilinear</span> <span class="n">interpolation</span> <span class="ow">in</span>
+<span class="n">NonUniformImage</span><span class="p">;</span> <span class="n">patch</span> <span class="n">by</span> <span class="n">Gregory</span> <span class="n">Lielens</span><span class="o">.</span> <span class="o">-</span> <span class="n">EF</span>
 
-Added support for multiple histograms with data of
-different length - MM
+<span class="n">Added</span> <span class="n">support</span> <span class="k">for</span> <span class="n">multiple</span> <span class="n">histograms</span> <span class="k">with</span> <span class="n">data</span> <span class="n">of</span>
+<span class="n">different</span> <span class="n">length</span> <span class="o">-</span> <span class="n">MM</span>
 
-Fix step plots with log scale - MGD
+<span class="n">Fix</span> <span class="n">step</span> <span class="n">plots</span> <span class="k">with</span> <span class="n">log</span> <span class="n">scale</span> <span class="o">-</span> <span class="n">MGD</span>
 
-Fix masked arrays with markers in non-Agg backends - MGD
+<span class="n">Fix</span> <span class="n">masked</span> <span class="n">arrays</span> <span class="k">with</span> <span class="n">markers</span> <span class="ow">in</span> <span class="n">non</span><span class="o">-</span><span class="n">Agg</span> <span class="n">backends</span> <span class="o">-</span> <span class="n">MGD</span>
 
-Fix clip_on kwarg so it actually works correctly - MGD
+<span class="n">Fix</span> <span class="n">clip_on</span> <span class="n">kwarg</span> <span class="n">so</span> <span class="n">it</span> <span class="n">actually</span> <span class="n">works</span> <span class="n">correctly</span> <span class="o">-</span> <span class="n">MGD</span>
 
-Fix locale problems in SVG backend - MGD
+<span class="n">Fix</span> <span class="n">locale</span> <span class="n">problems</span> <span class="ow">in</span> <span class="n">SVG</span> <span class="n">backend</span> <span class="o">-</span> <span class="n">MGD</span>
 
-fix quiver so masked values are not plotted - JSW
+<span class="n">fix</span> <span class="n">quiver</span> <span class="n">so</span> <span class="n">masked</span> <span class="n">values</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">plotted</span> <span class="o">-</span> <span class="n">JSW</span>
 
-improve interactive pan/zoom in qt4 backend on windows - DSD
+<span class="n">improve</span> <span class="n">interactive</span> <span class="n">pan</span><span class="o">/</span><span class="n">zoom</span> <span class="ow">in</span> <span class="n">qt4</span> <span class="n">backend</span> <span class="n">on</span> <span class="n">windows</span> <span class="o">-</span> <span class="n">DSD</span>
 
-Fix more bugs in NaN/inf handling.  In particular, path
-simplification (which does not handle NaNs or infs) will be turned
-off automatically when infs or NaNs are present.  Also masked
-arrays are now converted to arrays with NaNs for consistent
-handling of masks and NaNs - MGD and EF
+<span class="n">Fix</span> <span class="n">more</span> <span class="n">bugs</span> <span class="ow">in</span> <span class="n">NaN</span><span class="o">/</span><span class="n">inf</span> <span class="n">handling</span><span class="o">.</span>  <span class="n">In</span> <span class="n">particular</span><span class="p">,</span> <span class="n">path</span>
+<span class="n">simplification</span> <span class="p">(</span><span class="n">which</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">handle</span> <span class="n">NaNs</span> <span class="ow">or</span> <span class="n">infs</span><span class="p">)</span> <span class="n">will</span> <span class="n">be</span> <span class="n">turned</span>
+<span class="n">off</span> <span class="n">automatically</span> <span class="n">when</span> <span class="n">infs</span> <span class="ow">or</span> <span class="n">NaNs</span> <span class="n">are</span> <span class="n">present</span><span class="o">.</span>  <span class="n">Also</span> <span class="n">masked</span>
+<span class="n">arrays</span> <span class="n">are</span> <span class="n">now</span> <span class="n">converted</span> <span class="n">to</span> <span class="n">arrays</span> <span class="k">with</span> <span class="n">NaNs</span> <span class="k">for</span> <span class="n">consistent</span>
+<span class="n">handling</span> <span class="n">of</span> <span class="n">masks</span> <span class="ow">and</span> <span class="n">NaNs</span> <span class="o">-</span> <span class="n">MGD</span> <span class="ow">and</span> <span class="n">EF</span>
 
-Added support for arbitrary rasterization resolutions to the SVG
-backend. - MW
+<span class="n">Added</span> <span class="n">support</span> <span class="k">for</span> <span class="n">arbitrary</span> <span class="n">rasterization</span> <span class="n">resolutions</span> <span class="n">to</span> <span class="n">the</span> <span class="n">SVG</span>
+<span class="n">backend</span><span class="o">.</span> <span class="o">-</span> <span class="n">MW</span>
 </pre></div>
 </div>
 </div>
@@ -438,10 +435,10 @@ backend. - MW
       <div class="clearer"></div>
     </div>
     <div class="footer">
-        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2014 The matplotlib development team.
-      Last updated on Aug 29, 2016.
+        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2016 The matplotlib development team.
+      Last updated on Sep 25, 2016.
       Created using <a
-href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
 
 <script>

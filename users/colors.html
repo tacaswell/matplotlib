@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Specifying Colors &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
+    <title>Specifying Colors &mdash; Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation</title>
     
     <link rel="stylesheet" href="../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
+        VERSION:     '2.0.0b4.post96.dev0+g0de8fed',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
+          title="Search within Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation"
           href="../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation" href="../index.html" />
     <link rel="up" title="Colors" href="color_index.html" />
     <link rel="next" title="Choosing Colormaps" href="colormaps.html" />
     <link rel="prev" title="Colors" href="color_index.html" /> 
@@ -123,14 +123,11 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -146,10 +143,11 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <p>In almost all places in matplotlib where a color can be specified by the user
 it can be provided as:</p>
 <ul class="simple">
-<li>a <code class="docutils literal"><span class="pre">(r,</span> <span class="pre">g,</span> <span class="pre">b)</span></code> tuple</li>
-<li>a <code class="docutils literal"><span class="pre">(r,</span> <span class="pre">g,</span> <span class="pre">b,</span> <span class="pre">a)</span></code> tuple</li>
-<li>a hex RGB or RGBA string (ex <code class="docutils literal"><span class="pre">'#0F0F0F'</span></code> or <code class="docutils literal"><span class="pre">'#0F0F0F0F'</span></code>)</li>
-<li>a float value in <code class="docutils literal"><span class="pre">[0,</span> <span class="pre">1]</span></code> inclusive for gray level</li>
+<li>an RGB or RGBA tuple of float values in <code class="docutils literal"><span class="pre">[0,</span> <span class="pre">1]</span></code>
+(e.g., <code class="docutils literal"><span class="pre">(0.1,</span> <span class="pre">0.2,</span> <span class="pre">0.5)</span></code> or  <code class="docutils literal"><span class="pre">(0.1,</span> <span class="pre">0.2,</span> <span class="pre">0.5,</span> <span class="pre">0.3)</span></code>)</li>
+<li>a hex RGB or RGBA string (e.g., <code class="docutils literal"><span class="pre">'#0F0F0F'</span></code> or <code class="docutils literal"><span class="pre">'#0F0F0F0F'</span></code>)</li>
+<li>a string representation of a float value in <code class="docutils literal"><span class="pre">[0,</span> <span class="pre">1]</span></code>
+inclusive for gray level (e.g., <code class="docutils literal"><span class="pre">'0.5'</span></code>)</li>
 <li>one of <code class="docutils literal"><span class="pre">{'b',</span> <span class="pre">'g',</span> <span class="pre">'r',</span> <span class="pre">'c',</span> <span class="pre">'m',</span> <span class="pre">'y',</span> <span class="pre">'k',</span> <span class="pre">'w'}</span></code></li>
 <li>a X11/CSS4 color name</li>
 <li>a name from the <a class="reference external" href="https://xkcd.com/color/rgb/">xkcd color survey</a>
@@ -165,9 +163,9 @@ can be used as a &#8216;single character color&#8217; in format-string to
 <code class="xref py py-obj docutils literal"><span class="pre">matplotlib.Axes.plot</span></code>.</p>
 <p>The single digit is the index into the default property cycle
 (<code class="docutils literal"><span class="pre">matplotlib.rcParams['axes.prop_cycle']</span></code>).  If the property cycle does not
-include <code class="docutils literal"><span class="pre">'color</span></code> then black is returned.  The color is evaluated when the
-artist is created.  For example</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+include <code class="docutils literal"><span class="pre">'color'</span></code> then black is returned.  The color is evaluated when the
+artist is created.  For example,</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
 <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
@@ -196,20 +194,20 @@ artist is created.  For example</p>
 <p class="caption"><span class="caption-text">(<a class="reference external" href="../users/colors-1_01.png">png</a>, <a class="reference external" href="../users/colors-1_01.pdf">pdf</a>)</span></p>
 </div>
 <p>will use the first color for the title and then plot using the second
-and third colors of the styles <code class="docutils literal"><span class="pre">mpl.rcParams['axes.prop_cycle']</span></code>.</p>
+and third colors of each style&#8217;s <code class="docutils literal"><span class="pre">mpl.rcParams['axes.prop_cycle']</span></code>.</p>
 </div>
 <div class="section" id="xkcd-v-x11-css4">
 <h2>xkcd v X11/CSS4<a class="headerlink" href="#xkcd-v-x11-css4" title="Permalink to this headline">¶</a></h2>
 <p>The xkcd colors are derived from a user survey conducted by the
 webcomic xkcd.  <a class="reference external" href="https://blog.xkcd.com/2010/05/03/color-survey-results/">Details of the survey are available on the xkcd blog</a>.</p>
-<p>There are 95 (out of 148 colors in the css color list) name collisions
+<p>Out of 148 colors in the CSS color list, there are 95 name collisions
 between the X11/CSS4 names and the xkcd names, all but 3 of which have
 different hex values.  For example <code class="docutils literal"><span class="pre">'blue'</span></code> maps to <code class="docutils literal"><span class="pre">'#0000FF'</span></code>
 where as <code class="docutils literal"><span class="pre">'xkcd:blue'</span></code> maps to <code class="docutils literal"><span class="pre">'#0343DF'</span></code>.  Due to these name
 collisions all of the xkcd colors have <code class="docutils literal"><span class="pre">'xkcd:'</span></code> prefixed.  As noted in
 the blog post, while it might be interesting to re-define the X11/CSS4 names
-based on such a survey we do not do so unilaterally.</p>
-<p>The name collisions are shown in the table below, the color names
+based on such a survey, we do not do so unilaterally.</p>
+<p>The name collisions are shown in the table below; the color names
 where the hex values agree are shown in bold.</p>
 <p>(<a class="reference external" href="../users/colors-2.py">Source code</a>, <a class="reference external" href="../users/colors-2.png">png</a>, <a class="reference external" href="../users/colors-2.pdf">pdf</a>)</p>
 <div class="figure">
@@ -226,10 +224,10 @@ where the hex values agree are shown in bold.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2014 The matplotlib development team.
-      Last updated on Aug 29, 2016.
+        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2016 The matplotlib development team.
+      Last updated on Sep 25, 2016.
       Created using <a
-href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
 
 <script>

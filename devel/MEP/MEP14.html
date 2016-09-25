@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MEP14: Text handling &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
+    <title>MEP14: Text handling &mdash; Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation</title>
     
     <link rel="stylesheet" href="../../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
+        VERSION:     '2.0.0b4.post96.dev0+g0de8fed',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
+          title="Search within Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation"
           href="../../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation" href="../../index.html" />
     <link rel="up" title="Matplotlib Enhancement Proposals" href="index.html" />
     <link rel="next" title="MEP15 - Fix axis autoscaling when limits are specified for one axis only" href="MEP15.html" />
     <link rel="prev" title="MEP13: Use properties for Artists" href="MEP13.html" /> 
@@ -128,14 +128,11 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -194,7 +191,7 @@ for rendering mathematical equations using a subset of the TeX
 language without having a TeX installation available.  Support for
 these two engines in strewn about many source files, including every
 backend, where one finds clauses like</p>
-<div class="highlight-python"><div class="highlight"><pre>if rcParams[&#39;text.usetex&#39;]: # do one thing else: # do another
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;text.usetex&#39;</span><span class="p">]:</span> <span class="c1"># do one thing else: # do another</span>
 </pre></div>
 </div>
 <p>Adding a third text rendering approach (more on that later) would
@@ -389,7 +386,7 @@ font.  From a <code class="xref py py-obj docutils literal"><span class="pre">Te
 so the engine can output raw editable text using as few spans as
 possible.  If the engine would rather get individual characters, they
 can be obtained from the <code class="xref py py-obj docutils literal"><span class="pre">TextSpan</span></code> instance:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">TextFont</span><span class="p">(</span><span class="n">TextFontBase</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TextFont</span><span class="p">(</span><span class="n">TextFontBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">font_properties</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new object for rendering text using the given font properties.</span>
@@ -542,10 +539,10 @@ matplotlib may be selected.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2014 The matplotlib development team.
-      Last updated on Aug 29, 2016.
+        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2016 The matplotlib development team.
+      Last updated on Sep 25, 2016.
       Created using <a
-href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
 
 <script>

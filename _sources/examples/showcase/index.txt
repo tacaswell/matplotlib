@@ -12,6 +12,8 @@ showcase Examples
 .. toctree::
     :maxdepth: 1
 
+    anatomy <anatomy.rst>
     bachelors_degrees_by_gender <bachelors_degrees_by_gender.rst>
+    firefox <firefox.rst>
     integral_demo <integral_demo.rst>
     xkcd <xkcd.rst>

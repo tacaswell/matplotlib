@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changes to the default style &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
+    <title>Changes to the default style &mdash; Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation</title>
     
     <link rel="stylesheet" href="../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
+        VERSION:     '2.0.0b4.post96.dev0+g0de8fed',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
+          title="Search within Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation"
           href="../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation" href="../index.html" />
     <link rel="up" title="What’s new in matplotlib" href="whats_new.html" />
     <link rel="next" title="New in matplotlib 0.98.4" href="prev_whats_new/whats_new_0.98.4.html" />
     <link rel="prev" title="What’s new in matplotlib" href="whats_new.html" /> 
@@ -95,28 +95,48 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
   <h3><a href="../contents.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changes to the default style</a><ul>
-<li><a class="reference internal" href="#colors-color-cycles-and-color-maps">colors, color cycles, and color maps</a><ul>
+<li><a class="reference internal" href="#colors-color-cycles-and-color-maps">Colors, color cycles, and color maps</a><ul>
 <li><a class="reference internal" href="#colors-in-default-property-cycle">Colors in default property cycle</a></li>
 <li><a class="reference internal" href="#colormap">Colormap</a></li>
 <li><a class="reference internal" href="#interactive-figures">Interactive figures</a></li>
-<li><a class="reference internal" href="#figure-size-font-size-and-screen-dpi">Figure size, font size, and screen dpi</a></li>
 <li><a class="reference internal" href="#grid-lines">Grid lines</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#figure-size-font-size-and-screen-dpi">Figure size, font size, and screen dpi</a></li>
 <li><a class="reference internal" href="#plotting-functions">Plotting functions</a><ul>
 <li><a class="reference internal" href="#scatter"><code class="docutils literal"><span class="pre">scatter</span></code></a></li>
 <li><a class="reference internal" href="#plot"><code class="docutils literal"><span class="pre">plot</span></code></a></li>
+<li><a class="reference internal" href="#errorbar"><code class="docutils literal"><span class="pre">errorbar</span></code></a></li>
+<li><a class="reference internal" href="#boxplot"><code class="docutils literal"><span class="pre">boxplot</span></code></a></li>
 <li><a class="reference internal" href="#patch-edges-and-color">Patch edges and color</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#other">Other</a></li>
 <li><a class="reference internal" href="#hatching">Hatching</a></li>
-<li><a class="reference internal" href="#plot-layout">Plot layout</a></li>
-<li><a class="reference internal" href="#images">Images</a></li>
-<li><a class="reference internal" href="#fonts">Fonts</a></li>
-<li><a class="reference internal" href="#dates">Dates</a></li>
+<li><a class="reference internal" href="#fonts">Fonts</a><ul>
+<li><a class="reference internal" href="#normal-text">Normal text</a></li>
+<li><a class="reference internal" href="#math-text">Math text</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#legends">Legends</a></li>
+<li><a class="reference internal" href="#image">Image</a><ul>
+<li><a class="reference internal" href="#interpolation">Interpolation</a></li>
+<li><a class="reference internal" href="#colormapping-pipeline">Colormapping pipeline</a></li>
+<li><a class="reference internal" href="#shading">Shading</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plot-layout">Plot layout</a><ul>
+<li><a class="reference internal" href="#ticks">Ticks</a><ul>
+<li><a class="reference internal" href="#direction">Direction</a></li>
+<li><a class="reference internal" href="#number-of-ticks">Number of ticks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#auto-limits">Auto limits</a></li>
+<li><a class="reference internal" href="#z-order">Z-order</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#autodateformatter-format-strings"><code class="docutils literal"><span class="pre">AutoDateFormatter</span></code> format strings</a></li>
 <li><a class="reference internal" href="#mplot3d">mplot3d</a></li>
+<li><a class="reference internal" href="#temporary-notes-tom-is-keeping-in-the-source-so-they-do-not-get-lost">TEMPORARY NOTES TOM IS KEEPING IN THE SOURCE SO THEY DO NOT GET LOST</a></li>
 </ul>
 </li>
 </ul>
@@ -143,14 +163,11 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -169,43 +186,59 @@ default style.</p>
 are designed to work well in the most common cases.</p>
 <p>A &#8216;classic&#8217; style sheet is provided so reverting to the 1.x default
 values is a single line of python</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">mpl</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;classic&#39;</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;classic&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference internal" href="customizing.html#customizing-with-matplotlibrc-files"><span>The matplotlibrc file</span></a> for details about how to
+<p>See <a class="reference internal" href="customizing.html#customizing-with-matplotlibrc-files"><span class="std std-ref">The matplotlibrc file</span></a> for details about how to
 persistently and selectively revert many of these changes.</p>
 <div class="contents local topic" id="table-of-contents">
 <p class="topic-title first">Table of Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#colors-color-cycles-and-color-maps" id="id1">colors, color cycles, and color maps</a><ul>
+<li><a class="reference internal" href="#colors-color-cycles-and-color-maps" id="id1">Colors, color cycles, and color maps</a><ul>
 <li><a class="reference internal" href="#colors-in-default-property-cycle" id="id2">Colors in default property cycle</a></li>
 <li><a class="reference internal" href="#colormap" id="id3">Colormap</a></li>
 <li><a class="reference internal" href="#interactive-figures" id="id4">Interactive figures</a></li>
-<li><a class="reference internal" href="#figure-size-font-size-and-screen-dpi" id="id5">Figure size, font size, and screen dpi</a></li>
-<li><a class="reference internal" href="#grid-lines" id="id6">Grid lines</a></li>
+<li><a class="reference internal" href="#grid-lines" id="id5">Grid lines</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#figure-size-font-size-and-screen-dpi" id="id6">Figure size, font size, and screen dpi</a></li>
 <li><a class="reference internal" href="#plotting-functions" id="id7">Plotting functions</a><ul>
 <li><a class="reference internal" href="#scatter" id="id8"><code class="docutils literal"><span class="pre">scatter</span></code></a></li>
 <li><a class="reference internal" href="#plot" id="id9"><code class="docutils literal"><span class="pre">plot</span></code></a></li>
-<li><a class="reference internal" href="#patch-edges-and-color" id="id10">Patch edges and color</a></li>
+<li><a class="reference internal" href="#errorbar" id="id10"><code class="docutils literal"><span class="pre">errorbar</span></code></a></li>
+<li><a class="reference internal" href="#boxplot" id="id11"><code class="docutils literal"><span class="pre">boxplot</span></code></a></li>
+<li><a class="reference internal" href="#patch-edges-and-color" id="id12">Patch edges and color</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#other" id="id11">Other</a></li>
-<li><a class="reference internal" href="#hatching" id="id12">Hatching</a></li>
-<li><a class="reference internal" href="#plot-layout" id="id13">Plot layout</a></li>
-<li><a class="reference internal" href="#images" id="id14">Images</a></li>
-<li><a class="reference internal" href="#fonts" id="id15">Fonts</a></li>
-<li><a class="reference internal" href="#dates" id="id16">Dates</a></li>
+<li><a class="reference internal" href="#hatching" id="id13">Hatching</a></li>
+<li><a class="reference internal" href="#fonts" id="id14">Fonts</a><ul>
+<li><a class="reference internal" href="#normal-text" id="id15">Normal text</a></li>
+<li><a class="reference internal" href="#math-text" id="id16">Math text</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#legends" id="id17">Legends</a></li>
-<li><a class="reference internal" href="#mplot3d" id="id18">mplot3d</a></li>
+<li><a class="reference internal" href="#image" id="id18">Image</a><ul>
+<li><a class="reference internal" href="#interpolation" id="id19">Interpolation</a></li>
+<li><a class="reference internal" href="#colormapping-pipeline" id="id20">Colormapping pipeline</a></li>
+<li><a class="reference internal" href="#shading" id="id21">Shading</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plot-layout" id="id22">Plot layout</a><ul>
+<li><a class="reference internal" href="#ticks" id="id23">Ticks</a></li>
+<li><a class="reference internal" href="#auto-limits" id="id24">Auto limits</a></li>
+<li><a class="reference internal" href="#z-order" id="id25">Z-order</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#autodateformatter-format-strings" id="id26"><code class="docutils literal"><span class="pre">AutoDateFormatter</span></code> format strings</a></li>
+<li><a class="reference internal" href="#mplot3d" id="id27">mplot3d</a></li>
+<li><a class="reference internal" href="#temporary-notes-tom-is-keeping-in-the-source-so-they-do-not-get-lost" id="id28">TEMPORARY NOTES TOM IS KEEPING IN THE SOURCE SO THEY DO NOT GET LOST</a></li>
 </ul>
 </div>
 <div class="section" id="colors-color-cycles-and-color-maps">
-<h2><a class="toc-backref" href="#id1">colors, color cycles, and color maps</a><a class="headerlink" href="#colors-color-cycles-and-color-maps" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id1">Colors, color cycles, and color maps</a><a class="headerlink" href="#colors-color-cycles-and-color-maps" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="colors-in-default-property-cycle">
 <h3><a class="toc-backref" href="#id2">Colors in default property cycle</a><a class="headerlink" href="#colors-in-default-property-cycle" title="Permalink to this headline">¶</a></h3>
-<p>The colors in the default proprety cycle have been changed from
+<p>The colors in the default property cycle have been changed from
 <code class="docutils literal"><span class="pre">['b',</span> <span class="pre">'g',</span> <span class="pre">'r',</span> <span class="pre">'c',</span> <span class="pre">'m',</span> <span class="pre">'y',</span> <span class="pre">'k']</span></code> to the <a class="reference external" href="https://github.com/vega/vega/wiki/Scales#scale-range-literals">Vega category10 palette</a></p>
 <p>(<a class="reference external" href="../users/dflt_style_changes-1.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-1.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-1.pdf">pdf</a>)</p>
 <div class="figure">
@@ -217,16 +250,17 @@ character short-hand notations for red, green, blue, cyan, magenta,
 yellow, and black.  This made them easy to type and usable in the
 abbreviated style string in <code class="docutils literal"><span class="pre">plot</span></code>, however the new default colors
 are only specified via hex values.  To access these colors outside of
-the property cycling the notation for colors <code class="docutils literal"><span class="pre">'CN'</span></code> was added to
+the property cycling the notation for colors <code class="docutils literal"><span class="pre">'CN'</span></code>, where <code class="docutils literal"><span class="pre">N</span></code>
+takes values 0-9, was added to
 denote the first 10 colors in <code class="docutils literal"><span class="pre">mpl.rcParams['axes.prop_cycle']</span></code> See
-<a class="reference internal" href="colors.html#colors"><span>Specifying Colors</span></a> for more details.</p>
+<a class="reference internal" href="colors.html#colors"><span class="std std-ref">Specifying Colors</span></a> for more details.</p>
 <p>To restore the old color cycle use</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">cycler</span> <span class="kn">import</span> <span class="n">cycler</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cycler</span> <span class="k">import</span> <span class="n">cycler</span>
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;bgrcmyk&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>or setting</p>
-<div class="code highlight-python"><div class="highlight"><pre>axes.prop_cycle    : cycler(&#39;color&#39;, &#39;bgrcmyk&#39;)
+<p>or set</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">axes</span><span class="o">.</span><span class="n">prop_cycle</span>    <span class="p">:</span> <span class="n">cycler</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;bgrcmyk&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
@@ -245,14 +279,14 @@ denote the first 10 colors in <code class="docutils literal"><span class="pre">m
 watch Nathaniel Smith and Stéfan van der Walt&#8217;s talk from SciPy2015.
 See <a class="reference external" href="https://bids.github.io/colormap/">here for many more details</a>
 about the other alternatives and the tools used to create the color
-map.  For details on all of color maps available in matplotlib see
-<a class="reference internal" href="colormaps.html#colormaps"><span>Choosing Colormaps</span></a>.</p>
+map.  For details on all of the color maps available in matplotlib see
+<a class="reference internal" href="colormaps.html#colormaps"><span class="std std-ref">Choosing Colormaps</span></a>.</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/xAoljeRJ3lU" frameborder="0" allowfullscreen></iframe><p>The previous default can be restored using</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;image.cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;jet&#39;</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;image.cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;jet&#39;</span>
 </pre></div>
 </div>
 <p>or setting</p>
-<div class="code highlight-python"><div class="highlight"><pre>image.cmap    : &#39;jet&#39;
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">image</span><span class="o">.</span><span class="n">cmap</span>    <span class="p">:</span> <span class="s1">&#39;jet&#39;</span>
 </pre></div>
 </div>
 <p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file; however this is strongly discouraged.</p>
@@ -262,30 +296,55 @@ map.  For details on all of color maps available in matplotlib see
 <p>The default interactive figure background color has changed from grey
 to white, which matches the default background color used when saving.</p>
 <p>The previous defaults can be restored by</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.facecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.75&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.facecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.75&#39;</span>
 </pre></div>
 </div>
-<p>or setting</p>
-<div class="highlight-python"><div class="highlight"><pre>figure.facecolor : &#39;0.75&#39;
+<p>or by setting</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="o">.</span><span class="n">facecolor</span> <span class="p">:</span> <span class="s1">&#39;0.75&#39;</span>
 </pre></div>
 </div>
 <p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
 </div>
+<div class="section" id="grid-lines">
+<h3><a class="toc-backref" href="#id5">Grid lines</a><a class="headerlink" href="#grid-lines" title="Permalink to this headline">¶</a></h3>
+<p>The default style of grid lines was changed from black dashed lines to thicker
+solid light grey lines.</p>
+<p>(<a class="reference external" href="../users/dflt_style_changes-3.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-3.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-3.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-3.png" src="../_images/dflt_style_changes-3.png" />
+</div>
+<p>The previous default can be restored by using:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;:&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+</pre></div>
+</div>
+<p>or by setting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">grid</span><span class="o">.</span><span class="n">color</span>       <span class="p">:</span>   <span class="n">k</span>       <span class="c1"># grid color</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">linestyle</span>   <span class="p">:</span>   <span class="p">:</span>       <span class="c1"># dotted</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">linewidth</span>   <span class="p">:</span>   <span class="mf">0.5</span>     <span class="c1"># in points</span>
+</pre></div>
+</div>
+<p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
+</div>
+</div>
 <div class="section" id="figure-size-font-size-and-screen-dpi">
-<h3><a class="toc-backref" href="#id5">Figure size, font size, and screen dpi</a><a class="headerlink" href="#figure-size-font-size-and-screen-dpi" title="Permalink to this headline">¶</a></h3>
-<p>The default dpi used for on-screen display was changed from 80dpi to
-100dpi, the same as the default dpi for saving files.  Due to this
+<h2><a class="toc-backref" href="#id6">Figure size, font size, and screen dpi</a><a class="headerlink" href="#figure-size-font-size-and-screen-dpi" title="Permalink to this headline">¶</a></h2>
+<p>The default dpi used for on-screen display was changed from 80 dpi to
+100 dpi, the same as the default dpi for saving files.  Due to this
 change, the on-screen display is now more what-you-see-is-what-you-get
-for saved files.  To keep figure the same size in terms of pixels, in
+for saved files.  To keep the figure the same size in terms of pixels, in
 order to maintain approximately the same size on the screen, the
-default figure size was reduced from 8in by 6in to 6.4in by 4.8in.  As
+default figure size was reduced from 8x6 inches to 6.4x4.8 inches.  As
 a consequence of this the default font sizes used for the title, tick
 labels, and axes labels were reduced to maintain their size relative
 to the overall size of the figure.  By default the dpi of the saved
 image is now the dpi of the <a class="reference internal" href="../api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure"><code class="xref py py-obj docutils literal"><span class="pre">Figure</span></code></a> instance being
 saved.</p>
+<p>This will have consequences if you are trying to match text in a
+figure directly with external text.</p>
 <p>The previous defaults can be restored by</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">8.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">8.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]</span>
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">80</span>
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;savefig.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
 
@@ -294,80 +353,58 @@ saved.</p>
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;medium&#39;</span>
 </pre></div>
 </div>
-<p>or set:</p>
-<div class="highlight-python"><div class="highlight"><pre>figure.figsize   : [8.0, 6.0]
-figure.dpi       : 80
-savefig.dpi      : 100
+<p>or by setting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="o">.</span><span class="n">figsize</span>   <span class="p">:</span> <span class="p">[</span><span class="mf">8.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]</span>
+<span class="n">figure</span><span class="o">.</span><span class="n">dpi</span>       <span class="p">:</span> <span class="mi">80</span>
+<span class="n">savefig</span><span class="o">.</span><span class="n">dpi</span>      <span class="p">:</span> <span class="mi">100</span>
 
-font.size        : 12.0
-legend.fontsize  : &#39;large&#39;
-figure.titlesize : &#39;medium&#39;
+<span class="n">font</span><span class="o">.</span><span class="n">size</span>        <span class="p">:</span> <span class="mf">12.0</span>
+<span class="n">legend</span><span class="o">.</span><span class="n">fontsize</span>  <span class="p">:</span> <span class="s1">&#39;large&#39;</span>
+<span class="n">figure</span><span class="o">.</span><span class="n">titlesize</span> <span class="p">:</span> <span class="s1">&#39;medium&#39;</span>
 </pre></div>
 </div>
 <p>In your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
-</div>
-<div class="section" id="grid-lines">
-<h3><a class="toc-backref" href="#id6">Grid lines</a><a class="headerlink" href="#grid-lines" title="Permalink to this headline">¶</a></h3>
-<p>The default style of grid lines was changed from, black dashed lines to thicker
-solid light grey lines.</p>
-<p>(<a class="reference external" href="../users/dflt_style_changes-3.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-3.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-3.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/dflt_style_changes-3.png" src="../_images/dflt_style_changes-3.png" />
-</div>
-<p>The previous default can be restored by using:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;:&#39;</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
-</pre></div>
-</div>
-<p>or setting:</p>
-<div class="highlight-python"><div class="highlight"><pre>grid.color       :   k       # grid color
-grid.linestyle   :   :       # dotted
-grid.linewidth   :   0.5     # in points
-</pre></div>
-</div>
-<p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
-</div>
 </div>
 <div class="section" id="plotting-functions">
 <h2><a class="toc-backref" href="#id7">Plotting functions</a><a class="headerlink" href="#plotting-functions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="scatter">
 <h3><a class="toc-backref" href="#id8"><code class="docutils literal"><span class="pre">scatter</span></code></a><a class="headerlink" href="#scatter" title="Permalink to this headline">¶</a></h3>
-<p>The following changes were made to the default behavior of <a class="reference internal" href="../api/axes_api.html#matplotlib.axes.Axes.scatter" title="matplotlib.axes.Axes.scatter"><code class="xref py py-obj docutils literal"><span class="pre">scatter</span></code></a></p>
+<p>The following changes were made to the default behavior of
+<a class="reference internal" href="../api/_as_gen/matplotlib.axes.Axes.scatter.html#matplotlib.axes.Axes.scatter" title="matplotlib.axes.Axes.scatter"><code class="xref py py-obj docutils literal"><span class="pre">scatter</span></code></a></p>
 <blockquote>
 <div><ul class="simple">
 <li>The default size of the elements in a scatter plot is now based on
 the rcParam <code class="docutils literal"><span class="pre">lines.markersize</span></code> so it is consistent with <code class="docutils literal"><span class="pre">plot(X,</span>
 <span class="pre">Y,</span> <span class="pre">'o')</span></code>.  The old value was 20, and the new value is 36 (6^2).</li>
 <li>scatter markers no longer have a black edge.</li>
-<li>if the color of the markers is not specified it will follow the property cycle
-pulling from the &#8216;patches&#8217; cycle on the <code class="docutils literal"><span class="pre">Axes</span></code>.</li>
+<li>if the color of the markers is not specified it will follow the
+property cycle, pulling from the &#8216;patches&#8217; cycle on the <code class="docutils literal"><span class="pre">Axes</span></code>.</li>
 </ul>
 </div></blockquote>
 <p>(<a class="reference external" href="../users/dflt_style_changes-4.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-4.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-4.pdf">pdf</a>)</p>
 <div class="figure">
 <img alt="../_images/dflt_style_changes-4.png" src="../_images/dflt_style_changes-4.png" />
 </div>
-<p>The classic default behavior of <a class="reference internal" href="../api/axes_api.html#matplotlib.axes.Axes.scatter" title="matplotlib.axes.Axes.scatter"><code class="xref py py-obj docutils literal"><span class="pre">scatter</span></code></a> can
+<p>The classic default behavior of <a class="reference internal" href="../api/_as_gen/matplotlib.axes.Axes.scatter.html#matplotlib.axes.Axes.scatter" title="matplotlib.axes.Axes.scatter"><code class="xref py py-obj docutils literal"><span class="pre">scatter</span></code></a> can
 only be recovered through <code class="docutils literal"><span class="pre">mpl.style.use('classic')</span></code>.  The marker size
 can be recovered via</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mpl</span><span class="o">.</span><span class="n">rcParam</span><span class="p">[</span><span class="s1">&#39;lines.markersize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParam</span><span class="p">[</span><span class="s1">&#39;lines.markersize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>however, this will also affect the default marker size of
-<a class="reference internal" href="../api/axes_api.html#matplotlib.axes.Axes.plot" title="matplotlib.axes.Axes.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>.  To recover the classic behavior on
+<a class="reference internal" href="../api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="matplotlib.axes.Axes.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>.  To recover the classic behavior on
 a per-call basis pass the following kwargs:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">classic_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;edgecolors&#39;</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">}</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">classic_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;edgecolors&#39;</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;b&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="plot">
 <h3><a class="toc-backref" href="#id9"><code class="docutils literal"><span class="pre">plot</span></code></a><a class="headerlink" href="#plot" title="Permalink to this headline">¶</a></h3>
 <p>The following changes were made to the default behavior of
-<a class="reference internal" href="../api/axes_api.html#matplotlib.axes.Axes.plot" title="matplotlib.axes.Axes.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a></p>
+<a class="reference internal" href="../api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="matplotlib.axes.Axes.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a></p>
 <blockquote>
 <div><ul class="simple">
-<li>the default linewidth change from 1 to 1.5</li>
+<li>the default linewidth increased from 1 to 1.5</li>
 <li>the dash patterns associated with <code class="docutils literal"><span class="pre">'--'</span></code>, <code class="docutils literal"><span class="pre">':'</span></code>, and <code class="docutils literal"><span class="pre">'-.'</span></code> have
 changed</li>
 <li>the dash patterns now scale with line width</li>
@@ -378,55 +415,119 @@ changed</li>
 <img alt="../_images/dflt_style_changes-5.png" src="../_images/dflt_style_changes-5.png" />
 </div>
 <p>The previous defaults can be restored by setting:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.dashed_pattern&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.dashdot_pattern&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.dotted_pattern&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.scale_dashes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.scale_dashes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
 <p>or by setting:</p>
-<div class="highlight-python"><div class="highlight"><pre>lines.linewidth   : 1.0
-lines.dashed_pattern : 6, 6
-lines.dashdot_pattern : 3, 5, 1, 5
-lines.dotted_pattern : 1, 3
-lines.scale_dashes: False
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">lines</span><span class="o">.</span><span class="n">linewidth</span>   <span class="p">:</span> <span class="mf">1.0</span>
+<span class="n">lines</span><span class="o">.</span><span class="n">dashed_pattern</span> <span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span>
+<span class="n">lines</span><span class="o">.</span><span class="n">dashdot_pattern</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span>
+<span class="n">lines</span><span class="o">.</span><span class="n">dotted_pattern</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span>
+<span class="n">lines</span><span class="o">.</span><span class="n">scale_dashes</span><span class="p">:</span> <span class="kc">False</span>
 </pre></div>
 </div>
 <p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
 </div>
-<div class="section" id="patch-edges-and-color">
-<h3><a class="toc-backref" href="#id10">Patch edges and color</a><a class="headerlink" href="#patch-edges-and-color" title="Permalink to this headline">¶</a></h3>
-<p>Artists drawn with a patch (<code class="docutils literal"><span class="pre">~matplotlib.axes.Axes.bar</span></code>,
-<code class="docutils literal"><span class="pre">~matplotlib.axes.Axes.pie</span></code>, etc) no longer have a black edge by
-default.  The default face color is now <code class="docutils literal"><span class="pre">'C0'</span></code> instead of <code class="docutils literal"><span class="pre">'b'</span></code>.</p>
+<div class="section" id="errorbar">
+<h3><a class="toc-backref" href="#id10"><code class="docutils literal"><span class="pre">errorbar</span></code></a><a class="headerlink" href="#errorbar" title="Permalink to this headline">¶</a></h3>
+<p>By default, caps on the ends of errorbars are not present.</p>
 <p>(<a class="reference external" href="../users/dflt_style_changes-6.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-6.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-6.pdf">pdf</a>)</p>
 <div class="figure">
 <img alt="../_images/dflt_style_changes-6.png" src="../_images/dflt_style_changes-6.png" />
 </div>
 <p>The previous defaults can be restored by setting:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;patch.force_edgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;patch.facecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;errorbar.capsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>or by setting</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">errorbar</span><span class="o">.</span><span class="n">capsize</span> <span class="p">:</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
+</div>
+<div class="section" id="boxplot">
+<h3><a class="toc-backref" href="#id11"><code class="docutils literal"><span class="pre">boxplot</span></code></a><a class="headerlink" href="#boxplot" title="Permalink to this headline">¶</a></h3>
+<p>Previously, boxplots were composed of a mish-mash styles that were, for
+better for worse, inherited from Matlab. Most of the elements were blue,
+but the medians were red. The fliers (outliers) were black plus-symbols
+(<code class="xref py py-obj docutils literal"><span class="pre">+</span></code>) and the whiskers were dashed lines, which created ambiguity if
+the (solid and black) caps were not drawn.</p>
+<p>For the new defaults, everything is black except for the median and mean
+lines (if drawn), which are set to the first two elements of the current
+color cycle. Also, the default flier markers are now hollow circles,
+which maintain the ability of the plus-symbols to overlap without
+obscuring data too much.</p>
+<p>(<a class="reference external" href="../users/dflt_style_changes-7.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-7.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-7.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-7.png" src="../_images/dflt_style_changes-7.png" />
+</div>
+<p>The previous defaults can be restored by setting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.flierprops.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.flierprops.marker&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.flierprops.markerfacecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.flierprops.markeredgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.boxprops.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.whiskerprops.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.whiskerprops.linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.medianprops.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.meanprops.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.meanprops.marker&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;^&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.meanprops.markerfacecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.meanprops.markeredgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.meanprops.markersize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.meanprops.linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;boxplot.meanprops.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
 </pre></div>
 </div>
 <p>or by setting:</p>
-<div class="highlight-python"><div class="highlight"><pre>patch.facecolor        : b
-patch.force_edgecolor  : True
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">boxplot</span><span class="o">.</span><span class="n">flierprops</span><span class="o">.</span><span class="n">color</span><span class="p">:</span>           <span class="s1">&#39;k&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">flierprops</span><span class="o">.</span><span class="n">marker</span><span class="p">:</span>          <span class="s1">&#39;+&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">flierprops</span><span class="o">.</span><span class="n">markerfacecolor</span><span class="p">:</span> <span class="s1">&#39;none&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">flierprops</span><span class="o">.</span><span class="n">markeredgecolor</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">boxprops</span><span class="o">.</span><span class="n">color</span><span class="p">:</span>             <span class="s1">&#39;b&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">whiskerprops</span><span class="o">.</span><span class="n">color</span><span class="p">:</span>         <span class="s1">&#39;b&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">whiskerprops</span><span class="o">.</span><span class="n">linestyle</span><span class="p">:</span>     <span class="s1">&#39;--&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">medianprops</span><span class="o">.</span><span class="n">color</span><span class="p">:</span>          <span class="s1">&#39;r&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">meanprops</span><span class="o">.</span><span class="n">color</span><span class="p">:</span>            <span class="s1">&#39;r&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">meanprops</span><span class="o">.</span><span class="n">marker</span><span class="p">:</span>           <span class="s1">&#39;^&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">meanprops</span><span class="o">.</span><span class="n">markerfacecolor</span><span class="p">:</span>  <span class="s1">&#39;r&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">meanprops</span><span class="o">.</span><span class="n">markeredgecolor</span><span class="p">:</span>  <span class="s1">&#39;k&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">meanprops</span><span class="o">.</span><span class="n">markersize</span><span class="p">:</span>        <span class="mi">6</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">meanprops</span><span class="o">.</span><span class="n">linestyle</span><span class="p">:</span>         <span class="s1">&#39;--&#39;</span>
+<span class="n">boxplot</span><span class="o">.</span><span class="n">meanprops</span><span class="o">.</span><span class="n">linewidth</span><span class="p">:</span>         <span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
+</div>
+<div class="section" id="patch-edges-and-color">
+<h3><a class="toc-backref" href="#id12">Patch edges and color</a><a class="headerlink" href="#patch-edges-and-color" title="Permalink to this headline">¶</a></h3>
+<p>Most artists drawn with a patch (<code class="docutils literal"><span class="pre">~matplotlib.axes.Axes.bar</span></code>,
+<code class="docutils literal"><span class="pre">~matplotlib.axes.Axes.pie</span></code>, etc) no longer have a black edge by
+default.  The default face color is now <code class="docutils literal"><span class="pre">'C0'</span></code> instead of <code class="docutils literal"><span class="pre">'b'</span></code>.</p>
+<p>(<a class="reference external" href="../users/dflt_style_changes-8.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-8.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-8.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-8.png" src="../_images/dflt_style_changes-8.png" />
+</div>
+<p>The previous defaults can be restored by setting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;patch.force_edgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;patch.facecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>or by setting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">patch</span><span class="o">.</span><span class="n">facecolor</span>        <span class="p">:</span> <span class="n">b</span>
+<span class="n">patch</span><span class="o">.</span><span class="n">force_edgecolor</span>  <span class="p">:</span> <span class="kc">True</span>
 </pre></div>
 </div>
 <p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
 </div>
 </div>
-<div class="section" id="other">
-<h2><a class="toc-backref" href="#id11">Other</a><a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>lines.color change, only hits raw usage of Line2D</li>
-</ul>
-</div>
 <div class="section" id="hatching">
-<h2><a class="toc-backref" href="#id12">Hatching</a><a class="headerlink" href="#hatching" title="Permalink to this headline">¶</a></h2>
-<ul>
-<li><p class="first">The width of the lines in a hatch pattern is now configurable by the
+<h2><a class="toc-backref" href="#id13">Hatching</a><a class="headerlink" href="#hatching" title="Permalink to this headline">¶</a></h2>
+<p>The width of the lines in a hatch pattern is now configurable by the
 rcParam <code class="xref py py-obj docutils literal"><span class="pre">hatch.linewidth</span></code>, with a default of 1 point.  The old
 behavior was different depending on backend:</p>
 <blockquote>
@@ -437,85 +538,371 @@ behavior was different depending on backend:</p>
 <li>Agg: 1 px</li>
 </ul>
 </div></blockquote>
-</li>
-</ul>
+<p>The old behavior can not be restored across all backends simultaneously, but
+can be restored for a single backend by setting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;hatch.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># previous pdf hatch linewidth</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;hatch.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># previous svg hatch linewidth</span>
+</pre></div>
 </div>
-<div class="section" id="plot-layout">
-<h2><a class="toc-backref" href="#id13">Plot layout</a><a class="headerlink" href="#plot-layout" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>The number of ticks on an axis is now automatically determined based
-on the length of the axis.</li>
-<li>The limits of an axes are scaled to exactly the dimensions of the data,
-plus 5% padding.  The old behavior was to scale to the nearest &#8220;round&#8221;
-numbers.  To use the old behavior, set the <code class="docutils literal"><span class="pre">rcParam</span></code>
-<code class="docutils literal"><span class="pre">axes.autolimit_mode</span></code> to <code class="docutils literal"><span class="pre">round_numbers</span></code>.  To control the
-margins on a particular side individually, pass any of the following
-to any artist or plotting function:<ul>
-<li><code class="docutils literal"><span class="pre">top_margin=False</span></code></li>
-<li><code class="docutils literal"><span class="pre">bottom_margin=False</span></code></li>
-<li><code class="docutils literal"><span class="pre">left_margin=False</span></code></li>
-<li><code class="docutils literal"><span class="pre">right_margin=False</span></code></li>
-</ul>
-</li>
-<li>Ticks now point outward by default.  To have ticks pointing inward,
-use the <code class="docutils literal"><span class="pre">rcParams</span></code> <code class="docutils literal"><span class="pre">xtick.direction</span></code> and <code class="docutils literal"><span class="pre">ytick.direction</span></code>.</li>
-<li>Ticks and grids are now plotted above solid elements such as
-filled contours, but below lines.  To return to the previous
-behavior of plotting ticks and grids above lines, set
-<code class="docutils literal"><span class="pre">rcParams['axes.axisbelow']</span> <span class="pre">=</span> <span class="pre">False</span></code>.</li>
-<li>By default, caps on the ends of errorbars are not present.  Use the
-rcParam <code class="docutils literal"><span class="pre">errorbar.capsize</span></code> to control this.</li>
-</ul>
+<p>The behavior of the PS and Agg backends was DPI dependent, thus:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dpi</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;savefig.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dpi</span>  <span class="c1"># or leave as default &#39;figure&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;hatch.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">dpi</span>  <span class="c1"># previous ps and Agg hatch linewidth</span>
+</pre></div>
 </div>
-<div class="section" id="images">
-<h2><a class="toc-backref" href="#id14">Images</a><a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>The default mode for image interpolation, in the rcParam
-<code class="docutils literal"><span class="pre">image.interpolation</span></code>, is now <code class="docutils literal"><span class="pre">nearest</span></code>.</li>
-<li>The default shading mode for light source shading, in
-<code class="docutils literal"><span class="pre">matplotlib.colors.LightSource.shade</span></code>, is now <code class="docutils literal"><span class="pre">overlay</span></code>.
-Formerly, it was <code class="docutils literal"><span class="pre">hsv</span></code>.</li>
-<li>The default value for the rcParam <code class="docutils literal"><span class="pre">image.resample</span></code> is now
-<code class="docutils literal"><span class="pre">True</span></code>.  This will apply interpolation for both upsampling and
-downsampling of an image.</li>
-</ul>
+<p>There is no API level control of the hatch linewidth.</p>
 </div>
 <div class="section" id="fonts">
-<h2><a class="toc-backref" href="#id15">Fonts</a><a class="headerlink" href="#fonts" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>The default font has changed from &#8220;Bitstream Vera Sans&#8221; to &#8220;DejaVu
-Sans&#8221;.  &#8220;DejaVu Sans&#8221; is an improvement on &#8220;Bistream Vera Sans&#8221; that
-adds more international and math characters, but otherwise has the
-same appearance.</li>
-<li>The default math font when using the built-in math rendering engine
-(mathtext) has changed from &#8220;Computer Modern&#8221; (i.e. LaTeX-like) to
-&#8220;DejaVu Sans&#8221;.  To revert to the old behavior, set the <code class="docutils literal"><span class="pre">rcParam</span></code>
-<code class="docutils literal"><span class="pre">mathtext.fontset</span></code> to <code class="docutils literal"><span class="pre">cm</span></code>.  This change has no effect if the
-TeX backend is used (i.e. <code class="docutils literal"><span class="pre">text.usetex</span></code> is <code class="docutils literal"><span class="pre">True</span></code>).</li>
-</ul>
+<span id="default-changes-font"></span><h2><a class="toc-backref" href="#id14">Fonts</a><a class="headerlink" href="#fonts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="normal-text">
+<h3><a class="toc-backref" href="#id15">Normal text</a><a class="headerlink" href="#normal-text" title="Permalink to this headline">¶</a></h3>
+<p>The default font has changed from &#8220;Bitstream Vera Sans&#8221; to &#8220;DejaVu
+Sans&#8221;.  DejaVu Sans has additional international and math characters,
+but otherwise has the same appearance as Bitstream Vera Sans.
+Latin, Greek, Cyrillic, Armenian, Georgian, Hebrew, and Arabic are
+<a class="reference external" href="http://dejavu-fonts.org/wiki/Main_Page">all supported</a>
+(but right-to-left rendering is still not handled by matplotlib).
+In addition, DejaVu contains a sub-set of emoji symbols.</p>
+<p>(<a class="reference external" href="../users/dflt_style_changes-9.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-9.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-9.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-9.png" src="../_images/dflt_style_changes-9.png" />
 </div>
-<div class="section" id="dates">
-<h2><a class="toc-backref" href="#id16">Dates</a><a class="headerlink" href="#dates" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>The default date formats are now all based on ISO format, i.e., with
-the slowest-moving value first.  The date formatters are still
-changeable through the <code class="docutils literal"><span class="pre">date.autoformatter.*</span></code> rcParams.  Python&#8217;s
-<code class="docutils literal"><span class="pre">%x</span></code> and <code class="docutils literal"><span class="pre">%X</span></code> date formats may be of particular interest to
-format dates based on the current locale.</li>
-</ul>
+<p>See the <a class="reference external" href="http://dejavu.sourceforge.net/samples/DejaVuSans.pdf">DejaVu Sans PDF sample for full coverage</a>.</p>
+</div>
+<div class="section" id="math-text">
+<h3><a class="toc-backref" href="#id16">Math text</a><a class="headerlink" href="#math-text" title="Permalink to this headline">¶</a></h3>
+<p>The default math font when using the built-in math rendering engine
+(mathtext) has changed from &#8220;Computer Modern&#8221; (i.e. LaTeX-like) to
+&#8220;DejaVu Sans&#8221;.  This change has no effect if the
+TeX backend is used (i.e. <code class="docutils literal"><span class="pre">text.usetex</span></code> is <code class="docutils literal"><span class="pre">True</span></code>).</p>
+<p>(<a class="reference external" href="../users/dflt_style_changes-10.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-10.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-10.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-10.png" src="../_images/dflt_style_changes-10.png" />
+</div>
+<p>(<a class="reference external" href="../users/dflt_style_changes-11.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-11.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-11.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-11.png" src="../_images/dflt_style_changes-11.png" />
+</div>
+<p>To revert to the old behavior set the:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.fontset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;cm&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.rm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;serif&#39;</span>
+</pre></div>
+</div>
+<p>or set:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mathtext</span><span class="o">.</span><span class="n">fontset</span><span class="p">:</span> <span class="n">cm</span>
+<span class="n">mathtext</span><span class="o">.</span><span class="n">rm</span> <span class="p">:</span> <span class="n">serif</span>
+</pre></div>
+</div>
+<p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
+<p>This <code class="docutils literal"><span class="pre">rcParam</span></code> is consulted when the text is drawn, not when the
+artist is created. Thus all mathtext on a given <code class="docutils literal"><span class="pre">canvas</span></code> will use the
+same fontset.</p>
+</div>
 </div>
 <div class="section" id="legends">
 <h2><a class="toc-backref" href="#id17">Legends</a><a class="headerlink" href="#legends" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>By default, the number of points displayed in a legend is now 1.</li>
 <li>The default legend location is <code class="docutils literal"><span class="pre">best</span></code>, so the legend will be
-automatically placed in a location to obscure the least amount of
-data possible.</li>
-<li>The legend now has rounded corners by default.</li>
+automatically placed in a location to minimize overlap with data.</li>
+<li>The legend defaults now include rounded corners, a lighter
+boundary, and partially transparent boundary and background.</li>
+</ul>
+<p>(<a class="reference external" href="../users/dflt_style_changes-12.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-12.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-12.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-12.png" src="../_images/dflt_style_changes-12.png" />
+</div>
+<p>The previous defaults can be restored by setting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.fancybox&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.loc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;upper right&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.numpoints&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;large&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.framealpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.scatterpoints&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.edgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;inherit&#39;</span>
+</pre></div>
+</div>
+<p>or by setting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">legend</span><span class="o">.</span><span class="n">fancybox</span>      <span class="p">:</span> <span class="kc">False</span>
+<span class="n">legend</span><span class="o">.</span><span class="n">loc</span>           <span class="p">:</span> <span class="n">upper</span> <span class="n">right</span>
+<span class="n">legend</span><span class="o">.</span><span class="n">numpoints</span>     <span class="p">:</span> <span class="mi">2</span>      <span class="c1"># the number of points in the legend line</span>
+<span class="n">legend</span><span class="o">.</span><span class="n">fontsize</span>      <span class="p">:</span> <span class="n">large</span>
+<span class="n">legend</span><span class="o">.</span><span class="n">framealpha</span>    <span class="p">:</span> <span class="kc">None</span>    <span class="c1"># opacity of legend frame</span>
+<span class="n">legend</span><span class="o">.</span><span class="n">scatterpoints</span> <span class="p">:</span> <span class="mi">3</span> <span class="c1"># number of scatter points</span>
+<span class="n">legend</span><span class="o">.</span><span class="n">edgecolor</span>     <span class="p">:</span> <span class="n">inherit</span>   <span class="c1"># legend edge color (&#39;inherit&#39;</span>
+                                 <span class="c1"># means it uses axes.edgecolor)</span>
+</pre></div>
+</div>
+<p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
+</div>
+<div class="section" id="image">
+<h2><a class="toc-backref" href="#id18">Image</a><a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="interpolation">
+<h3><a class="toc-backref" href="#id19">Interpolation</a><a class="headerlink" href="#interpolation" title="Permalink to this headline">¶</a></h3>
+<p>The default interpolation method for <a class="reference internal" href="../api/_as_gen/matplotlib.axes.Axes.imshow.html#matplotlib.axes.Axes.imshow" title="matplotlib.axes.Axes.imshow"><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code></a> is
+now <code class="docutils literal"><span class="pre">'nearest'</span></code> and by default it resamples the data (both up and down
+sampling) before color mapping.</p>
+<p>(<a class="reference external" href="../users/dflt_style_changes-13.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-13.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-13.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-13.png" src="../_images/dflt_style_changes-13.png" />
+</div>
+<p>To restore the previous behavior set:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;image.interpolation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bilinear&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;image.resample&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>or set:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">image</span><span class="o">.</span><span class="n">interpolation</span>  <span class="p">:</span> <span class="n">bilinear</span>  <span class="c1"># see help(imshow) for options</span>
+<span class="n">image</span><span class="o">.</span><span class="n">resample</span>  <span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
+</div>
+<div class="section" id="colormapping-pipeline">
+<h3><a class="toc-backref" href="#id20">Colormapping pipeline</a><a class="headerlink" href="#colormapping-pipeline" title="Permalink to this headline">¶</a></h3>
+<p>Previously, the input data was normalized, then color mapped, and then
+resampled to the resolution required for the screen.  This meant that
+the final resampling was being done in color space.  Because the color
+maps are not generally linear in RGB space, colors not in the color map
+may appear in the final image.  This bug was addressed by an almost
+complete overhaul of the image handling code.</p>
+<p>The input data is now normalized, then resampled to the correct
+resolution (in normalized dataspace), and then color mapped to
+RGB space.  This ensures that only colors from the color map appear
+in the final image. (If your viewer subsequently resamples the image,
+the artifact may reappear.)</p>
+<p>The previous behavior can not be restored.</p>
+</div>
+<div class="section" id="shading">
+<h3><a class="toc-backref" href="#id21">Shading</a><a class="headerlink" href="#shading" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The default shading mode for light source shading, in
+<code class="docutils literal"><span class="pre">matplotlib.colors.LightSource.shade</span></code>, is now <code class="docutils literal"><span class="pre">overlay</span></code>.
+Formerly, it was <code class="docutils literal"><span class="pre">hsv</span></code>.</li>
 </ul>
 </div>
+</div>
+<div class="section" id="plot-layout">
+<h2><a class="toc-backref" href="#id22">Plot layout</a><a class="headerlink" href="#plot-layout" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ticks">
+<h3><a class="toc-backref" href="#id23">Ticks</a><a class="headerlink" href="#ticks" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="direction">
+<h4>Direction<a class="headerlink" href="#direction" title="Permalink to this headline">¶</a></h4>
+<p>To reduce the collision of tick marks with data, the default ticks now
+point outward by default.  In addition, ticks are now drawn only on
+the bottom and left spines to prevent a porcupine appearance, and for
+a cleaner separation between subplots.</p>
+<p>(<a class="reference external" href="../users/dflt_style_changes-14.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-14.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-14.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-14.png" src="../_images/dflt_style_changes-14.png" />
+</div>
+<p>To restore the previous behavior set:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.direction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;in&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.direction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;in&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.top&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.right&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>or set:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">xtick</span><span class="o">.</span><span class="n">top</span><span class="p">:</span> <span class="kc">True</span>
+<span class="n">xtick</span><span class="o">.</span><span class="n">direction</span><span class="p">:</span> <span class="ow">in</span>
+
+<span class="n">ytick</span><span class="o">.</span><span class="n">right</span><span class="p">:</span> <span class="kc">True</span>
+<span class="n">ytick</span><span class="o">.</span><span class="n">direction</span><span class="p">:</span> <span class="ow">in</span>
+</pre></div>
+</div>
+<p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
+</div>
+<div class="section" id="number-of-ticks">
+<h4>Number of ticks<a class="headerlink" href="#number-of-ticks" title="Permalink to this headline">¶</a></h4>
+<p>The default <a class="reference internal" href="../api/ticker_api.html#matplotlib.ticker.Locator" title="matplotlib.ticker.Locator"><code class="xref py py-obj docutils literal"><span class="pre">Locator</span></code></a> used for the x and y axis is
+<a class="reference internal" href="../api/ticker_api.html#matplotlib.ticker.AutoLocator" title="matplotlib.ticker.AutoLocator"><code class="xref py py-obj docutils literal"><span class="pre">AutoLocator</span></code></a> which tries to find, up to some
+maximum number, &#8216;nicely&#8217; spaced ticks.  The locator now includes
+an algorithm to estimate the maximum number of ticks that will leave
+room for the tick labels.  By default it also ensures that there are at least
+two ticks visible.</p>
+<p>(<a class="reference external" href="../users/dflt_style_changes-15.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-15.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-15.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-15.png" src="../_images/dflt_style_changes-15.png" />
+</div>
+<p>There is no way, other than using <code class="docutils literal"><span class="pre">mpl.style.use('classic')</span></code>, to restore the
+previous behavior as the default.  On an axis-by-axis basis you may either
+control the existing locator via:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_major_locator</span><span class="p">()</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">nbins</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>or create a new <a class="reference internal" href="../api/ticker_api.html#matplotlib.ticker.MaxNLocator" title="matplotlib.ticker.MaxNLocator"><code class="xref py py-obj docutils literal"><span class="pre">MaxNLocator</span></code></a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.ticker</span> <span class="k">as</span> <span class="nn">mticker</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">mticker</span><span class="o">.</span><span class="n">MaxNLocator</span><span class="p">(</span><span class="n">nbins</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>For a log-scaled axis the default locator is the
+<a class="reference internal" href="../api/ticker_api.html#matplotlib.ticker.LogLocator" title="matplotlib.ticker.LogLocator"><code class="xref py py-obj docutils literal"><span class="pre">LogLocator</span></code></a>.  Previously the maximum number
+of ticks was set to 15, and could not be changed. Now there is a
+<code class="xref py py-obj docutils literal"><span class="pre">numticks</span></code> kwarg for setting the maximum to any integer value,
+to the string &#8216;auto&#8217;, or to its default value of None which is
+equivalent to &#8216;auto&#8217;.  With the &#8216;auto&#8217; setting the maximum number
+will be no larger than 9, and will be reduced depending on the
+length of the axis in units of the tick font size.  As in the
+case of the AutoLocator, the heuristic algorithm reduces the
+incidence of overlapping tick labels but does not prevent it.</p>
+</div>
+</div>
+<div class="section" id="auto-limits">
+<h3><a class="toc-backref" href="#id24">Auto limits</a><a class="headerlink" href="#auto-limits" title="Permalink to this headline">¶</a></h3>
+<p>The previous auto-scaling behavior was to find &#8216;nice&#8217; round numbers
+as view limits that enclosed the data limits, but this could produce
+bad plots if the data happened to fall on a vertical or
+horizontal line near the chosen &#8216;round number&#8217; limit.  The new default
+sets the view limits to 5% wider than the data range.</p>
+<p>(<a class="reference external" href="../users/dflt_style_changes-16.py">Source code</a>, <a class="reference external" href="../users/dflt_style_changes-16.png">png</a>, <a class="reference external" href="../users/dflt_style_changes-16.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/dflt_style_changes-16.png" src="../_images/dflt_style_changes-16.png" />
+</div>
+<p>The size of the padding in the x and y directions is controlled by the
+<code class="docutils literal"><span class="pre">'axes.xmargin'</span></code> and <code class="docutils literal"><span class="pre">'axes.ymargin'</span></code> rcParams respectively. Whether
+the view limits should be &#8216;round numbers&#8217; is controlled by the
+<code class="docutils literal"><span class="pre">'axes.autolimit_mode'</span></code> rcParam.  In the original <code class="docutils literal"><span class="pre">'round_number'</span></code> mode,
+the view limits coincide with ticks.  With the new default value, <code class="docutils literal"><span class="pre">'data'</span></code>,
+the outermost ticks will usually be inside the view limits, not at the ends.
+Also see <a class="reference internal" href="../api/_as_gen/matplotlib.axes.Axes.margins.html#matplotlib.axes.Axes.margins" title="matplotlib.axes.Axes.margins"><code class="xref py py-obj docutils literal"><span class="pre">margins</span></code></a>.</p>
+<p>For a few <a class="reference internal" href="../api/artist_api.html#matplotlib.artist.Artist" title="matplotlib.artist.Artist"><code class="xref py py-obj docutils literal"><span class="pre">Artist</span></code></a> classes, margins are undesirable.
+For example, a margin should not be added for a <a class="reference internal" href="../api/image_api.html#matplotlib.image.AxesImage" title="matplotlib.image.AxesImage"><code class="xref py py-obj docutils literal"><span class="pre">AxesImage</span></code></a>
+created with <a class="reference internal" href="../api/_as_gen/matplotlib.axes.Axes.imshow.html#matplotlib.axes.Axes.imshow" title="matplotlib.axes.Axes.imshow"><code class="xref py py-obj docutils literal"><span class="pre">imshow</span></code></a>.  To control the application of
+the margins, the <a class="reference internal" href="../api/artist_api.html#matplotlib.artist.Artist" title="matplotlib.artist.Artist"><code class="xref py py-obj docutils literal"><span class="pre">Artist</span></code></a> class has gained the properties :</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="../api/artist_api.html#matplotlib.artist.Artist.top_margin" title="matplotlib.artist.Artist.top_margin"><code class="xref py py-obj docutils literal"><span class="pre">top_margin</span></code></a></li>
+<li><a class="reference internal" href="../api/artist_api.html#matplotlib.artist.Artist.bottom_margin" title="matplotlib.artist.Artist.bottom_margin"><code class="xref py py-obj docutils literal"><span class="pre">bottom_margin</span></code></a></li>
+<li><a class="reference internal" href="../api/artist_api.html#matplotlib.artist.Artist.left_margin" title="matplotlib.artist.Artist.left_margin"><code class="xref py py-obj docutils literal"><span class="pre">left_margin</span></code></a></li>
+<li><a class="reference internal" href="../api/artist_api.html#matplotlib.artist.Artist.right_margin" title="matplotlib.artist.Artist.right_margin"><code class="xref py py-obj docutils literal"><span class="pre">right_margin</span></code></a></li>
+<li><a class="reference internal" href="../api/artist_api.html#matplotlib.artist.Artist.margins" title="matplotlib.artist.Artist.margins"><code class="xref py py-obj docutils literal"><span class="pre">margins</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>along with the complimentary <code class="docutils literal"><span class="pre">get_*</span></code> and <code class="docutils literal"><span class="pre">set_*</span></code> methods.  When
+computing the view limits, each <a class="reference internal" href="../api/artist_api.html#matplotlib.artist.Artist" title="matplotlib.artist.Artist"><code class="xref py py-obj docutils literal"><span class="pre">Artist</span></code></a> is
+checked.  If <em>any</em> artist returns <code class="xref py py-obj docutils literal"><span class="pre">False</span></code>  on a given side,
+the margin will be omitted there.  Some plotting methods and artists
+have margins disabled (<code class="xref py py-obj docutils literal"><span class="pre">False</span></code>) by default (for example
+<a class="reference internal" href="../api/_as_gen/matplotlib.axes.Axes.bar.html#matplotlib.axes.Axes.bar" title="matplotlib.axes.Axes.bar"><code class="xref py py-obj docutils literal"><span class="pre">bar</span></code></a> disables the bottom margin).  To cancel
+the margins for a specific artist, pass the kwargs :</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">top_margin=False</span></code></li>
+<li><code class="docutils literal"><span class="pre">bottom_margin=False</span></code></li>
+<li><code class="docutils literal"><span class="pre">left_margin=False</span></code></li>
+<li><code class="docutils literal"><span class="pre">right_margin=False</span></code></li>
+</ul>
+</div></blockquote>
+<p>to any plotting method or artist <code class="docutils literal"><span class="pre">__init__</span></code> which supports <code class="docutils literal"><span class="pre">**kwargs</span></code> (as
+any unused kwargs eventually get passed to <a class="reference internal" href="../api/artist_api.html#matplotlib.artist.Artist.update" title="matplotlib.artist.Artist.update"><code class="xref py py-obj docutils literal"><span class="pre">update</span></code></a>).</p>
+<p>The previous default can be restored by using:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.autolimit_mode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;round_numbers&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.xmargin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.ymargin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>or setting:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">axes</span><span class="o">.</span><span class="n">autolimit_mode</span><span class="p">:</span> <span class="n">round_numbers</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">xmargin</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">ymargin</span><span class="p">:</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
+</div>
+<div class="section" id="z-order">
+<h3><a class="toc-backref" href="#id25">Z-order</a><a class="headerlink" href="#z-order" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Ticks and grids are now plotted above solid elements such as
+filled contours, but below lines.  To return to the previous
+behavior of plotting ticks and grids above lines, set
+<code class="docutils literal"><span class="pre">rcParams['axes.axisbelow']</span> <span class="pre">=</span> <span class="pre">False</span></code>.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="autodateformatter-format-strings">
+<h2><a class="toc-backref" href="#id26"><code class="docutils literal"><span class="pre">AutoDateFormatter</span></code> format strings</a><a class="headerlink" href="#autodateformatter-format-strings" title="Permalink to this headline">¶</a></h2>
+<p>The default date formats are now all based on ISO format, i.e., with
+the slowest-moving value first.  The date formatters are
+configurable through the <code class="docutils literal"><span class="pre">date.autoformatter.*</span></code> rcParams.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="17%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Threshold (tick interval &gt;= than)</th>
+<th class="head">rcParam</th>
+<th class="head">classic</th>
+<th class="head">v2.0</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>365 days</td>
+<td><code class="docutils literal"><span class="pre">'date.autoformatter.year'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%Y'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%Y'</span></code></td>
+</tr>
+<tr class="row-odd"><td>30 days</td>
+<td><code class="docutils literal"><span class="pre">'date.autoformatter.month'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%b</span> <span class="pre">%Y'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%Y-%m'</span></code></td>
+</tr>
+<tr class="row-even"><td>1 day</td>
+<td><code class="docutils literal"><span class="pre">'date.autoformatter.day'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%b</span> <span class="pre">%d</span> <span class="pre">%Y'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%Y-%m-%d'</span></code></td>
+</tr>
+<tr class="row-odd"><td>1 hour</td>
+<td><code class="docutils literal"><span class="pre">'date.autoformatter.hour'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%H:%M:%S'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%H:%M'</span></code></td>
+</tr>
+<tr class="row-even"><td>1 minute</td>
+<td><code class="docutils literal"><span class="pre">'date.autoformatter.minute'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%H:%M:%S.%f'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%H:%M:%S'</span></code></td>
+</tr>
+<tr class="row-odd"><td>1 second</td>
+<td><code class="docutils literal"><span class="pre">'date.autoformatter.second'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%H:%M:%S.%f'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%H:%M:%S'</span></code></td>
+</tr>
+<tr class="row-even"><td>1  microsecond</td>
+<td><code class="docutils literal"><span class="pre">'date.autoformatter.microsecond'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%H:%M:%S.%f'</span></code></td>
+<td><code class="docutils literal"><span class="pre">'%H:%M:%S.%f'</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>Python&#8217;s <code class="docutils literal"><span class="pre">%x</span></code> and <code class="docutils literal"><span class="pre">%X</span></code> date formats may be of particular interest
+to format dates based on the current locale.</p>
+<p>The previous default can be restored by:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;date.autoformatter.year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;%Y&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;date.autoformatter.month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;%b %Y&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;date.autoformatter.day&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;%b </span><span class="si">%d</span><span class="s1"> %Y&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;date.autoformatter.hour&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;%H:%M:%S&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;date.autoformatter.minute&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;%H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;date.autoformatter.second&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;%H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;date.autoformatter.microsecond&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;%H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>or setting</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">date</span><span class="o">.</span><span class="n">autoformatter</span><span class="o">.</span><span class="n">year</span>   <span class="p">:</span> <span class="o">%</span><span class="n">Y</span>
+<span class="n">date</span><span class="o">.</span><span class="n">autoformatter</span><span class="o">.</span><span class="n">month</span>  <span class="p">:</span> <span class="o">%</span><span class="n">b</span> <span class="o">%</span><span class="n">Y</span>
+<span class="n">date</span><span class="o">.</span><span class="n">autoformatter</span><span class="o">.</span><span class="n">day</span>    <span class="p">:</span> <span class="o">%</span><span class="n">b</span> <span class="o">%</span><span class="n">d</span> <span class="o">%</span><span class="n">Y</span>
+<span class="n">date</span><span class="o">.</span><span class="n">autoformatter</span><span class="o">.</span><span class="n">hour</span>   <span class="p">:</span> <span class="o">%</span><span class="n">H</span><span class="p">:</span><span class="o">%</span><span class="n">M</span><span class="p">:</span><span class="o">%</span><span class="n">S</span>
+<span class="n">date</span><span class="o">.</span><span class="n">autoformatter</span><span class="o">.</span><span class="n">minute</span> <span class="p">:</span> <span class="o">%</span><span class="n">H</span><span class="p">:</span><span class="o">%</span><span class="n">M</span><span class="p">:</span><span class="o">%</span><span class="n">S</span><span class="o">.%</span><span class="n">f</span>
+<span class="n">date</span><span class="o">.</span><span class="n">autoformatter</span><span class="o">.</span><span class="n">second</span> <span class="p">:</span> <span class="o">%</span><span class="n">H</span><span class="p">:</span><span class="o">%</span><span class="n">M</span><span class="p">:</span><span class="o">%</span><span class="n">S</span><span class="o">.%</span><span class="n">f</span>
+<span class="n">date</span><span class="o">.</span><span class="n">autoformatter</span><span class="o">.</span><span class="n">microsecond</span> <span class="p">:</span> <span class="o">%</span><span class="n">H</span><span class="p">:</span><span class="o">%</span><span class="n">M</span><span class="p">:</span><span class="o">%</span><span class="n">S</span><span class="o">.%</span><span class="n">f</span>
+</pre></div>
+</div>
+<p>in your <code class="file docutils literal"><span class="pre">matplotlibrc</span></code> file.</p>
+</div>
 <div class="section" id="mplot3d">
-<h2><a class="toc-backref" href="#id18">mplot3d</a><a class="headerlink" href="#mplot3d" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id27">mplot3d</a><a class="headerlink" href="#mplot3d" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>mplot3d now obeys some style-related rcParams, rather than using
 hard-coded defaults.  These include:<ul>
@@ -532,6 +919,12 @@ hard-coded defaults.  These include:<ul>
 </li>
 </ul>
 </div>
+<div class="section" id="temporary-notes-tom-is-keeping-in-the-source-so-they-do-not-get-lost">
+<h2><a class="toc-backref" href="#id28">TEMPORARY NOTES TOM IS KEEPING IN THE SOURCE SO THEY DO NOT GET LOST</a><a class="headerlink" href="#temporary-notes-tom-is-keeping-in-the-source-so-they-do-not-get-lost" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>lines.color change, only hits raw usage of Line2D</li>
+</ul>
+</div>
 </div>
 
 
@@ -542,10 +935,10 @@ hard-coded defaults.  These include:<ul>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2014 The matplotlib development team.
-      Last updated on Aug 29, 2016.
+        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2016 The matplotlib development team.
+      Last updated on Sep 25, 2016.
       Created using <a
-href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
 
 <script>

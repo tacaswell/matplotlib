@@ -32,7 +32,7 @@ lines_bars_and_markers example code: line_styles_reference.py
     
     
     # Plot all line styles.
-    f, ax = plt.subplots()
+    fig, ax = plt.subplots()
     
     linestyles = ['-', '--', '-.', ':']
     for y, linestyle in enumerate(linestyles):

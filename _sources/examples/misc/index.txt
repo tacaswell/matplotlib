@@ -16,7 +16,6 @@ misc Examples
     font_indexing <font_indexing.rst>
     ftface_props <ftface_props.rst>
     image_thumbnail <image_thumbnail.rst>
-    longshort <longshort.rst>
     multiprocess <multiprocess.rst>
     rasterization_demo <rasterization_demo.rst>
     rc_traits <rc_traits.rst>

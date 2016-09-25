@@ -22,7 +22,8 @@ def demo(ax_top, ax_mid, ax_bottom, rcparams, label):
 
         ax_bottom.set_xlim(0, .75)
         ax_bottom.set_ylim(0, .75)
-        ax_bottom.add_artist(mpatches.Rectangle(grid[1] - [0.025, 0.05], 0.05, 0.1))
+        ax_bottom.add_artist(mpatches.Rectangle(grid[1] - [0.025, 0.05],
+                                                0.05, 0.1))
         ax_bottom.add_artist(mpatches.RegularPolygon(grid[3], 5, 0.1))
         ax_bottom.add_artist(mpatches.Ellipse(grid[4], 0.2, 0.1))
         ax_bottom.add_artist(mpatches.Circle(grid[0], 0.1))

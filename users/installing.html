@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Installing &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
+    <title>Installing &mdash; Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation</title>
     
     <link rel="stylesheet" href="../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
+        VERSION:     '2.0.0b4.post96.dev0+g0de8fed',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
+          title="Search within Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation"
           href="../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation" href="../index.html" />
     <link rel="up" title="User’s Guide" href="index.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
     <link rel="prev" title="Introduction" href="intro.html" /> 
@@ -139,14 +139,11 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -189,7 +186,7 @@ is packaged for almost every major Linux distribution.</p>
 <h3>Mac OSX : using pip<a class="headerlink" href="#mac-osx-using-pip" title="Permalink to this headline">¶</a></h3>
 <p>If you are on Mac OSX you can probably install matplotlib binaries using the
 standard Python installation program <a class="reference external" href="https://pypi.python.org/pypi/pip/">pip</a>.
-See <a class="reference internal" href="../faq/installing_faq.html#install-osx-binaries"><span>Installing OSX binary wheels</span></a>.</p>
+See <a class="reference internal" href="../faq/installing_faq.html#install-osx-binaries"><span class="std std-ref">Installing OSX binary wheels</span></a>.</p>
 </div>
 <div class="section" id="windows">
 <span id="installing-windows"></span><h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
@@ -199,8 +196,8 @@ Enthought Canopy, or Continuum Anaconda, which have matplotlib and many
 of its dependencies, plus other useful packages, preinstalled.</p>
 <p>For <a class="reference external" href="https://www.python.org/download/">standard Python</a> installations,
 install matplotlib using <a class="reference external" href="https://pypi.python.org/pypi/pip/">pip</a>:</p>
-<div class="highlight-python"><div class="highlight"><pre>python -m pip install -U pip setuptools
-python -m pip install matplotlib
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">pip</span> <span class="n">setuptools</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">matplotlib</span>
 </pre></div>
 </div>
 <p>In case Python 2.7 or 3.4 are not installed for all users,
@@ -256,7 +253,7 @@ running the latest source code, or just like to build everything
 yourself, it is not difficult to build matplotlib from source.  Grab
 the latest <em>tar.gz</em> release file from <a class="reference external" href="https://pypi.python.org/pypi/matplotlib/">the PyPI files page</a>, or if you want to
 develop matplotlib or just need the latest bugfixed version, grab the
-latest git version <a class="reference internal" href="../faq/installing_faq.html#install-from-git"><span>Source install from git</span></a>.</p>
+latest git version <a class="reference internal" href="../faq/installing_faq.html#install-from-git"><span class="std std-ref">Source install from git</span></a>.</p>
 <p>The standard environment variables <code class="xref py py-obj docutils literal"><span class="pre">CC</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">CXX</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">PKG_CONFIG</span></code> are respected.
 This means you can set them if your toolchain is prefixed. This may be used for
 cross compiling.</p>
@@ -266,9 +263,9 @@ export CXX=x86_64-pc-linux-gnu-g++
 export PKG_CONFIG=x86_64-pc-linux-gnu-pkg-config</div></blockquote>
 <p>Once you have satisfied the requirements detailed below (mainly
 python, numpy, libpng and freetype), you can build matplotlib:</p>
-<div class="highlight-python"><div class="highlight"><pre>cd matplotlib
-python setup.py build
-python setup.py install
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">matplotlib</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>We provide a <a class="reference external" href="https://github.com/matplotlib/matplotlib/raw/master/setup.cfg.template">setup.cfg</a>
@@ -287,8 +284,8 @@ e.g., if the header to some required library is in
 <span id="install-requirements"></span><h3>Build requirements<a class="headerlink" href="#build-requirements" title="Permalink to this headline">¶</a></h3>
 <p>These are external packages which you will need to install before
 installing matplotlib.  If you are building on OSX, see
-<a class="reference internal" href="#build-osx"><span>Building on OSX</span></a>. If you are building on Windows, see
-<a class="reference internal" href="#build-windows"><span>Building on Windows</span></a>. If you are installing dependencies with a
+<a class="reference internal" href="#build-osx"><span class="std std-ref">Building on OSX</span></a>. If you are building on Windows, see
+<a class="reference internal" href="#build-windows"><span class="std std-ref">Building on Windows</span></a>. If you are installing dependencies with a
 package manager on Linux, you may need to install the development
 packages (look for a &#8220;-dev&#8221; postfix) in addition to the libraries
 themselves.</p>
@@ -330,7 +327,7 @@ Python 3.2.</dd>
 <h4>Optional GUI framework<a class="headerlink" href="#optional-gui-framework" title="Permalink to this headline">¶</a></h4>
 <p>These are optional packages which you may want to install to use
 matplotlib with a user interface toolkit. See
-<a class="reference internal" href="../faq/usage_faq.html#what-is-a-backend"><span>What is a backend?</span></a> for more details on the optional matplotlib
+<a class="reference internal" href="../faq/usage_faq.html#what-is-a-backend"><span class="std std-ref">What is a backend?</span></a> for more details on the optional matplotlib
 backends and the capabilities they provide.</p>
 <dl class="docutils">
 <dt><a class="reference internal" href="../glossary/index.html#term-tk"><span class="xref std std-term">tk</span></a> 8.3 or later, not 8.6.0 or 8.6.1</dt>
@@ -392,13 +389,13 @@ code.</dd>
 <p>It is easiest to use your system package manager to install the dependencies.</p>
 <p>If you are on Debian/Ubuntu, you can get all the dependencies
 required to build matplotlib with:</p>
-<div class="highlight-python"><div class="highlight"><pre>sudo apt-get build-dep python-matplotlib
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">build</span><span class="o">-</span><span class="n">dep</span> <span class="n">python</span><span class="o">-</span><span class="n">matplotlib</span>
 </pre></div>
 </div>
 <p>If you are on Fedora/RedHat, you can get all the dependencies required
 to build matplotlib by first installing <code class="docutils literal"><span class="pre">yum-builddep</span></code> and then
 running:</p>
-<div class="highlight-python"><div class="highlight"><pre>su -c &quot;yum-builddep python-matplotlib&quot;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">su</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;yum-builddep python-matplotlib&quot;</span>
 </pre></div>
 </div>
 <p>This does not build matplotlib, but it does get the install the
@@ -434,10 +431,10 @@ at <a class="reference external" href="https://github.com/jbmohler/matplotlib-wi
       <div class="clearer"></div>
     </div>
     <div class="footer">
-        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2014 The matplotlib development team.
-      Last updated on Aug 29, 2016.
+        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2016 The matplotlib development team.
+      Last updated on Sep 25, 2016.
       Created using <a
-href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
 
 <script>

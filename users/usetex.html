@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Text rendering With LaTeX &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
+    <title>Text rendering With LaTeX &mdash; Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation</title>
     
     <link rel="stylesheet" href="../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
+        VERSION:     '2.0.0b4.post96.dev0+g0de8fed',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
+          title="Search within Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation"
           href="../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation" href="../index.html" />
     <link rel="up" title="Working with text" href="index_text.html" />
     <link rel="next" title="Typesetting With XeLaTeX/LuaLaTeX" href="pgf.html" />
     <link rel="prev" title="Writing mathematical expressions" href="mathtext.html" /> 
@@ -125,14 +125,11 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -154,7 +151,7 @@ option is available with the following backends:</p>
 </ul>
 <p>The LaTeX option is activated by setting <code class="docutils literal"><span class="pre">text.usetex</span> <span class="pre">:</span> <span class="pre">True</span></code> in
 your rc settings.  Text handling with matplotlib&#8217;s LaTeX support is
-slower than matplotlib&#8217;s very capable <a class="reference internal" href="mathtext.html#mathtext-tutorial"><span>mathtext</span></a>, but is more flexible, since different LaTeX
+slower than matplotlib&#8217;s very capable <a class="reference internal" href="mathtext.html#mathtext-tutorial"><span class="std std-ref">mathtext</span></a>, but is more flexible, since different LaTeX
 packages (font packages, math packages, etc.)  can be used. The
 results can be striking, especially when you take care to use the same
 fonts in your figures as in the main document.</p>
@@ -162,15 +159,15 @@ fonts in your figures as in the main document.</p>
 (which may be included with your LaTeX installation), and <a class="reference external" href="http://www.cs.wisc.edu/~ghost/">Ghostscript</a>
 (GPL Ghostscript 8.60 or later is recommended). The executables for these
 external dependencies must all be located on your <span class="target" id="index-0"></span><a class="reference internal" href="../faq/environment_variables_faq.html#envvar-PATH"><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code></a>.</p>
-<p>There are a couple of options to mention, which can be changed using <a class="reference internal" href="customizing.html#customizing-matplotlib"><span>rc
+<p>There are a couple of options to mention, which can be changed using <a class="reference internal" href="customizing.html#customizing-matplotlib"><span class="std std-ref">rc
 settings</span></a>. Here is an example matplotlibrc file:</p>
-<div class="highlight-python"><div class="highlight"><pre>font.family        : serif
-font.serif         : Times, Palatino, New Century Schoolbook, Bookman, Computer Modern Roman
-font.sans-serif    : Helvetica, Avant Garde, Computer Modern Sans serif
-font.cursive       : Zapf Chancery
-font.monospace     : Courier, Computer Modern Typewriter
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">font</span><span class="o">.</span><span class="n">family</span>        <span class="p">:</span> <span class="n">serif</span>
+<span class="n">font</span><span class="o">.</span><span class="n">serif</span>         <span class="p">:</span> <span class="n">Times</span><span class="p">,</span> <span class="n">Palatino</span><span class="p">,</span> <span class="n">New</span> <span class="n">Century</span> <span class="n">Schoolbook</span><span class="p">,</span> <span class="n">Bookman</span><span class="p">,</span> <span class="n">Computer</span> <span class="n">Modern</span> <span class="n">Roman</span>
+<span class="n">font</span><span class="o">.</span><span class="n">sans</span><span class="o">-</span><span class="n">serif</span>    <span class="p">:</span> <span class="n">Helvetica</span><span class="p">,</span> <span class="n">Avant</span> <span class="n">Garde</span><span class="p">,</span> <span class="n">Computer</span> <span class="n">Modern</span> <span class="n">Sans</span> <span class="n">serif</span>
+<span class="n">font</span><span class="o">.</span><span class="n">cursive</span>       <span class="p">:</span> <span class="n">Zapf</span> <span class="n">Chancery</span>
+<span class="n">font</span><span class="o">.</span><span class="n">monospace</span>     <span class="p">:</span> <span class="n">Courier</span><span class="p">,</span> <span class="n">Computer</span> <span class="n">Modern</span> <span class="n">Typewriter</span>
 
-text.usetex        : true
+<span class="n">text</span><span class="o">.</span><span class="n">usetex</span>        <span class="p">:</span> <span class="n">true</span>
 </pre></div>
 </div>
 <p>The first valid font in each family is the one that will be loaded. If the
@@ -180,15 +177,15 @@ accompanying math fonts, while the other Adobe serif fonts make use of the
 Computer Modern math fonts. See the <a class="reference external" href="http://www.ctan.org/tex-archive/macros/latex/required/psnfss/psnfss2e.pdf">PSNFSS</a> documentation for more details.</p>
 <p>To use LaTeX and select Helvetica as the default font, without editing
 matplotlibrc use:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rc</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">rc</span>
 <span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;family&#39;</span><span class="p">:</span><span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span><span class="s1">&#39;sans-serif&#39;</span><span class="p">:[</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">]})</span>
 <span class="c1">## for Palatino and other serif fonts use:</span>
 <span class="c1">#rc(&#39;font&#39;,**{&#39;family&#39;:&#39;serif&#39;,&#39;serif&#39;:[&#39;Palatino&#39;]})</span>
-<span class="n">rc</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">usetex</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">rc</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">usetex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Here is the standard example, <code class="xref py py-obj docutils literal"><span class="pre">tex_demo.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Demo of TeX rendering.</span>
 
 <span class="sd">You can use TeX to render all of your matplotlib text if the rc</span>
@@ -235,7 +232,7 @@ results.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>Certain characters require special escaping in TeX, such as:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1"># $ % &amp; ~ _ ^ \ { } \( \) \[ \]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># $ % &amp; ~ _ ^ \ { } \( \) \[ \]</span>
 </pre></div>
 </div>
 <p class="last">Therefore, these characters will behave differently depending on
@@ -245,7 +242,7 @@ the rcParam <code class="docutils literal"><span class="pre">text.usetex</span><
 <span id="usetex-unicode"></span><h2>usetex with unicode<a class="headerlink" href="#usetex-with-unicode" title="Permalink to this headline">¶</a></h2>
 <p>It is also possible to use unicode strings with the LaTeX text manager, here is
 an example taken from <code class="xref py py-obj docutils literal"><span class="pre">tex_unicode_demo.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This demo is tex_demo.py modified to have unicode. See that file for</span>
@@ -299,8 +296,8 @@ documents.</p>
 <ul class="simple">
 <li>On Windows, the <span class="target" id="index-1"></span><a class="reference internal" href="../faq/environment_variables_faq.html#envvar-PATH"><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code></a> environment variable may need to be modified
 to include the directories containing the latex, dvipng and ghostscript
-executables. See <a class="reference internal" href="../faq/environment_variables_faq.html#environment-variables"><span>Environment Variables</span></a> and
-<a class="reference internal" href="../faq/environment_variables_faq.html#setting-windows-environment-variables"><span>Setting environment variables in windows</span></a> for details.</li>
+executables. See <a class="reference internal" href="../faq/environment_variables_faq.html#environment-variables"><span class="std std-ref">Environment Variables</span></a> and
+<a class="reference internal" href="../faq/environment_variables_faq.html#setting-windows-environment-variables"><span class="std std-ref">Setting environment variables in windows</span></a> for details.</li>
 <li>Using MiKTeX with Computer Modern fonts, if you get odd *Agg and PNG
 results, go to MiKTeX/Options and update your format files</li>
 <li>The fonts look terrible on screen. You are probably running Mac OS, and there
@@ -321,7 +318,7 @@ external dependency.</li>
 <span id="usetex-troubleshooting"></span><h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Try deleting your <code class="file docutils literal"><span class="pre">.matplotlib/tex.cache</span></code> directory. If you don&#8217;t know
-where to find <code class="file docutils literal"><span class="pre">.matplotlib</span></code>, see <a class="reference internal" href="../faq/troubleshooting_faq.html#locating-matplotlib-config-dir"><span>matplotlib configuration and cache directory locations</span></a>.</li>
+where to find <code class="file docutils literal"><span class="pre">.matplotlib</span></code>, see <a class="reference internal" href="../faq/troubleshooting_faq.html#locating-matplotlib-config-dir"><span class="std std-ref">matplotlib configuration and cache directory locations</span></a>.</li>
 <li>Make sure LaTeX, dvipng and ghostscript are each working and on your
 <span class="target" id="index-2"></span><a class="reference internal" href="../faq/environment_variables_faq.html#envvar-PATH"><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code></a>.</li>
 <li>Make sure what you are trying to do is possible in a LaTeX document,
@@ -334,7 +331,7 @@ latest release before reporting problems to the list.</li>
 option provides lots of flexibility, and lots of ways to cause
 problems. Please disable this option before reporting problems to
 the mailing list.</li>
-<li>If you still need help, please see <a class="reference internal" href="../faq/troubleshooting_faq.html#reporting-problems"><span>Getting help</span></a></li>
+<li>If you still need help, please see <a class="reference internal" href="../faq/troubleshooting_faq.html#reporting-problems"><span class="std std-ref">Getting help</span></a></li>
 </ul>
 </div>
 </div>
@@ -347,10 +344,10 @@ the mailing list.</li>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2014 The matplotlib development team.
-      Last updated on Aug 29, 2016.
+        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2016 The matplotlib development team.
+      Last updated on Sep 25, 2016.
       Created using <a
-href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
 
 <script>

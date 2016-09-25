@@ -1,0 +1,6 @@
+matplotlib.axes.Axes.get_top_margin
+===================================
+
+.. currentmodule:: matplotlib.axes
+
+.. automethod:: Axes.get_top_margin

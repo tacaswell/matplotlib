@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>mlab &mdash; Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation</title>
+    <title>mlab &mdash; Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation</title>
     
     <link rel="stylesheet" href="../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0.0b3.post127.dev0+g32a0122',
+        VERSION:     '2.0.0b4.post96.dev0+g0de8fed',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation"
+          title="Search within Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation"
           href="../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b3.post127.dev0+g32a0122 documentation" href="../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b4.post96.dev0+g0de8fed documentation" href="../index.html" />
     <link rel="up" title="The Matplotlib API" href="index.html" />
     <link rel="next" title="offsetbox" href="offsetbox_api.html" />
     <link rel="prev" title="mathtext" href="mathtext_api.html" /> 
@@ -124,14 +124,11 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -223,7 +220,7 @@ scipy.integrate tools)</dd>
 <h3>record array helper functions<a class="headerlink" href="#record-array-helper-functions" title="Permalink to this headline">¶</a></h3>
 <p>A collection of helper methods for numpyrecord arrays</p>
 <blockquote id="htmlonly">
-<div>See <a class="reference internal" href="../examples/misc/index.html#misc-examples-index"><span>misc Examples</span></a></div></blockquote>
+<div>See <a class="reference internal" href="../examples/misc/index.html#misc-examples-index"><span class="std std-ref">misc Examples</span></a></div></blockquote>
 <dl class="docutils">
 <dt><a class="reference internal" href="#matplotlib.mlab.rec2txt" title="matplotlib.mlab.rec2txt"><code class="xref py py-func docutils literal"><span class="pre">rec2txt()</span></code></a></dt>
 <dd>Pretty print a record array</dd>
@@ -248,7 +245,7 @@ scipy.integrate tools)</dd>
 objects you can pass into the functions that will do things like color
 negative values red, set percent formatting and scaling, etc.</p>
 <p>Example usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">csv2rec</span><span class="p">(</span><span class="s1">&#39;somefile.csv&#39;</span><span class="p">,</span> <span class="n">checkrows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">csv2rec</span><span class="p">(</span><span class="s1">&#39;somefile.csv&#39;</span><span class="p">,</span> <span class="n">checkrows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">formatd</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
     <span class="n">weight</span> <span class="o">=</span> <span class="n">FormatFloat</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
@@ -656,21 +653,21 @@ within the signal.</dd>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">apply_window</code><span class="sig-paren">(</span><em>x</em>, <em>window</em>, <em>axis=0</em>, <em>return_window=None</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.apply_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the given window to the given 1D or 2D array along the given axis.</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre>  apply_window(x, window, axis=0, return_window=False)
+<div class="highlight-default"><div class="highlight"><pre><span></span>  <span class="n">apply_window</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_window</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-*x*: 1D or 2D array or sequence
-  Array or sequence containing the data.
+<span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="p">:</span> <span class="mi">1</span><span class="n">D</span> <span class="ow">or</span> <span class="mi">2</span><span class="n">D</span> <span class="n">array</span> <span class="ow">or</span> <span class="n">sequence</span>
+  <span class="n">Array</span> <span class="ow">or</span> <span class="n">sequence</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">data</span><span class="o">.</span>
 
-*winodw*: function or array.
-  Either a function to generate a window or an array with length
-  *x*.shape[*axis*]
+<span class="o">*</span><span class="n">winodw</span><span class="o">*</span><span class="p">:</span> <span class="n">function</span> <span class="ow">or</span> <span class="n">array</span><span class="o">.</span>
+  <span class="n">Either</span> <span class="n">a</span> <span class="n">function</span> <span class="n">to</span> <span class="n">generate</span> <span class="n">a</span> <span class="n">window</span> <span class="ow">or</span> <span class="n">an</span> <span class="n">array</span> <span class="k">with</span> <span class="n">length</span>
+  <span class="o">*</span><span class="n">x</span><span class="o">*.</span><span class="n">shape</span><span class="p">[</span><span class="o">*</span><span class="n">axis</span><span class="o">*</span><span class="p">]</span>
 
-*axis*: integer
-  The axis over which to do the repetition.
-  Must be 0 or 1.  The default is 0
+<span class="o">*</span><span class="n">axis</span><span class="o">*</span><span class="p">:</span> <span class="n">integer</span>
+  <span class="n">The</span> <span class="n">axis</span> <span class="n">over</span> <span class="n">which</span> <span class="n">to</span> <span class="n">do</span> <span class="n">the</span> <span class="n">repetition</span><span class="o">.</span>
+  <span class="n">Must</span> <span class="n">be</span> <span class="mi">0</span> <span class="ow">or</span> <span class="mf">1.</span>  <span class="n">The</span> <span class="n">default</span> <span class="ow">is</span> <span class="mi">0</span>
 
-*return_window*: bool
-  If true, also return the 1D values of the window that was applied
+<span class="o">*</span><span class="n">return_window</span><span class="o">*</span><span class="p">:</span> <span class="nb">bool</span>
+  <span class="n">If</span> <span class="n">true</span><span class="p">,</span> <span class="n">also</span> <span class="k">return</span> <span class="n">the</span> <span class="mi">1</span><span class="n">D</span> <span class="n">values</span> <span class="n">of</span> <span class="n">the</span> <span class="n">window</span> <span class="n">that</span> <span class="n">was</span> <span class="n">applied</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -802,7 +799,7 @@ since the factors cancel out.</p>
 <dt id="matplotlib.mlab.cohere_pairs">
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">cohere_pairs</code><span class="sig-paren">(</span><em>X</em>, <em>ij</em>, <em>NFFT=256</em>, <em>Fs=2</em>, <em>detrend=&lt;function detrend_none&gt;</em>, <em>window=&lt;function window_hanning&gt;</em>, <em>noverlap=0</em>, <em>preferSpeedOverMemory=True</em>, <em>progressCallback=&lt;function donothing_callback&gt;</em>, <em>returnPxx=False</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.cohere_pairs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Cxy</span><span class="p">,</span> <span class="n">Phase</span><span class="p">,</span> <span class="n">freqs</span> <span class="o">=</span> <span class="n">cohere_pairs</span><span class="p">(</span> <span class="n">X</span><span class="p">,</span> <span class="n">ij</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Cxy</span><span class="p">,</span> <span class="n">Phase</span><span class="p">,</span> <span class="n">freqs</span> <span class="o">=</span> <span class="n">cohere_pairs</span><span class="p">(</span> <span class="n">X</span><span class="p">,</span> <span class="n">ij</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Compute the coherence and phase for all pairs <em>ij</em>, in <em>X</em>.</p>
@@ -811,7 +808,7 @@ since the factors cancel out.</p>
 the columns of X for which you want to compute coherence.  For
 example, if <em>X</em> has 64 columns, and you want to compute all
 nonredundant pairs, define <em>ij</em> as:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ij</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ij</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">64</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">64</span><span class="p">):</span>
         <span class="n">ij</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="p">)</span>
@@ -831,7 +828,7 @@ on a 1.7GHZ Athlon with 512MB RAM compared with
 than 10x faster than naively crunching all possible pairs through
 <a class="reference internal" href="#matplotlib.mlab.cohere" title="matplotlib.mlab.cohere"><code class="xref py py-func docutils literal"><span class="pre">cohere()</span></code></a>.</p>
 <p>Returns:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">Cxy</span><span class="p">,</span> <span class="n">Phase</span><span class="p">,</span> <span class="n">freqs</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">Cxy</span><span class="p">,</span> <span class="n">Phase</span><span class="p">,</span> <span class="n">freqs</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>where:</p>
@@ -853,7 +850,7 @@ each frequency for each pair.  Keys are (<em>i</em>, <em>j</em>).</p>
 </ul>
 </div></blockquote>
 <p>e.g., to make a coherence Bode plot:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">Cxy</span><span class="p">[(</span><span class="mi">12</span><span class="p">,</span><span class="mi">19</span><span class="p">)])</span>
 <span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">Phase</span><span class="p">[(</span><span class="mi">12</span><span class="p">,</span><span class="mi">19</span><span class="p">)])</span>
@@ -965,7 +962,7 @@ True and we cover all such regions</p>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">cross_from_above</code><span class="sig-paren">(</span><em>x</em>, <em>threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.cross_from_above" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the indices into <em>x</em> where <em>x</em> crosses some threshold from
 below, e.g., the i&#8217;s where:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="n">threshold</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">threshold</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="n">threshold</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">threshold</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -979,11 +976,11 @@ below, e.g., the i&#8217;s where:</p>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">cross_from_below</code><span class="sig-paren">(</span><em>x</em>, <em>threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.cross_from_below" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the indices into <em>x</em> where <em>x</em> crosses some threshold from
 below, e.g., the i&#8217;s where:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">threshold</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">threshold</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">threshold</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">threshold</span>
 </pre></div>
 </div>
 <p>Example code:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
 <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
@@ -1014,9 +1011,9 @@ below, e.g., the i&#8217;s where:</p>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">csd</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>NFFT=None</em>, <em>Fs=None</em>, <em>detrend=None</em>, <em>window=None</em>, <em>noverlap=None</em>, <em>pad_to=None</em>, <em>sides=None</em>, <em>scale_by_freq=None</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.csd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the cross-spectral density.</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">csd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">NFFT</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">detrend_none</span><span class="p">,</span>
-    <span class="n">window</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">window_hanning</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pad_to</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-    <span class="n">sides</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">scale_by_freq</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">csd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">NFFT</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">detrend_none</span><span class="p">,</span>
+    <span class="n">window</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">window_hanning</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pad_to</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sides</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">scale_by_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The cross spectral density <img src="../_images/mathmpl/math-0005c3a5e5.png" style="position: relative; bottom: -9px"/> by Welch&#8217;s average
@@ -1190,15 +1187,15 @@ for further information.</p>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">demean</code><span class="sig-paren">(</span><em>x</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.demean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return x minus its mean along the specified axis.</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre>  demean(x, axis=0)
+<div class="highlight-default"><div class="highlight"><pre><span></span>  <span class="n">demean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-*x*: array or sequence
-  Array or sequence containing the data
-  Can have any dimensionality
+<span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="p">:</span> <span class="n">array</span> <span class="ow">or</span> <span class="n">sequence</span>
+  <span class="n">Array</span> <span class="ow">or</span> <span class="n">sequence</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">data</span>
+  <span class="n">Can</span> <span class="n">have</span> <span class="nb">any</span> <span class="n">dimensionality</span>
 
-*axis*: integer
-  The axis along which to take the mean.  See numpy.mean for a
-  description of this argument.
+<span class="o">*</span><span class="n">axis</span><span class="o">*</span><span class="p">:</span> <span class="n">integer</span>
+  <span class="n">The</span> <span class="n">axis</span> <span class="n">along</span> <span class="n">which</span> <span class="n">to</span> <span class="n">take</span> <span class="n">the</span> <span class="n">mean</span><span class="o">.</span>  <span class="n">See</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span> <span class="k">for</span> <span class="n">a</span>
+  <span class="n">description</span> <span class="n">of</span> <span class="n">this</span> <span class="n">argument</span><span class="o">.</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -1219,7 +1216,7 @@ for the default <em>axis</em>.</dd>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">detrend</code><span class="sig-paren">(</span><em>x</em>, <em>key=None</em>, <em>axis=None</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.detrend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return x with its trend removed.</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre>  detrend(x, key=&#39;mean&#39;)
+<div class="highlight-default"><div class="highlight"><pre><span></span>  detrend(x, key=&#39;mean&#39;)
 
 *x*: array or sequence
   Array or sequence containing the data.
@@ -1254,14 +1251,14 @@ for the default <em>axis</em>.</dd>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">detrend_linear</code><span class="sig-paren">(</span><em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.detrend_linear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return x minus best fit line; &#8216;linear&#8217; detrending.</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre>  detrend_linear(y)
+<div class="highlight-default"><div class="highlight"><pre><span></span>  <span class="n">detrend_linear</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
-*y*: 0-D or 1-D array or sequence
-  Array or sequence containing the data
+<span class="o">*</span><span class="n">y</span><span class="o">*</span><span class="p">:</span> <span class="mi">0</span><span class="o">-</span><span class="n">D</span> <span class="ow">or</span> <span class="mi">1</span><span class="o">-</span><span class="n">D</span> <span class="n">array</span> <span class="ow">or</span> <span class="n">sequence</span>
+  <span class="n">Array</span> <span class="ow">or</span> <span class="n">sequence</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">data</span>
 
-*axis*: integer
-  The axis along which to take the mean.  See numpy.mean for a
-  description of this argument.
+<span class="o">*</span><span class="n">axis</span><span class="o">*</span><span class="p">:</span> <span class="n">integer</span>
+  <span class="n">The</span> <span class="n">axis</span> <span class="n">along</span> <span class="n">which</span> <span class="n">to</span> <span class="n">take</span> <span class="n">the</span> <span class="n">mean</span><span class="o">.</span>  <span class="n">See</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span> <span class="k">for</span> <span class="n">a</span>
+  <span class="n">description</span> <span class="n">of</span> <span class="n">this</span> <span class="n">argument</span><span class="o">.</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -1287,15 +1284,15 @@ detrend algorithms.</dd>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">detrend_mean</code><span class="sig-paren">(</span><em>x</em>, <em>axis=None</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.detrend_mean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return x minus the mean(x).</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre>  detrend_mean(x, axis=None)
+<div class="highlight-default"><div class="highlight"><pre><span></span>  <span class="n">detrend_mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
-*x*: array or sequence
-  Array or sequence containing the data
-  Can have any dimensionality
+<span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="p">:</span> <span class="n">array</span> <span class="ow">or</span> <span class="n">sequence</span>
+  <span class="n">Array</span> <span class="ow">or</span> <span class="n">sequence</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">data</span>
+  <span class="n">Can</span> <span class="n">have</span> <span class="nb">any</span> <span class="n">dimensionality</span>
 
-*axis*: integer
-  The axis along which to take the mean.  See numpy.mean for a
-  description of this argument.
+<span class="o">*</span><span class="n">axis</span><span class="o">*</span><span class="p">:</span> <span class="n">integer</span>
+  <span class="n">The</span> <span class="n">axis</span> <span class="n">along</span> <span class="n">which</span> <span class="n">to</span> <span class="n">take</span> <span class="n">the</span> <span class="n">mean</span><span class="o">.</span>  <span class="n">See</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span> <span class="k">for</span> <span class="n">a</span>
+  <span class="n">description</span> <span class="n">of</span> <span class="n">this</span> <span class="n">argument</span><span class="o">.</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -1321,14 +1318,14 @@ detrend algorithms.</dd>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">detrend_none</code><span class="sig-paren">(</span><em>x</em>, <em>axis=None</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.detrend_none" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return x: no detrending.</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre>  detrend_none(x, axis=None)
+<div class="highlight-default"><div class="highlight"><pre><span></span>  <span class="n">detrend_none</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
-*x*: any object
-  An object containing the data
+<span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="p">:</span> <span class="nb">any</span> <span class="nb">object</span>
+  <span class="n">An</span> <span class="nb">object</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">data</span>
 
-*axis*: integer
-  This parameter is ignored.
-  It is included for compatibility with detrend_mean
+<span class="o">*</span><span class="n">axis</span><span class="o">*</span><span class="p">:</span> <span class="n">integer</span>
+  <span class="n">This</span> <span class="n">parameter</span> <span class="ow">is</span> <span class="n">ignored</span><span class="o">.</span>
+  <span class="n">It</span> <span class="ow">is</span> <span class="n">included</span> <span class="k">for</span> <span class="n">compatibility</span> <span class="k">with</span> <span class="n">detrend_mean</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -1387,7 +1384,7 @@ distance.</p>
 <img src="../_images/mathmpl/math-fce1799ac3.png" style="position: relative; bottom: -3px"/> bin of <em>bins</em>.  <em>bins</em> can be a number of bins or a
 range of bins; see <code class="xref py py-func docutils literal"><span class="pre">numpy.histogram()</span></code>.</p>
 <p>Compare <em>S</em> with analytic calculation for a Gaussian:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">randn</span><span class="p">(</span><span class="mi">200000</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">randn</span><span class="p">(</span><span class="mi">200000</span><span class="p">)</span>
 <span class="n">Sanalytic</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">sigma</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span> <span class="p">)</span>
 </pre></div>
 </div>
@@ -1437,7 +1434,7 @@ sets the number of points the list should contain (and overrides
 the value <em>step</em> might have been given). <code class="xref py py-func docutils literal"><span class="pre">numpy.arange()</span></code>
 doesn&#8217;t offer this option.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="go">array([ 0.,  1.,  2.,  3.])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frange</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">closed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="go">array([ 0.,  1.,  2.])</span>
@@ -1530,9 +1527,9 @@ matplotlib.tri.Triangulation and a matplotlib.tri.TriInterpolator.</p>
 <dd><p>Returns the identity matrix of shape (<em>n</em>, <em>n</em>, ..., <em>n</em>) (rank <em>r</em>).</p>
 <p>For ranks higher than 2, this object is simply a multi-index Kronecker
 delta:</p>
-<div class="highlight-python"><div class="highlight"><pre>                    /  1  if i0=i1=...=iR,
-id[i0,i1,...,iR] = -|
-                    \  0  otherwise.
+<div class="highlight-default"><div class="highlight"><pre><span></span>                    <span class="o">/</span>  <span class="mi">1</span>  <span class="k">if</span> <span class="n">i0</span><span class="o">=</span><span class="n">i1</span><span class="o">=...=</span><span class="n">iR</span><span class="p">,</span>
+<span class="nb">id</span><span class="p">[</span><span class="n">i0</span><span class="p">,</span><span class="n">i1</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">iR</span><span class="p">]</span> <span class="o">=</span> <span class="o">-|</span>
+                    \  <span class="mi">0</span>  <span class="n">otherwise</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>Optionally a <em>dtype</em> (or typecode) may be given (it defaults to &#8216;l&#8217;).</p>
@@ -1616,7 +1613,7 @@ integer value if the input is an integer exact power of 2.</p>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">logspace</code><span class="sig-paren">(</span><em>xmin</em>, <em>xmax</em>, <em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.logspace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return N values logarithmically spaced between xmin and xmax.</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">logspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">logspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1745,8 +1742,8 @@ component-wise.</p>
 </li>
 <li><p class="first">A tuple of length 2. In this case, yerr[0] is the error below <em>y</em> and
 yerr[1] is error above <em>y</em>. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylab</span> <span class="k">import</span> <span class="o">*</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="n">y_minus</span><span class="p">,</span> <span class="n">y_plus</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">offset_line</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -1846,8 +1843,8 @@ within the signal.</dd>
 <dd><p>Given a sequence of <em>xs</em> and <em>ys</em>, return the vertices of a
 polygon that has a horizontal base at <em>xmin</em> and an upper bound at
 the <em>ys</em>.  <em>xmin</em> is a scalar.</p>
-<p>Intended for use with <a class="reference internal" href="axes_api.html#matplotlib.axes.Axes.fill" title="matplotlib.axes.Axes.fill"><code class="xref py py-meth docutils literal"><span class="pre">matplotlib.axes.Axes.fill()</span></code></a>, e.g.,:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">poly_below</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<p>Intended for use with <a class="reference internal" href="_as_gen/matplotlib.axes.Axes.fill.html#matplotlib.axes.Axes.fill" title="matplotlib.axes.Axes.fill"><code class="xref py py-meth docutils literal"><span class="pre">matplotlib.axes.Axes.fill()</span></code></a>, e.g.,:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">poly_below</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1861,7 +1858,7 @@ that fills the regions between them.  <em>ylower</em> or <em>yupper</em> can be
 scalar or iterable.  If they are iterable, they must be equal in
 length to <em>x</em>.</p>
 <p>Return value is <em>x</em>, <em>y</em> arrays for use with
-<a class="reference internal" href="axes_api.html#matplotlib.axes.Axes.fill" title="matplotlib.axes.Axes.fill"><code class="xref py py-meth docutils literal"><span class="pre">matplotlib.axes.Axes.fill()</span></code></a>.</p>
+<a class="reference internal" href="_as_gen/matplotlib.axes.Axes.fill.html#matplotlib.axes.Axes.fill" title="matplotlib.axes.Axes.fill"><code class="xref py py-meth docutils literal"><span class="pre">matplotlib.axes.Axes.fill()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -1892,9 +1889,9 @@ indicates how many quantiles of data you want ranked.</p>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">psd</code><span class="sig-paren">(</span><em>x</em>, <em>NFFT=None</em>, <em>Fs=None</em>, <em>detrend=None</em>, <em>window=None</em>, <em>noverlap=None</em>, <em>pad_to=None</em>, <em>sides=None</em>, <em>scale_by_freq=None</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.psd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the power spectral density.</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">psd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">NFFT</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">detrend_none</span><span class="p">,</span>
-    <span class="n">window</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">window_hanning</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pad_to</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-    <span class="n">sides</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">scale_by_freq</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">psd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">NFFT</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">detrend_none</span><span class="p">,</span>
+    <span class="n">window</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">window_hanning</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pad_to</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sides</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">scale_by_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The power spectral density <img src="../_images/mathmpl/math-f6d65b7f49.png" style="position: relative; bottom: -6px"/> by Welch&#8217;s average
@@ -2052,13 +2049,13 @@ Precision for non-floats is simply ignored.</dd>
 can be a list of strings like [&#8216;field1&#8217;, &#8216;field2&#8217;] or a single
 comma separated string like &#8216;field1,field2&#8217;</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">precision</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">precision</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-python"><div class="highlight"><pre>ID    Price   Return
-ABC   12.54    0.234
-XYZ    6.32   -0.076
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ID</span>    <span class="n">Price</span>   <span class="n">Return</span>
+<span class="n">ABC</span>   <span class="mf">12.54</span>    <span class="mf">0.234</span>
+<span class="n">XYZ</span>    <span class="mf">6.32</span>   <span class="o">-</span><span class="mf">0.076</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2087,7 +2084,7 @@ together form the grouping key.  e.g., (&#8216;date&#8217;, &#8216;productcode&#
 <p><em>stats</em> is a sequence of (<em>attr</em>, <em>func</em>, <em>outname</em>) tuples which
 will call <code class="docutils literal"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">func(attr)</span></code> and assign <em>x</em> to the record array
 output with attribute <em>outname</em>.  For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">stats</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="s1">&#39;sales&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">,</span> <span class="s1">&#39;numsales&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;sales&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="s1">&#39;avgsale&#39;</span><span class="p">)</span> <span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">stats</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="s1">&#39;sales&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">,</span> <span class="s1">&#39;numsales&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;sales&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="s1">&#39;avgsale&#39;</span><span class="p">)</span> <span class="p">)</span>
 </pre></div>
 </div>
 <p>Return record array has <em>dtype</em> names for each attribute name in
@@ -2154,7 +2151,7 @@ array is identical to <em>r</em>, with extra arrays for each element in
 or if postfixes [PF0, PF1, ..., PFN-1] are supplied,
 [rowkey, namePF0, namePF1, ... namePFN-1].</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">recs_join</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;close&quot;</span><span class="p">,</span> <span class="n">recs</span><span class="o">=</span><span class="p">[</span><span class="n">r0</span><span class="p">,</span> <span class="n">r1</span><span class="p">],</span> <span class="n">missing</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">recs_join</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;close&quot;</span><span class="p">,</span> <span class="n">recs</span><span class="o">=</span><span class="p">[</span><span class="n">r0</span><span class="p">,</span> <span class="n">r1</span><span class="p">],</span> <span class="n">missing</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2176,7 +2173,7 @@ yourself stranded on a system w/o scipy.  Otherwise use
 signature <code class="docutils literal"><span class="pre">dy</span> <span class="pre">=</span> <span class="pre">derivs(yi,</span> <span class="pre">ti)</span></code></dd>
 </dl>
 <p>Example 1</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1">## 2D system</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">## 2D system</span>
 
 <span class="k">def</span> <span class="nf">derivs6</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
     <span class="n">d1</span> <span class="o">=</span>  <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -2189,7 +2186,7 @@ signature <code class="docutils literal"><span class="pre">dy</span> <span class
 </pre></div>
 </div>
 <p>Example 2:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1">## 1D system</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">## 1D system</span>
 <span class="n">alpha</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="k">def</span> <span class="nf">derivs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">alpha</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">)</span>
@@ -2225,8 +2222,8 @@ scipy.integrate tools rather than this function.</p>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">segments_intersect</code><span class="sig-paren">(</span><em>s1</em>, <em>s2</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.segments_intersect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <em>True</em> if <em>s1</em> and <em>s2</em> intersect.
 <em>s1</em> and <em>s2</em> are defined as:</p>
-<div class="highlight-python"><div class="highlight"><pre>s1: (x1, y1), (x2, y2)
-s2: (x3, y3), (x4, y4)
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">s1</span><span class="p">:</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+<span class="n">s2</span><span class="p">:</span> <span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">),</span> <span class="p">(</span><span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2258,66 +2255,69 @@ Icelandic Meteorological Office, March 2006 halldor at vedur.is)</p>
 <dt id="matplotlib.mlab.specgram">
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">specgram</code><span class="sig-paren">(</span><em>x</em>, <em>NFFT=None</em>, <em>Fs=None</em>, <em>detrend=None</em>, <em>window=None</em>, <em>noverlap=None</em>, <em>pad_to=None</em>, <em>sides=None</em>, <em>scale_by_freq=None</em>, <em>mode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.specgram" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a spectrogram.</p>
-<p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">specgram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">NFFT</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">detrend</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">detrend_none</span><span class="p">,</span>
-        <span class="n">window</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">window_hanning</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
-        <span class="n">cmap</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xextent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">pad_to</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sides</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span>
-        <span class="n">scale_by_freq</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Compute and plot a spectrogram of data in <em>x</em>.  Data are split into
-<em>NFFT</em> length segments and the spectrum of each section is
-computed.  The windowing function <em>window</em> is applied to each
+<p>Compute and plot a spectrogram of data in x.  Data are split into
+NFFT length segments and the spectrum of each section is
+computed.  The windowing function window is applied to each
 segment, and the amount of overlap of each segment is
-specified with <em>noverlap</em>.</p>
+specified with noverlap.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
 <blockquote>
-<div><dl class="docutils">
-<dt><em>x</em>: 1-D array or sequence</dt>
-<dd>Array or sequence containing the data</dd>
-</dl>
+<div><p>1-D array or sequence.</p>
 </div></blockquote>
-<p>Keyword arguments:</p>
+<p><strong>Keyword arguments:</strong></p>
 <blockquote>
 <div><dl class="docutils">
 <dt><em>Fs</em>: scalar</dt>
-<dd>The sampling frequency (samples per time unit).  It is used
+<dd><p class="first last">The sampling frequency (samples per time unit).  It is used
 to calculate the Fourier frequencies, freqs, in cycles per time
-unit. The default value is 2.</dd>
+unit. The default value is 2.</p>
+</dd>
 <dt><em>window</em>: callable or ndarray</dt>
-<dd>A function or a vector of length <em>NFFT</em>. To create window
+<dd><p class="first last">A function or a vector of length <em>NFFT</em>. To create window
 vectors see <a class="reference internal" href="#matplotlib.mlab.window_hanning" title="matplotlib.mlab.window_hanning"><code class="xref py py-func docutils literal"><span class="pre">window_hanning()</span></code></a>, <a class="reference internal" href="#matplotlib.mlab.window_none" title="matplotlib.mlab.window_none"><code class="xref py py-func docutils literal"><span class="pre">window_none()</span></code></a>,
 <code class="xref py py-func docutils literal"><span class="pre">numpy.blackman()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">numpy.hamming()</span></code>,
 <code class="xref py py-func docutils literal"><span class="pre">numpy.bartlett()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">scipy.signal()</span></code>,
 <code class="xref py py-func docutils literal"><span class="pre">scipy.signal.get_window()</span></code>, etc. The default is
 <a class="reference internal" href="#matplotlib.mlab.window_hanning" title="matplotlib.mlab.window_hanning"><code class="xref py py-func docutils literal"><span class="pre">window_hanning()</span></code></a>.  If a function is passed as the
 argument, it must take a data segment as an argument and
-return the windowed version of the segment.</dd>
+return the windowed version of the segment.</p>
+</dd>
 <dt><em>sides</em>: [ &#8216;default&#8217; | &#8216;onesided&#8217; | &#8216;twosided&#8217; ]</dt>
-<dd>Specifies which sides of the spectrum to return.  Default gives the
+<dd><p class="first last">Specifies which sides of the spectrum to return.  Default gives the
 default behavior, which returns one-sided for real data and both
 for complex data.  &#8216;onesided&#8217; forces the return of a one-sided
-spectrum, while &#8216;twosided&#8217; forces two-sided.</dd>
+spectrum, while &#8216;twosided&#8217; forces two-sided.</p>
+</dd>
 </dl>
 </div></blockquote>
-<dl class="docutils">
-<dt><em>pad_to</em>: integer</dt>
-<dd>The number of points to which the data segment is padded when
+<p><strong>*pad_to*: integer</strong></p>
+<blockquote>
+<div><p>The number of points to which the data segment is padded when
 performing the FFT.  This can be different from <em>NFFT</em>, which
 specifies the number of data points used.  While not increasing
 the actual resolution of the spectrum (the minimum distance between
 resolvable peaks), this can give more points in the plot,
 allowing for more detail. This corresponds to the <em>n</em> parameter
 in the call to fft(). The default is None, which sets <em>pad_to</em>
-equal to <em>NFFT</em></dd>
-<dt><em>NFFT</em>: integer</dt>
-<dd>The number of data points used in each block for the FFT.
+equal to <em>NFFT</em></p>
+</div></blockquote>
+<p><strong>*NFFT*: integer</strong></p>
+<blockquote>
+<div><p>The number of data points used in each block for the FFT.
 A power 2 is most efficient.  The default value is 256.
 This should <em>NOT</em> be used to get zero padding, or the scaling of the
-result will be incorrect. Use <em>pad_to</em> for this instead.</dd>
-<dt><em>detrend</em>: [ &#8216;default&#8217; | &#8216;constant&#8217; | &#8216;mean&#8217; | &#8216;linear&#8217; | &#8216;none&#8217;] or</dt>
-<dd><blockquote class="first">
-<div>callable</div></blockquote>
-<p class="last">The function applied to each segment before fft-ing,
+result will be incorrect. Use <em>pad_to</em> for this instead.</p>
+</div></blockquote>
+<p><strong>*detrend*: [ &#8216;default&#8217; | &#8216;constant&#8217; | &#8216;mean&#8217; | &#8216;linear&#8217; | &#8216;none&#8217;] or</strong></p>
+<blockquote>
+<div><blockquote>
+<div><p>callable</p>
+</div></blockquote>
+<p>The function applied to each segment before fft-ing,
 designed to remove the mean or linear trend.  Unlike in
 MATLAB, where the <em>detrend</em> parameter is a vector, in
 matplotlib is it a function.  The <code class="xref py py-mod docutils literal"><span class="pre">pylab</span></code>
@@ -2329,67 +2329,79 @@ one of the functions.  &#8216;default&#8217;, &#8216;constant&#8217;, and &#8216
 <code class="xref py py-func docutils literal"><span class="pre">detrend_mean()</span></code>.  &#8216;linear&#8217; calls
 <code class="xref py py-func docutils literal"><span class="pre">detrend_linear()</span></code>.  &#8216;none&#8217; calls
 <code class="xref py py-func docutils literal"><span class="pre">detrend_none()</span></code>.</p>
-</dd>
-<dt><em>scale_by_freq</em>: boolean</dt>
-<dd><blockquote class="first">
-<div>Specifies whether the resulting density values should be scaled
+</div></blockquote>
+<p><strong>*scale_by_freq*: boolean</strong></p>
+<blockquote>
+<div><p>Specifies whether the resulting density values should be scaled
 by the scaling frequency, which gives density in units of Hz^-1.
 This allows for integration over the returned frequency values.
-The default is True for MATLAB compatibility.</div></blockquote>
-<dl class="last docutils">
-<dt><em>mode</em>: [ &#8216;default&#8217; | &#8216;psd&#8217; | &#8216;complex&#8217; | &#8216;magnitude&#8217;</dt>
-<dd><blockquote class="first">
-<div>&#8216;angle&#8217; | &#8216;phase&#8217; ]</div></blockquote>
-<p class="last">What sort of spectrum to use.  Default is &#8216;psd&#8217;. which takes the
-power spectral density.  &#8216;complex&#8217; returns the complex-valued
-frequency spectrum.  &#8216;magnitude&#8217; returns the magnitude spectrum.
-&#8216;angle&#8217; returns the phase spectrum without unwrapping.  &#8216;phase&#8217;
-returns the phase spectrum with unwrapping.</p>
-</dd>
-<dt><em>noverlap</em>: integer</dt>
-<dd>The number of points of overlap between blocks.  The default value
-is 128.</dd>
-</dl>
-</dd>
-</dl>
-<p>Returns the tuple (<em>spectrum</em>, <em>freqs</em>, <em>t</em>):</p>
+The default is True for MATLAB compatibility.</p>
+</div></blockquote>
+<p><strong>noverlap</strong> : int, optional</p>
+<blockquote>
+<div><p>The number of points of overlap between blocks.  The default
+value is 128.</p>
+</div></blockquote>
+<p><strong>mode</strong> : str, optional</p>
 <blockquote>
 <div><dl class="docutils">
-<dt><em>spectrum</em>: 2-D array</dt>
-<dd>columns are the periodograms of successive segments</dd>
-<dt><em>freqs</em>: 1-D array</dt>
-<dd>The frequencies corresponding to the rows in <em>spectrum</em></dd>
-<dt><em>t</em>: 1-D array</dt>
-<dd>The times corresponding to midpoints of segments (i.e the columns
-in <em>spectrum</em>).</dd>
+<dt>What sort of spectrum to use, default is &#8216;psd&#8217;.</dt>
+<dd><dl class="first last docutils">
+<dt>&#8216;psd&#8217;</dt>
+<dd><p class="first last">Returns the power spectral density.</p>
+</dd>
+<dt>&#8216;complex&#8217;</dt>
+<dd><p class="first last">Returns the complex-valued frequency spectrum.</p>
+</dd>
+<dt>&#8216;magnitude&#8217;</dt>
+<dd><p class="first last">Returns the magnitude spectrum.</p>
+</dd>
+<dt>&#8216;angle&#8217;</dt>
+<dd><p class="first last">Returns the phase spectrum without unwrapping.</p>
+</dd>
+<dt>&#8216;phase&#8217;</dt>
+<dd><p class="first last">Returns the phase spectrum with unwrapping.</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </div></blockquote>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><em>detrend</em> and <em>scale_by_freq</em> only apply when <em>mode</em> is set to
-&#8216;psd&#8217;</p>
-</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>spectrum</strong> : array_like</p>
+<blockquote>
+<div><p>2-D array, columns are the periodograms of successive segments.</p>
+</div></blockquote>
+<p><strong>freqs</strong> : array_like</p>
+<blockquote>
+<div><p>1-D array, frequencies corresponding to the rows in <em>spectrum</em>.</p>
+</div></blockquote>
+<p><strong>t</strong> : array_like</p>
+<blockquote class="last">
+<div><p>1-D array, the times corresponding to midpoints of segments
+(i.e the columns in <em>spectrum</em>).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="#matplotlib.mlab.psd" title="matplotlib.mlab.psd"><code class="xref py py-func docutils literal"><span class="pre">psd()</span></code></a></dt>
-<dd><a class="reference internal" href="#matplotlib.mlab.psd" title="matplotlib.mlab.psd"><code class="xref py py-func docutils literal"><span class="pre">psd()</span></code></a> differs in the default overlap; in returning
-the mean of the segment periodograms; and in not returning
-times.</dd>
-<dt><a class="reference internal" href="#matplotlib.mlab.complex_spectrum" title="matplotlib.mlab.complex_spectrum"><code class="xref py py-func docutils literal"><span class="pre">complex_spectrum()</span></code></a></dt>
-<dd>A single spectrum, similar to having a single segment when
-<em>mode</em> is &#8216;complex&#8217;.</dd>
-<dt><a class="reference internal" href="#matplotlib.mlab.magnitude_spectrum" title="matplotlib.mlab.magnitude_spectrum"><code class="xref py py-func docutils literal"><span class="pre">magnitude_spectrum()</span></code></a></dt>
-<dd>A single spectrum, similar to having a single segment when
-<em>mode</em> is &#8216;magnitude&#8217;.</dd>
-<dt><a class="reference internal" href="#matplotlib.mlab.angle_spectrum" title="matplotlib.mlab.angle_spectrum"><code class="xref py py-func docutils literal"><span class="pre">angle_spectrum()</span></code></a></dt>
-<dd>A single spectrum, similar to having a single segment when
-<em>mode</em> is &#8216;angle&#8217;.</dd>
-<dt><a class="reference internal" href="#matplotlib.mlab.phase_spectrum" title="matplotlib.mlab.phase_spectrum"><code class="xref py py-func docutils literal"><span class="pre">phase_spectrum()</span></code></a></dt>
-<dd>A single spectrum, similar to having a single segment when
-<em>mode</em> is &#8216;phase&#8217;.</dd>
+<dt><a class="reference internal" href="#matplotlib.mlab.psd" title="matplotlib.mlab.psd"><code class="xref py py-obj docutils literal"><span class="pre">psd</span></code></a></dt>
+<dd>differs in the overlap and in the return values.</dd>
+<dt><a class="reference internal" href="#matplotlib.mlab.complex_spectrum" title="matplotlib.mlab.complex_spectrum"><code class="xref py py-obj docutils literal"><span class="pre">complex_spectrum</span></code></a></dt>
+<dd>similar, but with complex valued frequencies.</dd>
+<dt><a class="reference internal" href="#matplotlib.mlab.magnitude_spectrum" title="matplotlib.mlab.magnitude_spectrum"><code class="xref py py-obj docutils literal"><span class="pre">magnitude_spectrum</span></code></a></dt>
+<dd>similar single segment when mode is &#8216;magnitude&#8217;.</dd>
+<dt><a class="reference internal" href="#matplotlib.mlab.angle_spectrum" title="matplotlib.mlab.angle_spectrum"><code class="xref py py-obj docutils literal"><span class="pre">angle_spectrum</span></code></a></dt>
+<dd>similar to single segment when mode is &#8216;angle&#8217;.</dd>
+<dt><a class="reference internal" href="#matplotlib.mlab.phase_spectrum" title="matplotlib.mlab.phase_spectrum"><code class="xref py py-obj docutils literal"><span class="pre">phase_spectrum</span></code></a></dt>
+<dd>similar to single segment when mode is &#8216;phase&#8217;.</dd>
 </dl>
 </div>
+<p class="rubric">Notes</p>
+<p>detrend and scale_by_freq only apply when <em>mode</em> is set to &#8216;psd&#8217;.</p>
 </dd></dl>
 
 <dl class="function">
@@ -2401,7 +2413,7 @@ Stineman interpolation to calculate a vector <em>yi</em> corresponding to
 <em>xi</em>.</p>
 <p>Here&#8217;s an example that generates a coarse sine curve, then
 interpolates over a finer abscissa:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>  <span class="n">y</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="n">yp</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>  <span class="n">y</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="n">yp</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="n">xi</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span><span class="mi">40</span><span class="p">);</span>
 <span class="n">yi</span> <span class="o">=</span> <span class="n">stineman_interp</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">yp</span><span class="p">);</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">yi</span><span class="p">)</span>
@@ -2441,16 +2453,16 @@ elements may point to the same piece of memory, so
 modifying one value may change others.</p>
 </div>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre>  stride_repeat(x, n, axis=0)
+<div class="highlight-default"><div class="highlight"><pre><span></span>  <span class="n">stride_repeat</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-*x*: 1D array or sequence
-  Array or sequence containing the data.
+<span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="p">:</span> <span class="mi">1</span><span class="n">D</span> <span class="n">array</span> <span class="ow">or</span> <span class="n">sequence</span>
+  <span class="n">Array</span> <span class="ow">or</span> <span class="n">sequence</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">data</span><span class="o">.</span>
 
-*n*: integer
-  The number of time to repeat the array.
+<span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="p">:</span> <span class="n">integer</span>
+  <span class="n">The</span> <span class="n">number</span> <span class="n">of</span> <span class="n">time</span> <span class="n">to</span> <span class="n">repeat</span> <span class="n">the</span> <span class="n">array</span><span class="o">.</span>
 
-*axis*: integer
-  The axis along which the data will run.
+<span class="o">*</span><span class="n">axis</span><span class="o">*</span><span class="p">:</span> <span class="n">integer</span>
+  <span class="n">The</span> <span class="n">axis</span> <span class="n">along</span> <span class="n">which</span> <span class="n">the</span> <span class="n">data</span> <span class="n">will</span> <span class="n">run</span><span class="o">.</span>
 </pre></div>
 </div>
 <dl class="docutils">
@@ -2471,20 +2483,20 @@ elements may point to the same piece of memory,
 so modifying one value may change others.</p>
 </div>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre>  stride_windows(x, n, noverlap=0)
+<div class="highlight-default"><div class="highlight"><pre><span></span>  <span class="n">stride_windows</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-*x*: 1D array or sequence
-  Array or sequence containing the data.
+<span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="p">:</span> <span class="mi">1</span><span class="n">D</span> <span class="n">array</span> <span class="ow">or</span> <span class="n">sequence</span>
+  <span class="n">Array</span> <span class="ow">or</span> <span class="n">sequence</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">data</span><span class="o">.</span>
 
-*n*: integer
-  The number of data points in each window.
+<span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="p">:</span> <span class="n">integer</span>
+  <span class="n">The</span> <span class="n">number</span> <span class="n">of</span> <span class="n">data</span> <span class="n">points</span> <span class="ow">in</span> <span class="n">each</span> <span class="n">window</span><span class="o">.</span>
 
-*noverlap*: integer
-  The overlap between adjacent windows.
-  Default is 0 (no overlap)
+<span class="o">*</span><span class="n">noverlap</span><span class="o">*</span><span class="p">:</span> <span class="n">integer</span>
+  <span class="n">The</span> <span class="n">overlap</span> <span class="n">between</span> <span class="n">adjacent</span> <span class="n">windows</span><span class="o">.</span>
+  <span class="n">Default</span> <span class="ow">is</span> <span class="mi">0</span> <span class="p">(</span><span class="n">no</span> <span class="n">overlap</span><span class="p">)</span>
 
-*axis*: integer
-  The axis along which the windows will run.
+<span class="o">*</span><span class="n">axis</span><span class="o">*</span><span class="p">:</span> <span class="n">integer</span>
+  <span class="n">The</span> <span class="n">axis</span> <span class="n">along</span> <span class="n">which</span> <span class="n">the</span> <span class="n">windows</span> <span class="n">will</span> <span class="n">run</span><span class="o">.</span>
 </pre></div>
 </div>
 <dl class="docutils">
@@ -2510,7 +2522,7 @@ compute over all elements of <em>X</em>.</p>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">window_hanning</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.window_hanning" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return x times the hanning window of len(x).</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">window_hanning</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">window_hanning</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -2527,7 +2539,7 @@ compute over all elements of <em>X</em>.</p>
 <code class="descclassname">matplotlib.mlab.</code><code class="descname">window_none</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#matplotlib.mlab.window_none" title="Permalink to this definition">¶</a></dt>
 <dd><p>No window function; simply return x.</p>
 <p>Call signature:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">window_none</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">window_none</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -2551,10 +2563,10 @@ compute over all elements of <em>X</em>.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2014 The matplotlib development team.
-      Last updated on Aug 29, 2016.
+        &copy; Copyright 2002 - 2012 John Hunter, Darren Dale, Eric Firing, Michael Droettboom and the matplotlib development team; 2012 - 2016 The matplotlib development team.
+      Last updated on Sep 25, 2016.
       Created using <a
-href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
 
 <script>

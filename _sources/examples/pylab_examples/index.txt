@@ -63,8 +63,6 @@ pylab_examples Examples
     customize_rc <customize_rc.rst>
     dashpointlabel <dashpointlabel.rst>
     data_helper <data_helper.rst>
-    date_demo1 <date_demo1.rst>
-    date_demo2 <date_demo2.rst>
     date_demo_convert <date_demo_convert.rst>
     date_demo_rrule <date_demo_rrule.rst>
     date_index_formatter <date_index_formatter.rst>
@@ -94,8 +92,6 @@ pylab_examples Examples
     fill_between_demo <fill_between_demo.rst>
     fill_betweenx_demo <fill_betweenx_demo.rst>
     fill_spiral <fill_spiral.rst>
-    finance_demo <finance_demo.rst>
-    finance_work2 <finance_work2.rst>
     findobj_demo <findobj_demo.rst>
     font_table_ttf <font_table_ttf.rst>
     fonts_demo <fonts_demo.rst>
