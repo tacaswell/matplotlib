@@ -1,0 +1,6 @@
+matplotlib.axis.YAxis.set_margins
+=================================
+
+.. currentmodule:: matplotlib.axis
+
+.. automethod:: YAxis.set_margins

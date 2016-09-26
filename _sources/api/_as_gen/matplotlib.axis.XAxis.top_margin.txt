@@ -1,0 +1,6 @@
+matplotlib.axis.XAxis.top_margin
+================================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: XAxis.top_margin

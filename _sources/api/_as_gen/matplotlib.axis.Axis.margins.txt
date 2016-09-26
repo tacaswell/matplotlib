@@ -1,0 +1,6 @@
+matplotlib.axis.Axis.margins
+============================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: Axis.margins

@@ -1,0 +1,6 @@
+matplotlib.axis.Tick.bottom_margin
+==================================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: Tick.bottom_margin

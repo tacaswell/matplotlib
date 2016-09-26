@@ -1,0 +1,6 @@
+matplotlib.axis.Axis.set_left_margin
+====================================
+
+.. currentmodule:: matplotlib.axis
+
+.. automethod:: Axis.set_left_margin

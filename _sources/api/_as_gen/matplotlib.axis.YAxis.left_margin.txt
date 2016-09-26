@@ -1,0 +1,6 @@
+matplotlib.axis.YAxis.left_margin
+=================================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: YAxis.left_margin

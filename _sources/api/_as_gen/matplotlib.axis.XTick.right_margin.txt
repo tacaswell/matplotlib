@@ -1,0 +1,6 @@
+matplotlib.axis.XTick.right_margin
+==================================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: XTick.right_margin

@@ -1,0 +1,6 @@
+matplotlib.axis.XAxis.get_right_margin
+======================================
+
+.. currentmodule:: matplotlib.axis
+
+.. automethod:: XAxis.get_right_margin

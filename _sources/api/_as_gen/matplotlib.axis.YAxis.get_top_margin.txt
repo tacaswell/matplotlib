@@ -1,0 +1,6 @@
+matplotlib.axis.YAxis.get_top_margin
+====================================
+
+.. currentmodule:: matplotlib.axis
+
+.. automethod:: YAxis.get_top_margin

@@ -1,0 +1,6 @@
+matplotlib.axis.YTick.margins
+=============================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: YTick.margins

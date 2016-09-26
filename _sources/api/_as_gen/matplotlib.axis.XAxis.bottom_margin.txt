@@ -1,0 +1,6 @@
+matplotlib.axis.XAxis.bottom_margin
+===================================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: XAxis.bottom_margin

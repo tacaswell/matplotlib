@@ -1,0 +1,7 @@
+<map id="inheritanced42bccc26f" name="inheritanced42bccc26f">
+<area shape="rect" id="node1" href="artist_api.html#matplotlib.artist.Artist" target="_top" title="Abstract base class for someone who renders into a" alt="" coords="5,80,172,105"/>
+<area shape="rect" id="node2" title="Public attributes" alt="" coords="220,55,372,80"/>
+<area shape="rect" id="node3" title="Abstract base class for the axis ticks, grid lines and labels" alt="" coords="221,104,371,129"/>
+<area shape="rect" id="node6" title="Contains all the Artists needed to make an x tick &#45; the tick line," alt="" coords="421,104,581,129"/>
+<area shape="rect" id="node8" title="Contains all the Artists needed to make a Y tick &#45; the tick line," alt="" coords="421,153,580,179"/>
+</map>

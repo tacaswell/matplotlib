@@ -1,0 +1,6 @@
+matplotlib.axis.YTick.set_left_margin
+=====================================
+
+.. currentmodule:: matplotlib.axis
+
+.. automethod:: YTick.set_left_margin

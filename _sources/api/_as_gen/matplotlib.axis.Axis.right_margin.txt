@@ -1,0 +1,6 @@
+matplotlib.axis.Axis.right_margin
+=================================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: Axis.right_margin

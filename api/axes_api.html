@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Axes class &mdash; Matplotlib 2.0.0b4.post98.dev0+gab31bf2 documentation</title>
+    <title>Axes class &mdash; Matplotlib 2.0.0b4.post105.dev0+g6083015 documentation</title>
     
     <link rel="stylesheet" href="../_static/mpl.css"
 type="text/css" />
@@ -16,7 +16,7 @@ type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0.0b4.post98.dev0+gab31bf2',
+        VERSION:     '2.0.0b4.post105.dev0+g6083015',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@ type="text/css" />
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Matplotlib 2.0.0b4.post98.dev0+gab31bf2 documentation"
+          title="Search within Matplotlib 2.0.0b4.post105.dev0+g6083015 documentation"
           href="../_static/opensearch.xml"/>
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="top" title="Matplotlib 2.0.0b4.post98.dev0+gab31bf2 documentation" href="../index.html" />
+    <link rel="top" title="Matplotlib 2.0.0b4.post105.dev0+g6083015 documentation" href="../index.html" />
     <link rel="up" title="The Matplotlib API" href="index.html" />
     <link rel="next" title="matplotlib.axes.Axes.plot" href="_as_gen/matplotlib.axes.Axes.plot.html" />
     <link rel="prev" title="artists" href="artist_api.html" /> 
@@ -120,7 +120,6 @@ Travis-CI: <a href="https://travis-ci.org/matplotlib/matplotlib">
 </li>
 <li><a class="reference internal" href="#aspect-ratio">Aspect ratio</a></li>
 <li><a class="reference internal" href="#ticks-and-tick-labels">Ticks and tick labels</a></li>
-<li><a class="reference internal" href="#internal">Internal</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#units">Units</a></li>
@@ -219,23 +218,22 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 <li><a class="reference internal" href="#autoscaling" id="id19">Autoscaling</a></li>
 <li><a class="reference internal" href="#aspect-ratio" id="id20">Aspect ratio</a></li>
 <li><a class="reference internal" href="#ticks-and-tick-labels" id="id21">Ticks and tick labels</a></li>
-<li><a class="reference internal" href="#internal" id="id22">Internal</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#units" id="id23">Units</a></li>
-<li><a class="reference internal" href="#adding-artists" id="id24">Adding Artists</a></li>
-<li><a class="reference internal" href="#twinning" id="id25">Twinning</a></li>
-<li><a class="reference internal" href="#axes-position" id="id26">Axes Position</a></li>
-<li><a class="reference internal" href="#async-event-based" id="id27">Async/Event based</a></li>
-<li><a class="reference internal" href="#interactive" id="id28">Interactive</a></li>
-<li><a class="reference internal" href="#children" id="id29">Children</a></li>
-<li><a class="reference internal" href="#drawing" id="id30">Drawing</a></li>
-<li><a class="reference internal" href="#bulk-property-manipulation" id="id31">Bulk property manipulation</a></li>
-<li><a class="reference internal" href="#general-artist-properties" id="id32">General Artist Properties</a></li>
-<li><a class="reference internal" href="#artist-methods" id="id33">Artist Methods</a></li>
-<li><a class="reference internal" href="#projection" id="id34">Projection</a></li>
-<li><a class="reference internal" href="#other" id="id35">Other</a></li>
-<li><a class="reference internal" href="#inheritance" id="id36">Inheritance</a></li>
+<li><a class="reference internal" href="#units" id="id22">Units</a></li>
+<li><a class="reference internal" href="#adding-artists" id="id23">Adding Artists</a></li>
+<li><a class="reference internal" href="#twinning" id="id24">Twinning</a></li>
+<li><a class="reference internal" href="#axes-position" id="id25">Axes Position</a></li>
+<li><a class="reference internal" href="#async-event-based" id="id26">Async/Event based</a></li>
+<li><a class="reference internal" href="#interactive" id="id27">Interactive</a></li>
+<li><a class="reference internal" href="#children" id="id28">Children</a></li>
+<li><a class="reference internal" href="#drawing" id="id29">Drawing</a></li>
+<li><a class="reference internal" href="#bulk-property-manipulation" id="id30">Bulk property manipulation</a></li>
+<li><a class="reference internal" href="#general-artist-properties" id="id31">General Artist Properties</a></li>
+<li><a class="reference internal" href="#artist-methods" id="id32">Artist Methods</a></li>
+<li><a class="reference internal" href="#projection" id="id33">Projection</a></li>
+<li><a class="reference internal" href="#other" id="id34">Other</a></li>
+<li><a class="reference internal" href="#inheritance" id="id35">Inheritance</a></li>
 </ul>
 </div>
 <div class="section" id="plotting">
@@ -966,32 +964,9 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </tbody>
 </table>
 </div>
-<div class="section" id="internal">
-<h3><a class="toc-backref" href="#id22">Internal</a><a class="headerlink" href="#internal" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="_as_gen/matplotlib.axes.Axes.get_xaxis_text1_transform.html#matplotlib.axes.Axes.get_xaxis_text1_transform" title="matplotlib.axes.Axes.get_xaxis_text1_transform"><code class="xref py py-obj docutils literal"><span class="pre">Axes.get_xaxis_text1_transform</span></code></a></td>
-<td>Get the transformation used for drawing x-axis labels, which will add the given amount of padding (in points) between the axes and the label.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="_as_gen/matplotlib.axes.Axes.get_xaxis_text2_transform.html#matplotlib.axes.Axes.get_xaxis_text2_transform" title="matplotlib.axes.Axes.get_xaxis_text2_transform"><code class="xref py py-obj docutils literal"><span class="pre">Axes.get_xaxis_text2_transform</span></code></a></td>
-<td>Get the transformation used for drawing the secondary x-axis labels, which will add the given amount of padding (in points) between the axes and the label.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="_as_gen/matplotlib.axes.Axes.get_yaxis_text1_transform.html#matplotlib.axes.Axes.get_yaxis_text1_transform" title="matplotlib.axes.Axes.get_yaxis_text1_transform"><code class="xref py py-obj docutils literal"><span class="pre">Axes.get_yaxis_text1_transform</span></code></a></td>
-<td>Get the transformation used for drawing y-axis labels, which will add the given amount of padding (in points) between the axes and the label.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="_as_gen/matplotlib.axes.Axes.get_yaxis_text2_transform.html#matplotlib.axes.Axes.get_yaxis_text2_transform" title="matplotlib.axes.Axes.get_yaxis_text2_transform"><code class="xref py py-obj docutils literal"><span class="pre">Axes.get_yaxis_text2_transform</span></code></a></td>
-<td>Get the transformation used for drawing the secondary y-axis labels, which will add the given amount of padding (in points) between the axes and the label.</td>
-</tr>
-</tbody>
-</table>
-</div>
 </div>
 <div class="section" id="units">
-<h2><a class="toc-backref" href="#id23">Units</a><a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id22">Units</a><a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1011,7 +986,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="adding-artists">
-<h2><a class="toc-backref" href="#id24">Adding Artists</a><a class="headerlink" href="#adding-artists" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id23">Adding Artists</a><a class="headerlink" href="#adding-artists" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1043,7 +1018,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="twinning">
-<h2><a class="toc-backref" href="#id25">Twinning</a><a class="headerlink" href="#twinning" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id24">Twinning</a><a class="headerlink" href="#twinning" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1066,7 +1041,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="axes-position">
-<h2><a class="toc-backref" href="#id26">Axes Position</a><a class="headerlink" href="#axes-position" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id25">Axes Position</a><a class="headerlink" href="#axes-position" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1098,7 +1073,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="async-event-based">
-<h2><a class="toc-backref" href="#id27">Async/Event based</a><a class="headerlink" href="#async-event-based" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id26">Async/Event based</a><a class="headerlink" href="#async-event-based" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1121,7 +1096,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="interactive">
-<h2><a class="toc-backref" href="#id28">Interactive</a><a class="headerlink" href="#interactive" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id27">Interactive</a><a class="headerlink" href="#interactive" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1213,7 +1188,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="children">
-<h2><a class="toc-backref" href="#id29">Children</a><a class="headerlink" href="#children" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id28">Children</a><a class="headerlink" href="#children" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1236,7 +1211,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="drawing">
-<h2><a class="toc-backref" href="#id30">Drawing</a><a class="headerlink" href="#drawing" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id29">Drawing</a><a class="headerlink" href="#drawing" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1271,7 +1246,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="bulk-property-manipulation">
-<h2><a class="toc-backref" href="#id31">Bulk property manipulation</a><a class="headerlink" href="#bulk-property-manipulation" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id30">Bulk property manipulation</a><a class="headerlink" href="#bulk-property-manipulation" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1294,7 +1269,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="general-artist-properties">
-<h2><a class="toc-backref" href="#id32">General Artist Properties</a><a class="headerlink" href="#general-artist-properties" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id31">General Artist Properties</a><a class="headerlink" href="#general-artist-properties" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1416,7 +1391,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="artist-methods">
-<h2><a class="toc-backref" href="#id33">Artist Methods</a><a class="headerlink" href="#artist-methods" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id32">Artist Methods</a><a class="headerlink" href="#artist-methods" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1436,7 +1411,7 @@ where <em>ax</em> is the <a class="reference internal" href="#matplotlib.axes.Ax
 </table>
 </div>
 <div class="section" id="projection">
-<h2><a class="toc-backref" href="#id34">Projection</a><a class="headerlink" href="#projection" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id33">Projection</a><a class="headerlink" href="#projection" title="Permalink to this headline">¶</a></h2>
 <p>Methods used by <a class="reference internal" href="axis_api.html#matplotlib.axis.Axis" title="matplotlib.axis.Axis"><code class="xref py py-obj docutils literal"><span class="pre">Axis</span></code></a> that must be overridden for
 non-rectilinear Axes.</p>
 <table border="1" class="longtable docutils">
@@ -1460,11 +1435,23 @@ non-rectilinear Axes.</p>
 <tr class="row-odd"><td><a class="reference internal" href="_as_gen/matplotlib.axes.Axes.get_data_ratio_log.html#matplotlib.axes.Axes.get_data_ratio_log" title="matplotlib.axes.Axes.get_data_ratio_log"><code class="xref py py-obj docutils literal"><span class="pre">Axes.get_data_ratio_log</span></code></a></td>
 <td>Returns the aspect ratio of the raw data in log scale.</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="_as_gen/matplotlib.axes.Axes.get_xaxis_text1_transform.html#matplotlib.axes.Axes.get_xaxis_text1_transform" title="matplotlib.axes.Axes.get_xaxis_text1_transform"><code class="xref py py-obj docutils literal"><span class="pre">Axes.get_xaxis_text1_transform</span></code></a></td>
+<td>Get the transformation used for drawing x-axis labels, which will add the given amount of padding (in points) between the axes and the label.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_as_gen/matplotlib.axes.Axes.get_xaxis_text2_transform.html#matplotlib.axes.Axes.get_xaxis_text2_transform" title="matplotlib.axes.Axes.get_xaxis_text2_transform"><code class="xref py py-obj docutils literal"><span class="pre">Axes.get_xaxis_text2_transform</span></code></a></td>
+<td>Get the transformation used for drawing the secondary x-axis labels, which will add the given amount of padding (in points) between the axes and the label.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_as_gen/matplotlib.axes.Axes.get_yaxis_text1_transform.html#matplotlib.axes.Axes.get_yaxis_text1_transform" title="matplotlib.axes.Axes.get_yaxis_text1_transform"><code class="xref py py-obj docutils literal"><span class="pre">Axes.get_yaxis_text1_transform</span></code></a></td>
+<td>Get the transformation used for drawing y-axis labels, which will add the given amount of padding (in points) between the axes and the label.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_as_gen/matplotlib.axes.Axes.get_yaxis_text2_transform.html#matplotlib.axes.Axes.get_yaxis_text2_transform" title="matplotlib.axes.Axes.get_yaxis_text2_transform"><code class="xref py py-obj docutils literal"><span class="pre">Axes.get_yaxis_text2_transform</span></code></a></td>
+<td>Get the transformation used for drawing the secondary y-axis labels, which will add the given amount of padding (in points) between the axes and the label.</td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="other">
-<h2><a class="toc-backref" href="#id35">Other</a><a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id34">Other</a><a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -1496,7 +1483,7 @@ non-rectilinear Axes.</p>
 </table>
 </div>
 <div class="section" id="inheritance">
-<h2><a class="toc-backref" href="#id36">Inheritance</a><a class="headerlink" href="#inheritance" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id35">Inheritance</a><a class="headerlink" href="#inheritance" title="Permalink to this headline">¶</a></h2>
 <img src="../_images/inheritance-96cf6055c86fad640da1309d2143273d036f2e54.png" alt="Inheritance diagram of matplotlib.axes.Axes" usemap="#inheritance552e017e23" class="inheritance"/>
 <map id="inheritance552e017e23" name="inheritance552e017e23">
 <area shape="rect" id="node1" href="artist_api.html#matplotlib.artist.Artist" target="_top" title="Abstract base class for someone who renders into a" alt="" coords="5,5,172,31"/>

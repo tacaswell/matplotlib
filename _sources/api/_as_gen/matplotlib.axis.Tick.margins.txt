@@ -1,0 +1,6 @@
+matplotlib.axis.Tick.margins
+============================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: Tick.margins

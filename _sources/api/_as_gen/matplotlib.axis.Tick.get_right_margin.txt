@@ -1,0 +1,6 @@
+matplotlib.axis.Tick.get_right_margin
+=====================================
+
+.. currentmodule:: matplotlib.axis
+
+.. automethod:: Tick.get_right_margin

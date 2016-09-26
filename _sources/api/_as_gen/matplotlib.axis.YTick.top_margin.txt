@@ -1,0 +1,6 @@
+matplotlib.axis.YTick.top_margin
+================================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: YTick.top_margin

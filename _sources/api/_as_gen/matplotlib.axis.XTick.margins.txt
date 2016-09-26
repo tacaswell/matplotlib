@@ -1,0 +1,6 @@
+matplotlib.axis.XTick.margins
+=============================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: XTick.margins

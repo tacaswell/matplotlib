@@ -1,0 +1,6 @@
+matplotlib.axis.XTick.top_margin
+================================
+
+.. currentmodule:: matplotlib.axis
+
+.. autoattribute:: XTick.top_margin

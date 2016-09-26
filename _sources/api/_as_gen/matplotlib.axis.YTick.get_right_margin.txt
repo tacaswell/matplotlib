@@ -1,0 +1,6 @@
+matplotlib.axis.YTick.get_right_margin
+======================================
+
+.. currentmodule:: matplotlib.axis
+
+.. automethod:: YTick.get_right_margin
