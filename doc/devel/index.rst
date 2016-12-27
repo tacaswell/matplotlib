@@ -13,12 +13,12 @@ The Matplotlib Developers' Guide
    :maxdepth: 2
 
    contributing.rst
+   coding_guide.rst
    testing.rst
    documenting_mpl.rst
    add_new_projection.rst
    portable_code.rst
    gitwash/index.rst
-   coding_guide.rst
    release_guide.rst
    MEP/index
 

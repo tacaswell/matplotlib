@@ -12,15 +12,15 @@
 .. toctree::
    :maxdepth: 1
 
-   pyplot_summary.rst
    api_changes.rst
+   pyplot_summary.rst
    matplotlib_configuration_api.rst
+
    afm_api.rst
    animation_api.rst
    artist_api.rst
    axes_api.rst
    axis_api.rst
-   index_backend_api.rst
    cbook_api.rst
    cm_api.rst
    collections_api.rst
@@ -33,6 +33,7 @@
    font_manager_api.rst
    gridspec_api.rst
    image_api.rst
+   index_backend_api.rst
    legend_api.rst
    lines_api.rst
    markers_api.rst
