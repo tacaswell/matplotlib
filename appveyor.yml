@@ -92,12 +92,12 @@ install:
   - conda create -q -n test-environment python=%PYTHON_VERSION%
     pip setuptools numpy python-dateutil freetype=2.6 msinttypes "tk=8.5"
     pyparsing pytz tornado "libpng>=1.6.21,<1.7" "zlib=1.2" "cycler>=0.10"
-    nose mock sphinx
+    mock sphinx
   - activate test-environment
   - cmd: echo %PYTHON_VERSION% %TARGET_ARCH%
   - cmd: IF %PYTHON_VERSION% == 2.7 conda install -q functools32
   # pytest-cov>=2.3.1 due to https://github.com/pytest-dev/pytest-cov/issues/124
-  - if x%USE_PYTEST% == xyes conda install -q pytest "pytest-cov>=2.3.1" pytest-timeout #pytest-xdist
+  - conda install -q pytest "pytest-cov>=2.3.1" pytest-timeout #pytest-xdist
 
   # Let the install prefer the static builds of the libs
   - set LIBRARY_LIB=%CONDA_PREFIX%\Library\lib
