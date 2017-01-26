@@ -20,7 +20,7 @@ import pytest
 import warnings
 
 import matplotlib
-from matplotlib.testing.decorators import image_comparison, cleanup
+from matplotlib.testing.decorators import image_comparison
 import matplotlib.pyplot as plt
 import matplotlib.markers as mmarkers
 import matplotlib.patches as mpatches
@@ -120,7 +120,6 @@ def test_twin_axis_locaters_formatters():
     ax3 = ax1.twinx()
 
 
-@cleanup
 def test_twinx_cla():
     fig, ax = plt.subplots()
     ax2 = ax.twinx()
@@ -227,7 +226,6 @@ def test_basic_annotate():
                 xytext=(3, 3), textcoords='offset points')
 
 
-@cleanup
 def test_annotate_default_arrow():
     # Check that we can make an annotation arrow with only default properties.
     fig, ax = plt.subplots()
@@ -586,7 +584,6 @@ def test_hexbin_empty():
     ax = plt.gca()
     ax.hexbin([], [])
 
-@cleanup
 def test_hexbin_pickable():
     # From #1973: Test that picking a hexbin collection works
     class FauxMouseEvent:
@@ -620,7 +617,6 @@ def test_hexbin_log():
     ax.hexbin(x, y, yscale='log')
 
 
-@cleanup
 def test_inverted_limits():
     # Test gh:1553
     # Calling invert_xaxis prior to plotting should not disable autoscaling
@@ -724,7 +720,6 @@ def test_polycollection_joinstyle():
     ax.set_ybound(0, 3)
 
 
-@cleanup
 def test_fill_between_2d_x_input():
     x = np.zeros((2, 2))
     y1 = 3
@@ -737,7 +732,6 @@ def test_fill_between_2d_x_input():
         ax.fill_between(x, y1, y2)
 
 
-@cleanup
 def test_fill_between_2d_y1_input():
     x = np.arange(0.0, 2, 0.02)
     y1 = np.zeros((2, 2))
@@ -750,7 +744,6 @@ def test_fill_between_2d_y1_input():
         ax.fill_between(x, y1, y2)
 
 
-@cleanup
 def test_fill_between_2d_y2_input():
     x = np.arange(0.0, 2, 0.02)
     y1 = 3
@@ -838,7 +831,6 @@ def test_symlog2():
     ax.set_ylim(-0.1, 0.1)
 
 
-@cleanup
 def test_pcolorargs():
     # Smoketest to catch issue found in gh:5205
     x = [-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5]
@@ -931,7 +923,6 @@ def test_pcolor_datetime_axis():
             label.set_rotation(30)
 
 
-@cleanup
 def test_pcolorargs():
     n = 12
     x = np.linspace(-1.5, 1.5, n)
@@ -1161,7 +1152,6 @@ def test_bar_tick_label_single():
     ax.bar("a", "b", tick_label='0', data=data)
 
 
-@cleanup
 def test_bar_ticklabel_fail():
     fig, ax = plt.subplots()
     ax.bar([], [])
@@ -1396,7 +1386,6 @@ def test_scatter_2D():
     ax.scatter(x, y, c=z, s=200, edgecolors='face')
 
 
-@cleanup
 def test_scatter_color():
     # Try to catch cases where 'c' kwarg should have been used.
     with pytest.raises(ValueError):
@@ -1405,7 +1394,6 @@ def test_scatter_color():
         plt.scatter([1, 2, 3], [1, 2, 3], color=[1, 2, 3])
 
 
-@cleanup
 def test_as_mpl_axes_api():
     # tests the _as_mpl_axes api
     from matplotlib.projections.polar import PolarAxes
@@ -1885,7 +1873,6 @@ def test_bxp_custompositions():
     ax.bxp(logstats, positions=[1, 5, 6, 7])
 
 
-@cleanup
 def test_bxp_bad_widths():
     np.random.seed(937)
     logstats = matplotlib.cbook.boxplot_stats(
@@ -1898,7 +1885,6 @@ def test_bxp_bad_widths():
         ax.bxp(logstats, widths=[1])
 
 
-@cleanup
 def test_bxp_bad_positions():
     np.random.seed(937)
     logstats = matplotlib.cbook.boxplot_stats(
@@ -2088,7 +2074,6 @@ def test_boxplot_no_weird_whisker():
     ax1.xaxis.grid(False)
 
 
-@cleanup
 def test_boxplot_bad_medians_1():
     x = np.linspace(-7, 7, 140)
     x = np.hstack([-25, x, 25])
@@ -2097,7 +2082,6 @@ def test_boxplot_bad_medians_1():
         ax.boxplot(x, usermedians=[1, 2])
 
 
-@cleanup
 def test_boxplot_bad_medians_2():
     x = np.linspace(-7, 7, 140)
     x = np.hstack([-25, x, 25])
@@ -2106,7 +2090,6 @@ def test_boxplot_bad_medians_2():
         ax.boxplot([x, x], usermedians=[[1, 2], [1, 2]])
 
 
-@cleanup
 def test_boxplot_bad_ci_1():
     x = np.linspace(-7, 7, 140)
     x = np.hstack([-25, x, 25])
@@ -2115,7 +2098,6 @@ def test_boxplot_bad_ci_1():
         ax.boxplot([x, x], conf_intervals=[[1, 2]])
 
 
-@cleanup
 def test_boxplot_zorder():
     x = np.arange(10)
     fix, ax = plt.subplots()
@@ -2123,7 +2105,6 @@ def test_boxplot_zorder():
     assert ax.boxplot(x, zorder=10)['boxes'][0].get_zorder() == 10
 
 
-@cleanup
 def test_boxplot_bad_ci_2():
     x = np.linspace(-7, 7, 140)
     x = np.hstack([-25, x, 25])
@@ -2306,7 +2287,6 @@ def test_horiz_violinplot_custompoints_200():
                   showextrema=0, showmedians=0, points=200)
 
 
-@cleanup
 def test_violinplot_bad_positions():
     ax = plt.axes()
     # First 9 digits of frac(sqrt(47))
@@ -2316,7 +2296,6 @@ def test_violinplot_bad_positions():
         ax.violinplot(data, positions=range(5))
 
 
-@cleanup
 def test_violinplot_bad_widths():
     ax = plt.axes()
     # First 9 digits of frac(sqrt(53))
@@ -2326,7 +2305,6 @@ def test_violinplot_bad_widths():
         ax.violinplot(data, positions=range(4), widths=[1, 2, 3])
 
 
-@cleanup
 def test_manage_xticks():
     _, ax = plt.subplots()
     ax.set_xlim(0, 4)
@@ -2394,7 +2372,6 @@ def test_errorbar():
     ax.set_title("Simplest errorbars, 0.2 in x, 0.4 in y")
 
 
-@cleanup
 def test_errorbar_shape():
     fig = plt.figure()
     ax = fig.gca()
@@ -2522,7 +2499,6 @@ def test_hist_stacked_weighted():
     ax.hist((d1, d2), weights=(w1, w2), histtype="stepfilled", stacked=True)
 
 
-@cleanup
 def test_stem_args():
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
@@ -2537,7 +2513,6 @@ def test_stem_args():
     ax.stem(x, y, 'r--', basefmt='b--')
 
 
-@cleanup
 def test_stem_dates():
     fig, ax = plt.subplots(1, 1)
     from dateutil import parser
@@ -2607,7 +2582,6 @@ def test_hist_stacked_bar():
     ax.legend(loc='upper right', bbox_to_anchor=(1.0, 1.0), ncol=1)
 
 
-@cleanup
 def test_hist_emptydata():
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -2649,7 +2623,6 @@ def test_mollweide_grid():
     ax.grid()
 
 
-@cleanup
 def test_mollweide_forward_inverse_closure():
     # test that the round-trip Mollweide forward->inverse transformation is an
     # approximate identity
@@ -2672,7 +2645,6 @@ def test_mollweide_forward_inverse_closure():
     np.testing.assert_array_almost_equal(ll, ll2, 3)
 
 
-@cleanup
 def test_mollweide_inverse_forward_closure():
     # test that the round-trip Mollweide inverse->forward transformation is an
     # approximate identity
@@ -2820,7 +2792,6 @@ def test_eventplot_problem_kwargs():
         assert all(issubclass(wi.category, IgnoredKeywordWarning) for wi in w)
 
 
-@cleanup
 def test_empty_eventplot():
     fig, ax = plt.subplots(1, 1)
     ax.eventplot([[]], colors=[(0.0, 0.0, 0.0, 0.0)])
@@ -3038,7 +3009,6 @@ def test_mixed_collection():
     ax.set_ylim(0, 16)
 
 
-@cleanup
 def test_subplot_key_hash():
     ax = plt.subplot(np.float64(5.5), np.int64(1), np.float64(1.2))
     ax.twinx()
@@ -3981,7 +3951,6 @@ def test_twin_spines_on_top():
     ax2.fill_between("i", "j", color='#7FC97F', alpha=.5, data=data)
 
 
-@cleanup
 def test_rcparam_grid_minor():
     orig_grid = matplotlib.rcParams['axes.grid']
     orig_locator = matplotlib.rcParams['axes.grid.which']
@@ -4004,7 +3973,6 @@ def test_rcparam_grid_minor():
     matplotlib.rcParams['axes.grid.which'] = orig_locator
 
 
-@cleanup
 def test_vline_limit():
     fig = plt.figure()
     ax = fig.gca()
@@ -4014,7 +3982,6 @@ def test_vline_limit():
     assert_allclose(ax.get_ylim(), (-.1, .2))
 
 
-@cleanup
 def test_empty_shared_subplots():
     # empty plots with shared axes inherit limits from populated plots
     fig, axes = plt.subplots(nrows=1, ncols=2, sharex=True, sharey=True)
@@ -4027,7 +3994,6 @@ def test_empty_shared_subplots():
     assert y1 >= 6
 
 
-@cleanup
 def test_relim_visible_only():
     x1 = (0., 10.)
     y1 = (0., 10.)
@@ -4053,7 +4019,6 @@ def test_relim_visible_only():
     assert ax.get_ylim() == y1
 
 
-@cleanup
 def test_text_labelsize():
     """
     tests for issue #1172
@@ -4208,7 +4173,6 @@ def test_o_marker_path_snap():
         ax.plot([3, 4, ], np.ones(2) + ms, 'o', ms=ms)
 
 
-@cleanup
 def test_margins():
     # test all ways margins can be called
     data = [1, 10]
@@ -4229,14 +4193,12 @@ def test_margins():
     assert ax3.margins() == (1, 0.5)
 
 
-@cleanup
 def test_length_one_hist():
     fig, ax = plt.subplots()
     ax.hist(1)
     ax.hist([1])
 
 
-@cleanup
 def test_pathological_hexbin():
     # issue #2863
     out = io.BytesIO()
@@ -4250,14 +4212,12 @@ def test_pathological_hexbin():
         assert len(w) == 0
 
 
-@cleanup
 def test_color_None():
     # issue 3855
     fig, ax = plt.subplots()
     ax.plot([1,2], [1,2], color=None)
 
 
-@cleanup
 def test_color_alias():
     # issues 4157 and 4162
     fig, ax = plt.subplots()
@@ -4265,14 +4225,12 @@ def test_color_alias():
     assert 'lime' == line.get_color()
 
 
-@cleanup
 def test_numerical_hist_label():
     fig, ax = plt.subplots()
     ax.hist([range(15)] * 5, label=range(5))
     ax.legend()
 
 
-@cleanup
 def test_unicode_hist_label():
     fig, ax = plt.subplots()
     a = (b'\xe5\xbe\x88\xe6\xbc\x82\xe4\xba\xae, ' +
@@ -4287,7 +4245,6 @@ def test_unicode_hist_label():
     ax.legend()
 
 
-@cleanup
 def test_move_offsetlabel():
     data = np.random.random(10) * 1e-22
     fig, ax = plt.subplots()
@@ -4333,7 +4290,6 @@ def test_rc_grid():
             i += 1
 
 
-@cleanup
 def test_rc_tick():
     d = {'xtick.bottom': False, 'xtick.top': True,
          'ytick.left': True, 'ytick.right': False}
@@ -4354,7 +4310,6 @@ def test_rc_tick():
         assert yax._minor_tick_kw['tick2On'] == False
 
 
-@cleanup
 def test_rc_major_minor_tick():
     d = {'xtick.top': True, 'ytick.right': True,  # Enable all ticks
          'xtick.bottom': True, 'ytick.left': True,
@@ -4378,7 +4333,6 @@ def test_rc_major_minor_tick():
         assert yax._minor_tick_kw['tick2On'] == True
 
 
-@cleanup
 def test_bar_negative_width():
     fig, ax = plt.subplots()
     res = ax.bar(range(1, 5), range(1, 5), width=-1)
@@ -4389,7 +4343,6 @@ def test_bar_negative_width():
         assert b._height == indx + 1
 
 
-@cleanup
 def test_square_plot():
     x = np.arange(4)
     y = np.array([1., 3., 5., 7.])
@@ -4401,7 +4354,6 @@ def test_square_plot():
     assert ax.get_aspect() == 'equal'
 
 
-@cleanup
 def test_no_None():
     fig, ax = plt.subplots()
     with pytest.raises(ValueError):
@@ -4410,7 +4362,6 @@ def test_no_None():
         plt.plot(None, None)
 
 
-@cleanup
 def test_pcolor_fast_non_uniform():
     Z = np.arange(6).reshape((3, 2))
     X = np.array([0, 1, 2, 10])
@@ -4421,7 +4372,6 @@ def test_pcolor_fast_non_uniform():
     ax.pcolorfast(X, Y, Z.T)
 
 
-@cleanup
 def test_shared_scale():
     fig, axs = plt.subplots(2, 2, sharex=True, sharey=True)
 
@@ -4440,7 +4390,6 @@ def test_shared_scale():
         assert ax.get_xscale() == 'linear'
 
 
-@cleanup
 def test_violin_point_mass():
     """Violin plot should handle point mass pdf gracefully."""
     plt.violinplot(np.array([0, 0]))
@@ -4472,7 +4421,6 @@ def generate_errorbar_inputs():
     return test_cyclers
 
 
-@cleanup
 @pytest.mark.parametrize('kwargs', generate_errorbar_inputs())
 def test_errorbar_inputs_shotgun(kwargs):
     ax = plt.gca()
@@ -4480,7 +4428,6 @@ def test_errorbar_inputs_shotgun(kwargs):
     eb.remove()
 
 
-@cleanup
 def test_axisbg_warning():
     fig = plt.figure()
     with warnings.catch_warnings(record=True) as w:
@@ -4500,7 +4447,6 @@ def test_dash_offset():
         ax.plot(x, j*y, ls=(j, (10, 10)), lw=5, color='k')
 
 
-@cleanup
 def test_title_location_roundtrip():
     fig, ax = plt.subplots()
     ax.set_title('aardvark')
@@ -4605,14 +4551,12 @@ def shared_axes_generator(request):
     return fig, ax
 
 
-@cleanup
 def test_remove_shared_axes(shared_axes_generator, shared_axis_remover):
     # test all of the ways to get fig/ax sets
     fig, ax = shared_axes_generator
     shared_axis_remover(ax)
 
 
-@cleanup
 def test_remove_shared_axes_relim():
     fig, ax_lst = plt.subplots(2, 2, sharex='all', sharey='all')
     ax = ax_lst[0][0]
@@ -4622,7 +4566,6 @@ def test_remove_shared_axes_relim():
     assert_array_equal(ax_lst[0][1].get_xlim(), orig_xlim)
 
 
-@cleanup
 def test_adjust_numtick_aspect():
     fig, ax = plt.subplots()
     ax.yaxis.get_major_locator().set_params(nbins='auto')
@@ -4651,13 +4594,11 @@ def test_auto_numticks_log():
     ax.loglog([1e-20, 1e5], [1e-16, 10])
 
 
-@cleanup
 def test_broken_barh_empty():
     fig, ax = plt.subplots()
     ax.broken_barh([], (.1, .5))
 
 
-@cleanup
 def test_pandas_indexing_dates():
     try:
         import pandas as pd
@@ -4674,7 +4615,6 @@ def test_pandas_indexing_dates():
     ax.plot('dates', 'values', data=without_zero_index)
 
 
-@cleanup
 def test_pandas_errorbar_indexing():
     try:
         import pandas as pd
@@ -4688,7 +4628,6 @@ def test_pandas_errorbar_indexing():
     ax.errorbar('x', 'y', xerr='xe', yerr='ye', data=df)
 
 
-@cleanup
 def test_pandas_indexing_hist():
     try:
         import pandas as pd
@@ -4701,7 +4640,6 @@ def test_pandas_indexing_hist():
     axes.hist(ser_2)
 
 
-@cleanup
 def test_axis_set_tick_params_labelsize_labelcolor():
     # Tests fix for issue 4346
     axis_1 = plt.subplot()
@@ -4714,14 +4652,12 @@ def test_axis_set_tick_params_labelsize_labelcolor():
     assert axis_1.yaxis.majorTicks[0]._labelcolor == 'red'
 
 
-@cleanup
 def test_none_kwargs():
     fig, ax = plt.subplots()
     ln, = ax.plot(range(32), linestyle=None)
     assert ln.get_linestyle() == '-'
 
 
-@cleanup
 def test_ls_ds_conflict():
     with pytest.raises(ValueError):
         plt.plot(range(32), linestyle='steps-pre:', drawstyle='steps-post')
@@ -4799,7 +4735,6 @@ def test_axisbelow():
         ax.set_axisbelow(setting)
 
 
-@cleanup
 def test_offset_label_color():
     # Tests issue 6440
     fig = plt.figure()
@@ -4809,14 +4744,12 @@ def test_offset_label_color():
     assert ax.yaxis.get_offset_text().get_color() == 'red'
 
 
-@cleanup
 def test_large_offset():
     fig, ax = plt.subplots()
     ax.plot((1 + np.array([0, 1.e-12])) * 1.e27)
     fig.canvas.draw()
 
 
-@cleanup
 def test_bar_color_cycle():
     ccov = mcolors.colorConverter.to_rgb
     fig, ax = plt.subplots()
@@ -4827,7 +4760,6 @@ def test_bar_color_cycle():
             assert ccov(ln.get_color()) == ccov(br.get_facecolor())
 
 
-@cleanup
 def test_tick_param_label_rotation():
     fix, ax = plt.subplots()
     plt.plot([0, 1], [0, 1])
@@ -4839,7 +4771,6 @@ def test_tick_param_label_rotation():
         assert text.get_rotation() == 90
 
 
-@cleanup
 def test_fill_betweenx_2d_y_input():
     y = np.zeros((2, 2))
     x1 = 3
@@ -4852,7 +4783,6 @@ def test_fill_betweenx_2d_y_input():
         ax.fill_betweenx(y, x1, x2)
 
 
-@cleanup
 def test_fill_betweenx_2d_x1_input():
     y = np.arange(0.0, 2, 0.02)
     x1 = np.zeros((2, 2))
@@ -4865,7 +4795,6 @@ def test_fill_betweenx_2d_x1_input():
         ax.fill_betweenx(y, x1, x2)
 
 
-@cleanup
 def test_fill_betweenx_2d_x2_input():
     y = np.arange(0.0, 2, 0.02)
     x1 = 3
@@ -4906,7 +4835,6 @@ def test_fillbetween_cycle():
         assert tuple(cc.get_edgecolors().squeeze()) == tuple(edge_target)
 
 
-@cleanup
 def test_log_margins():
     plt.rcParams['axes.autolimit_mode'] = 'data'
     fig, ax = plt.subplots()
@@ -4921,7 +4849,6 @@ def test_log_margins():
     assert_allclose([xlim0t + delta, xlim1t - delta], [x0t, x1t])
 
 
-@cleanup
 def test_color_length_mismatch():
     N = 5
     x, y = np.arange(N), np.arange(N)
@@ -4934,7 +4861,6 @@ def test_color_length_mismatch():
     ax.scatter(x, y, c=[c_rgb] * N)
 
 
-@cleanup
 def test_scatter_color_masking():
     x = np.array([1, 2, 3])
     y = np.array([1, np.nan, 3])
@@ -4950,13 +4876,11 @@ def test_scatter_color_masking():
     assert linewidths[1] == 3
 
 
-@cleanup
 def test_eventplot_legend():
     plt.eventplot([1.0], label='Label')
     plt.legend()
 
 
-@cleanup
 def test_bar_single_height():
     fig, ax = plt.subplots()
     # Check that a bar chart with a single height for all bars works
