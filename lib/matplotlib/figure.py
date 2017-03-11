@@ -712,8 +712,8 @@ class Figure(Artist):
         if forward:
             ratio = getattr(self.canvas, '_dpi_ratio', 1)
             dpival = self.dpi / ratio
-            canvasw = w * dpival
-            canvash = h * dpival
+            canvasw = np.round(w * dpival)
+            canvash = np.round(h * dpival)
             manager = getattr(self.canvas, 'manager', None)
             if manager is not None:
                 manager.resize(int(canvasw), int(canvash))
