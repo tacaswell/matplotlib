@@ -470,7 +470,14 @@ class FigureCanvasAgg(FigureCanvasBase):
 
     def get_renderer(self, cleared=False):
         l, b, w, h = np.round(self.figure.bbox.bounds).astype(int)
-        key = w, h, self.figure.dpi
+        dpi = self.figure.dpi
+
+        # we know we are using Agg, thus are tied to discrete sizes
+        # set by the dpi.  Feed this back so that the transforms are
+        # mapped to the available pixels
+        self.figure.set_size_inches(w / dpi, h / dpi)
+
+        key = w, h, dpi
         try: self._lastKey, self.renderer
         except AttributeError: need_new_renderer = True
         else:  need_new_renderer = (self._lastKey != key)
@@ -569,6 +576,7 @@ class FigureCanvasAgg(FigureCanvasBase):
             if close:
                 filename_or_obj.close()
             renderer.dpi = original_dpi
+
 
     def print_to_buffer(self):
         FigureCanvasAgg.draw(self)

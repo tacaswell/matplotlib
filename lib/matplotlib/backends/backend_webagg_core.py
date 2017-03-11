@@ -244,8 +244,13 @@ class FigureCanvasWebAggCore(backend_agg.FigureCanvasAgg):
         # so that we can do things such as produce a diff image
         # in get_diff_image
         _, _, w, h = np.round(self.figure.bbox.bounds).astype(int)
-        w, h = int(w), int(h)
-        key = w, h, self.figure.dpi
+        dpi = self.figure.dpi
+        # we know we are using Agg, thus are tied to discrete sizes
+        # set by the dpi.  Feed this back so that the transforms are
+        # mapped to the available pixels
+        self.figure.set_size_inches(w / dpi, h / dpi)
+
+        key = w, h, dpi
         try:
             self._lastKey, self._renderer
         except AttributeError:
