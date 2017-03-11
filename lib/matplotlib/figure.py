@@ -704,7 +704,9 @@ class Figure(Artist):
         if h is None:
             w, h = w
 
-        dpival = self.dpi
+        if tuple(self.bbox_inches.p1) == (w, h):
+            return
+
         self.bbox_inches.p1 = w, h
 
         if forward:
