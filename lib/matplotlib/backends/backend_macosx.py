@@ -4,6 +4,7 @@ from __future__ import (absolute_import, division, print_function,
 import six
 
 import os
+import numpy as np
 
 from matplotlib._pylab_helpers import Gcf
 from matplotlib.backend_bases import FigureManagerBase, FigureCanvasBase, \
@@ -116,7 +117,7 @@ class FigureCanvasMac(_macosx.FigureCanvas, FigureCanvasAgg):
             self._device_scale = value
 
     def get_renderer(self, cleared=False):
-        l, b, w, h = self.figure.bbox.bounds
+        l, b, w, h = np.round(self.figure.bbox.bounds).astype(int)
         key = w, h, self.figure.dpi
         try:
             self._lastKey, self._renderer

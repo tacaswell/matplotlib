@@ -243,7 +243,7 @@ class FigureCanvasWebAggCore(backend_agg.FigureCanvasAgg):
         # Mirrors super.get_renderer, but caches the old one
         # so that we can do things such as produce a diff image
         # in get_diff_image
-        _, _, w, h = self.figure.bbox.bounds
+        _, _, w, h = np.round(self.figure.bbox.bounds).astype(int)
         w, h = int(w), int(h)
         key = w, h, self.figure.dpi
         try:

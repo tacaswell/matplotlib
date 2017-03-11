@@ -469,7 +469,7 @@ class FigureCanvasAgg(FigureCanvasBase):
             RendererAgg.lock.release()
 
     def get_renderer(self, cleared=False):
-        l, b, w, h = self.figure.bbox.bounds
+        l, b, w, h = np.round(self.figure.bbox.bounds).astype(int)
         key = w, h, self.figure.dpi
         try: self._lastKey, self.renderer
         except AttributeError: need_new_renderer = True
