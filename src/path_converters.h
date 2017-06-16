@@ -10,6 +10,8 @@
 #include "mplutils.h"
 #include "agg_conv_segmentator.h"
 
+#include <iostream>
+
 /*
  This file contains a number of vertex converters that modify
  paths. They all work as iterators, where the output is generated
@@ -568,10 +570,22 @@ class PathSimplifier : protected EmbeddedQueue<9>
           m_origdx(0.0),
           m_origdy(0.0),
           m_origdNorm2(0.0),
-          m_dnorm2Max(0.0),
-          m_lastMax(false),
+          m_dnorm2ForwardMax(0.0), // maximum norm of vector in forward (parallel) direction
+          m_dnorm2BackwardMax(0.0), // maximum norm of vector in backward (anti-parallel)
+                                    // direction
+          m_lastForwardMax(false), // was last point furthest from
+                                   // lastWritten in forward (parallel) direction?
+          m_lastBackwardMax(false), // was last point furthest from
+                                    // lastWritten in backward (anti-parallel) direction?
+
+          // added to queue immediately when _push is called
           m_nextX(0.0),
           m_nextY(0.0),
+
+          // added to queue when _push is called if any backwards vectors were observed
+          m_nextBackwardX(0.0),
+          m_nextBackwardY(0.0),
+
           m_lastWrittenX(0.0),
           m_lastWrittenY(0.0)
     {
@@ -677,8 +691,8 @@ class PathSimplifier : protected EmbeddedQueue<9>
                 m_origdNorm2 = m_origdx * m_origdx + m_origdy * m_origdy;
 
                 // set all the variables to reflect this new orig vector
-                m_dnorm2Max = m_origdNorm2;
-                m_lastMax = true;
+                m_dnorm2ForwardMax = m_origdNorm2;
+                m_lastForwardMax = true;
 
                 m_nextX = m_lastWrittenX = m_lastx = *x;
                 m_nextY = m_lastWrittenY = m_lasty = *y;
@@ -712,25 +726,33 @@ class PathSimplifier : protected EmbeddedQueue<9>
 
             /* If the perp vector is less than some number of (squared)
                pixels in size, then merge the current vector */
+            // std::cout << "here?\n";
             if (perpdNorm2 < m_simplify_threshold) {
+                // std::cout << "do we get here?\n";
                 /* check if the current vector is parallel or
                    anti-parallel to the orig vector. If it is
                    parallel, test if it is the longest of the vectors
                    we are merging in that direction. */
                 double paradNorm2 = paradx * paradx + parady * parady;
 
-                m_lastMax = false;
+                m_lastForwardMax = false;
+                m_lastBackwardMax = false;
                 if (totdot > 0.0) {
-                    if (paradNorm2 > m_dnorm2Max) {
-                        m_lastMax = true;
-                        m_dnorm2Max = paradNorm2;
+                    if (paradNorm2 > m_dnorm2ForwardMax) {
+                        m_lastForwardMax = true;
+                        m_dnorm2ForwardMax = paradNorm2;
                         m_nextX = *x;
                         m_nextY = *y;
                     }
                 } else {
-                    _push(&m_lastx, &m_lasty);
-                    _push(x, y);
-                    break;
+                    std::cout << "almost next backwards\n";
+                    if (paradNorm2 > m_dnorm2BackwardMax) {
+                        std::cout << "next backwards\n";
+                        m_lastBackwardMax = true;
+                        m_dnorm2BackwardMax = paradNorm2;
+                        m_nextBackwardX = *x;
+                        m_nextBackwardY = *y;
+                    }
                 }
 
                 m_lastx = *x;
@@ -789,10 +811,14 @@ class PathSimplifier : protected EmbeddedQueue<9>
     double m_origdx;
     double m_origdy;
     double m_origdNorm2;
-    double m_dnorm2Max;
-    bool m_lastMax;
+    double m_dnorm2ForwardMax;
+    double m_dnorm2BackwardMax;
+    bool m_lastForwardMax;
+    bool m_lastBackwardMax;
     double m_nextX;
     double m_nextY;
+    double m_nextBackwardX;
+    double m_nextBackwardY;
     double m_lastWrittenX;
     double m_lastWrittenY;
 
@@ -800,11 +826,18 @@ class PathSimplifier : protected EmbeddedQueue<9>
     {
         queue_push(agg::path_cmd_line_to, m_nextX, m_nextY);
 
+        /* If we observed any backward (anti-parallel) vectors, then
+           we need to move to the furthest backward point. */
+        if (m_dnorm2BackwardMax > 0.0) {
+            std::cout << "pushing backwards\n";
+            queue_push(agg::path_cmd_line_to, m_nextBackwardX, m_nextBackwardY);
+        }
+
         /* If we clipped some segments between this line and the next line
            we are starting, we also need to move to the last point. */
         if (m_clipped) {
             queue_push(agg::path_cmd_move_to, m_lastx, m_lasty);
-        } else if (!m_lastMax) {
+        } else if ((!m_lastForwardMax) && (!m_lastBackwardMax)) {
             /* If the last line was not the longest line, then move
                back to the end point of the last line in the
                sequence. Only do this if not clipped, since in that
@@ -819,8 +852,8 @@ class PathSimplifier : protected EmbeddedQueue<9>
         m_origdy = *y - m_lasty;
         m_origdNorm2 = m_origdx * m_origdx + m_origdy * m_origdy;
 
-        m_dnorm2Max = m_origdNorm2;
-        m_lastMax = true;
+        m_dnorm2ForwardMax = m_origdNorm2;
+        m_lastForwardMax = true;
         m_lastWrittenX = m_queue[m_queue_write - 1].x;
         m_lastWrittenY = m_queue[m_queue_write - 1].y;
         m_lastx = m_nextX = *x;
