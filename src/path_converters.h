@@ -638,6 +638,7 @@ class PathSimplifier : protected EmbeddedQueue<9>
            to the outbound queue, not to run through the entire path
            in one go.  This eliminates the need to allocate and fill
            an entire additional path array on each draw. */
+        m_dnorm2BackwardMax = 0.0;
         while ((cmd = m_source->vertex(x, y)) != agg::path_cmd_stop) {
             /* if we are starting a new path segment, move to the first point
                + init */
@@ -692,6 +693,7 @@ class PathSimplifier : protected EmbeddedQueue<9>
 
                 // set all the variables to reflect this new orig vector
                 m_dnorm2ForwardMax = m_origdNorm2;
+                m_dnorm2BackwardMax = 0.0;
                 m_lastForwardMax = true;
 
                 m_nextX = m_lastWrittenX = m_lastx = *x;
@@ -726,9 +728,7 @@ class PathSimplifier : protected EmbeddedQueue<9>
 
             /* If the perp vector is less than some number of (squared)
                pixels in size, then merge the current vector */
-            // std::cout << "here?\n";
             if (perpdNorm2 < m_simplify_threshold) {
-                // std::cout << "do we get here?\n";
                 /* check if the current vector is parallel or
                    anti-parallel to the orig vector. If it is
                    parallel, test if it is the longest of the vectors
@@ -745,9 +745,8 @@ class PathSimplifier : protected EmbeddedQueue<9>
                         m_nextY = *y;
                     }
                 } else {
-                    std::cout << "almost next backwards\n";
                     if (paradNorm2 > m_dnorm2BackwardMax) {
-                        std::cout << "next backwards\n";
+                        // std::cout << "next backwards\n";
                         m_lastBackwardMax = true;
                         m_dnorm2BackwardMax = paradNorm2;
                         m_nextBackwardX = *x;
@@ -767,6 +766,7 @@ class PathSimplifier : protected EmbeddedQueue<9>
             /* If the line needs to extend in the opposite direction from the
                direction we are drawing in, move back to we start drawing from
                back there. */
+            // std::cout << "at this push " << m_dnorm2BackwardMax;
             _push(x, y);
 
             break;
@@ -829,7 +829,7 @@ class PathSimplifier : protected EmbeddedQueue<9>
         /* If we observed any backward (anti-parallel) vectors, then
            we need to move to the furthest backward point. */
         if (m_dnorm2BackwardMax > 0.0) {
-            std::cout << "pushing backwards\n";
+            // std::cout << "pushing backward points\n";
             queue_push(agg::path_cmd_line_to, m_nextBackwardX, m_nextBackwardY);
         }
 

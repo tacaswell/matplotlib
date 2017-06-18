@@ -774,8 +774,6 @@ class Line2D(Artist):
         funcname = self._lineStyles.get(self._linestyle, '_draw_nothing')
         if funcname != '_draw_nothing':
             tpath, affine = transf_path.get_transformed_path_and_affine()
-            print(tpath.vertices.size)
-            print(tpath.cleaned(simplify=True).vertices.size)
             if len(tpath.vertices):
                 line_func = getattr(self, funcname)
                 gc = renderer.new_gc()
@@ -792,6 +790,9 @@ class Line2D(Artist):
                     cap = self._dashcapstyle
                     join = self._dashjoinstyle
                 else:
+                    print(tpath.vertices.size)
+                    tpath = affine.inverted().transform_path(affine.transform_path(tpath).cleaned(simplify=True))
+                    print(tpath.vertices.size)
                     cap = self._solidcapstyle
                     join = self._solidjoinstyle
                 gc.set_joinstyle(join)
@@ -800,7 +801,7 @@ class Line2D(Artist):
                 if self.get_sketch_params() is not None:
                     gc.set_sketch_params(*self.get_sketch_params())
 
-                line_func(renderer, gc, tpath.cleaned(simplify=True), affine.frozen())
+                line_func(renderer, gc, tpath, affine.frozen())
                 gc.restore()
 
         if self._marker and self._markersize > 0:
