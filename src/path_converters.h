@@ -10,8 +10,6 @@
 #include "mplutils.h"
 #include "agg_conv_segmentator.h"
 
-#include <iostream>
-
 /*
  This file contains a number of vertex converters that modify
  paths. They all work as iterators, where the output is generated
@@ -746,7 +744,6 @@ class PathSimplifier : protected EmbeddedQueue<9>
                     }
                 } else {
                     if (paradNorm2 > m_dnorm2BackwardMax) {
-                        // std::cout << "next backwards\n";
                         m_lastBackwardMax = true;
                         m_dnorm2BackwardMax = paradNorm2;
                         m_nextBackwardX = *x;
@@ -766,7 +763,6 @@ class PathSimplifier : protected EmbeddedQueue<9>
             /* If the line needs to extend in the opposite direction from the
                direction we are drawing in, move back to we start drawing from
                back there. */
-            // std::cout << "at this push " << m_dnorm2BackwardMax;
             _push(x, y);
 
             break;
@@ -829,7 +825,6 @@ class PathSimplifier : protected EmbeddedQueue<9>
         /* If we observed any backward (anti-parallel) vectors, then
            we need to move to the furthest backward point. */
         if (m_dnorm2BackwardMax > 0.0) {
-            // std::cout << "pushing backward points\n";
             queue_push(agg::path_cmd_line_to, m_nextBackwardX, m_nextBackwardY);
         }
 
