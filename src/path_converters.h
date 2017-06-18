@@ -607,6 +607,10 @@ class PathSimplifier : protected EmbeddedQueue<9>
             return m_source->vertex(x, y);
         }
 
+        /* NOTE: the below comment is out of date. Lines < 1 pixel in
+           length are no longer removed. (Sequential parallel lines
+           *are* still merged.) */
+
         /* idea: we can skip drawing many lines: lines < 1 pixel in
            length, and we can combine sequential parallel lines into a
            single line instead of redrawing lines over the same
@@ -627,6 +631,14 @@ class PathSimplifier : protected EmbeddedQueue<9>
            the queue before proceeding to the main loop below.
            -- Michael Droettboom */
 
+        /* This code was originally written by Allan Haldane and
+           updated by Michael Droettboom. I have modified it to
+           handle anti-parallel vectors. This is done essentially
+           the same way as parallel vectors, but requires a little
+           additional book-keeping to track whether or not we have
+           observed an anti-parallel vector during the current run.
+           -- Kevin Rose */
+
         if (queue_pop(&cmd, x, y)) {
             return cmd;
         }
@@ -636,7 +648,6 @@ class PathSimplifier : protected EmbeddedQueue<9>
            to the outbound queue, not to run through the entire path
            in one go.  This eliminates the need to allocate and fill
            an entire additional path array on each draw. */
-        m_dnorm2BackwardMax = 0.0;
         while ((cmd = m_source->vertex(x, y)) != agg::path_cmd_stop) {
             /* if we are starting a new path segment, move to the first point
                + init */
@@ -728,8 +739,8 @@ class PathSimplifier : protected EmbeddedQueue<9>
                pixels in size, then merge the current vector */
             if (perpdNorm2 < m_simplify_threshold) {
                 /* check if the current vector is parallel or
-                   anti-parallel to the orig vector. If it is
-                   parallel, test if it is the longest of the vectors
+                   anti-parallel to the orig vector. In either case,
+                   test if it is the longest of the vectors
                    we are merging in that direction. */
                 double paradNorm2 = paradx * paradx + parady * parady;
 
@@ -823,7 +834,7 @@ class PathSimplifier : protected EmbeddedQueue<9>
         queue_push(agg::path_cmd_line_to, m_nextX, m_nextY);
 
         /* If we observed any backward (anti-parallel) vectors, then
-           we need to move to the furthest backward point. */
+           we need to also move to the furthest backward point. */
         if (m_dnorm2BackwardMax > 0.0) {
             queue_push(agg::path_cmd_line_to, m_nextBackwardX, m_nextBackwardY);
         }
@@ -853,6 +864,8 @@ class PathSimplifier : protected EmbeddedQueue<9>
         m_lastWrittenY = m_queue[m_queue_write - 1].y;
         m_lastx = m_nextX = *x;
         m_lasty = m_nextY = *y;
+        m_dnorm2BackwardMax = 0.0;
+        m_lastForwardMax = false;
 
         m_clipped = false;
     }
