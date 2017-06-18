@@ -49,7 +49,7 @@ def test_diamond():
 
 def test_noise():
     np.random.seed(0)
-    x = np.random.uniform(size=(5000,)) * 50
+    x = np.random.uniform(size=(50000,)) * 50
 
     fig, ax = plt.subplots()
     p1 = ax.plot(x, solid_joinstyle='round', linewidth=2.0)
@@ -57,15 +57,15 @@ def test_noise():
     path = p1[0].get_path()
     transform = p1[0].get_transform()
     path = transform.transform_path(path)
-    simplified = list(path.iter_segments(simplify=(800, 600)))
+    simplified = path.cleaned(simplify=True)
 
-    assert len(simplified) == 3884
+    assert simplified.vertices.size == 25340
 
 
 def test_sine_plus_noise():
     np.random.seed(0)
-    x = (np.sin(np.linspace(0, np.pi * 2.0, 1000)) +
-         np.random.uniform(size=(1000,)) * 0.01)
+    x = (np.sin(np.linspace(0, np.pi * 2.0, 50000)) +
+         np.random.uniform(size=(50000,)) * 0.01)
 
     fig, ax = plt.subplots()
     p1 = ax.plot(x, solid_joinstyle='round', linewidth=2.0)
@@ -73,9 +73,9 @@ def test_sine_plus_noise():
     path = p1[0].get_path()
     transform = p1[0].get_transform()
     path = transform.transform_path(path)
-    simplified = list(path.iter_segments(simplify=(800, 600)))
+    simplified = path.cleaned(simplify=True)
 
-    assert len(simplified) == 876
+    assert simplified.vertices.size == 25190
 
 
 @image_comparison(baseline_images=['simplify_curve'], remove_text=True)
@@ -110,9 +110,9 @@ def test_fft_peaks():
     path = p1[0].get_path()
     transform = p1[0].get_transform()
     path = transform.transform_path(path)
-    simplified = list(path.iter_segments(simplify=(800, 600)))
+    simplified = path.cleaned(simplify=True)
 
-    assert len(simplified) == 20
+    assert simplified.vertices.size == 38
 
 
 def test_start_with_moveto():
