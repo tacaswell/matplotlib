@@ -393,7 +393,7 @@ agg.path.chunksize : 0           # 0 to disable; values in the range
                                  # A value of 20000 is probably a good
                                  # starting point.
 ### SAVING FIGURES
-path.simplify : False  # When True, simplify paths by removing "invisible"
+path.simplify : False   # When True, simplify paths by removing "invisible"
                        # points to reduce file size and increase rendering
                        # speed
 path.simplify_threshold : 0.1111111111111111
