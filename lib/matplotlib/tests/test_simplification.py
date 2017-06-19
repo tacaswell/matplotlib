@@ -4,6 +4,8 @@ from __future__ import (absolute_import, division, print_function,
 import io
 
 import numpy as np
+from numpy.testing import assert_array_almost_equal
+
 import pytest
 
 from matplotlib.testing.decorators import image_comparison
@@ -61,6 +63,102 @@ def test_noise():
 
     assert simplified.vertices.size == 25340
 
+
+def test_antiparallel_simplification():
+    # test ending on a maximum
+    x = [ 0, 0,  0, 0,  0, 1]
+    y = [.5, 1, -1, 1,  2, .5]
+
+    fig, ax = plt.subplots()
+    p1 = ax.plot(x, y)
+
+    path = p1[0].get_path()
+    transform = p1[0].get_transform()
+    path = transform.transform_path(path)
+    simplified = path.cleaned(simplify=True)
+    simplified = transform.inverted().transform_path(simplified)
+
+    assert_array_almost_equal([[ 0. ,  0.5],
+                               [ 0. , -1. ],
+                               [ 0. ,  2. ],
+                               [ 1. ,  0.5]],
+                              simplified.vertices[:-2, :])
+
+    # test ending on a minimum
+    x = [ 0, 0,  0, 0,  0, 1]
+    y = [.5, 1, -1, 1,  -2, .5]
+
+    fig, ax = plt.subplots()
+    p1 = ax.plot(x, y)
+
+    path = p1[0].get_path()
+    transform = p1[0].get_transform()
+    path = transform.transform_path(path)
+    simplified = path.cleaned(simplify=True)
+    simplified = transform.inverted().transform_path(simplified)
+
+    assert_array_almost_equal([[ 0. ,  0.5],
+                               [ 0. ,  1. ],
+                               [ 0. , -2. ],
+                               [ 1. ,  0.5]],
+                              simplified.vertices[:-2, :])
+
+    # test ending in between
+    x = [ 0, 0,  0, 0,  0, 1]
+    y = [.5, 1, -1, 1,  0, .5]
+
+    fig, ax = plt.subplots()
+    p1 = ax.plot(x, y)
+
+    path = p1[0].get_path()
+    transform = p1[0].get_transform()
+    path = transform.transform_path(path)
+    simplified = path.cleaned(simplify=True)
+    simplified = transform.inverted().transform_path(simplified)
+
+    assert_array_almost_equal([[ 0. ,  0.5],
+                               [ 0. ,  1. ],
+                               [ 0. , -1. ],
+                               [ 0. ,  0. ],
+                               [ 1. ,  0.5]],
+                              simplified.vertices[:-2, :])
+
+    # test no anti-parallel ending at max
+    x = [ 0, 0,  0, 0,  0, 1]
+    y = [.5, 1,  2, 1,  3, .5]
+
+    fig, ax = plt.subplots()
+    p1 = ax.plot(x, y)
+
+    path = p1[0].get_path()
+    transform = p1[0].get_transform()
+    path = transform.transform_path(path)
+    simplified = path.cleaned(simplify=True)
+    simplified = transform.inverted().transform_path(simplified)
+
+    assert_array_almost_equal([[ 0. ,  0.5],
+                               [ 0. ,  3. ],
+                               [ 1. ,  0.5]],
+                              simplified.vertices[:-2, :])
+
+    # test no anti-parallel ending in middle
+    x = [ 0, 0,  0, 0,  0, 1]
+    y = [.5, 1,  2, 1,  1, .5]
+
+    fig, ax = plt.subplots()
+    p1 = ax.plot(x, y)
+
+    path = p1[0].get_path()
+    transform = p1[0].get_transform()
+    path = transform.transform_path(path)
+    simplified = path.cleaned(simplify=True)
+    simplified = transform.inverted().transform_path(simplified)
+
+    assert_array_almost_equal([[ 0. ,  0.5],
+                               [ 0. ,  2. ],
+                               [ 0. ,  1. ],
+                               [ 1. ,  0.5]],
+                              simplified.vertices[:-2, :])
 
 def test_sine_plus_noise():
     np.random.seed(0)

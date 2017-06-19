@@ -822,6 +822,7 @@ class PathSimplifier : protected EmbeddedQueue<9>
     double m_dnorm2BackwardMax;
     bool m_lastForwardMax;
     bool m_lastBackwardMax;
+    bool m_needToPushBack;
     double m_nextX;
     double m_nextY;
     double m_nextBackwardX;
@@ -831,12 +832,26 @@ class PathSimplifier : protected EmbeddedQueue<9>
 
     inline void _push(double *x, double *y)
     {
-        queue_push(agg::path_cmd_line_to, m_nextX, m_nextY);
+        m_needToPushBack = (m_dnorm2BackwardMax > 0.0);
 
         /* If we observed any backward (anti-parallel) vectors, then
-           we need to also move to the furthest backward point. */
-        if (m_dnorm2BackwardMax > 0.0) {
-            queue_push(agg::path_cmd_line_to, m_nextBackwardX, m_nextBackwardY);
+           we need to push both forward and backward vectors. */
+        if (m_needToPushBack) {
+            /* If the last vector seen was the maximum in the forward direction,
+               then we need to push the forward after the backward. Otherwise,
+               the last vector seen was the maximum in the backward direction,
+               or somewhere in between, either way we are safe pushing forward
+               before backward. */
+            if (m_lastForwardMax) {
+                queue_push(agg::path_cmd_line_to, m_nextBackwardX, m_nextBackwardY);
+                queue_push(agg::path_cmd_line_to, m_nextX, m_nextY);
+            } else {
+                queue_push(agg::path_cmd_line_to, m_nextX, m_nextY);
+                queue_push(agg::path_cmd_line_to, m_nextBackwardX, m_nextBackwardY);
+            }
+        } else {
+            /* If we did not observe any backwards vectors, just push forward. */
+            queue_push(agg::path_cmd_line_to, m_nextX, m_nextY);
         }
 
         /* If we clipped some segments between this line and the next line
