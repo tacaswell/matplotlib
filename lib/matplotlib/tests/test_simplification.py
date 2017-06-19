@@ -65,18 +65,24 @@ def test_noise():
 
 
 def test_antiparallel_simplification():
+    def _get_simplified(x,y):
+        fig, ax = plt.subplots()
+        p1 = ax.plot(x, y)
+
+        path = p1[0].get_path()
+        transform = p1[0].get_transform()
+        path = transform.transform_path(path)
+        simplified = path.cleaned(simplify=True)
+        simplified = transform.inverted().transform_path(simplified)
+
+        return simplified
+
+
     # test ending on a maximum
     x = [ 0, 0,  0, 0,  0, 1]
     y = [.5, 1, -1, 1,  2, .5]
 
-    fig, ax = plt.subplots()
-    p1 = ax.plot(x, y)
-
-    path = p1[0].get_path()
-    transform = p1[0].get_transform()
-    path = transform.transform_path(path)
-    simplified = path.cleaned(simplify=True)
-    simplified = transform.inverted().transform_path(simplified)
+    simplified = _get_simplified(x,y)
 
     assert_array_almost_equal([[ 0. ,  0.5],
                                [ 0. , -1. ],
@@ -88,14 +94,7 @@ def test_antiparallel_simplification():
     x = [ 0, 0,  0, 0,  0, 1]
     y = [.5, 1, -1, 1,  -2, .5]
 
-    fig, ax = plt.subplots()
-    p1 = ax.plot(x, y)
-
-    path = p1[0].get_path()
-    transform = p1[0].get_transform()
-    path = transform.transform_path(path)
-    simplified = path.cleaned(simplify=True)
-    simplified = transform.inverted().transform_path(simplified)
+    simplified = _get_simplified(x,y)
 
     assert_array_almost_equal([[ 0. ,  0.5],
                                [ 0. ,  1. ],
@@ -107,14 +106,7 @@ def test_antiparallel_simplification():
     x = [ 0, 0,  0, 0,  0, 1]
     y = [.5, 1, -1, 1,  0, .5]
 
-    fig, ax = plt.subplots()
-    p1 = ax.plot(x, y)
-
-    path = p1[0].get_path()
-    transform = p1[0].get_transform()
-    path = transform.transform_path(path)
-    simplified = path.cleaned(simplify=True)
-    simplified = transform.inverted().transform_path(simplified)
+    simplified = _get_simplified(x,y)
 
     assert_array_almost_equal([[ 0. ,  0.5],
                                [ 0. ,  1. ],
@@ -127,14 +119,7 @@ def test_antiparallel_simplification():
     x = [ 0, 0,  0, 0,  0, 1]
     y = [.5, 1,  2, 1,  3, .5]
 
-    fig, ax = plt.subplots()
-    p1 = ax.plot(x, y)
-
-    path = p1[0].get_path()
-    transform = p1[0].get_transform()
-    path = transform.transform_path(path)
-    simplified = path.cleaned(simplify=True)
-    simplified = transform.inverted().transform_path(simplified)
+    simplified = _get_simplified(x,y)
 
     assert_array_almost_equal([[ 0. ,  0.5],
                                [ 0. ,  3. ],
@@ -145,14 +130,7 @@ def test_antiparallel_simplification():
     x = [ 0, 0,  0, 0,  0, 1]
     y = [.5, 1,  2, 1,  1, .5]
 
-    fig, ax = plt.subplots()
-    p1 = ax.plot(x, y)
-
-    path = p1[0].get_path()
-    transform = p1[0].get_transform()
-    path = transform.transform_path(path)
-    simplified = path.cleaned(simplify=True)
-    simplified = transform.inverted().transform_path(simplified)
+    simplified = _get_simplified(x,y)
 
     assert_array_almost_equal([[ 0. ,  0.5],
                                [ 0. ,  2. ],
