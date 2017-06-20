@@ -559,6 +559,8 @@ class PathSimplifier : protected EmbeddedQueue<9>
     PathSimplifier(VertexSource &source, bool do_simplify, double simplify_threshold)
         : m_source(&source),
           m_simplify(do_simplify),
+          /* we square simplify_threshold so that we can compute
+             norms without doing the square root every step. */
           m_simplify_threshold(simplify_threshold * simplify_threshold),
           m_moveto(true),
           m_after_moveto(false),
