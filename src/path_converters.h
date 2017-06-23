@@ -882,7 +882,7 @@ class PathSimplifier : protected EmbeddedQueue<9>
         m_lastx = m_nextX = *x;
         m_lasty = m_nextY = *y;
         m_dnorm2BackwardMax = 0.0;
-        m_lastForwardMax = false;
+        m_lastBackwardMax = false;
 
         m_clipped = false;
     }
