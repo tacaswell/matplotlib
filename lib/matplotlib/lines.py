@@ -790,25 +790,6 @@ class Line2D(Artist):
                     cap = self._dashcapstyle
                     join = self._dashjoinstyle
                 else:
-                    if tpath.should_simplify and affine.has_inverse:
-                        # The path simplification code expects the path
-                        # to be in pixel space, not data space, but the
-                        # renderer downstream expects the path to be
-                        # in data space. The transformation `affine`
-                        # will put the path into pixel space, and
-                        # affine.inverted() will transform it back to
-                        # data space. So, transform using affine, simplify
-                        # the path, and transform using the affine inverted.
-                        #
-                        # This may be inefficient, but it appears to be the
-                        # only way forward at the moment. It's possible that
-                        # the problem only lies in path clipping inside
-                        # src/path_converters.h, but that is only a
-                        # hypothesis. Despite the inefficiency, it is still
-                        # faster than *not* simplifying.
-                        tpath = affine.inverted().transform_path(
-                            affine.transform_path(tpath).cleaned(simplify=True)
-                        )
                     cap = self._solidcapstyle
                     join = self._solidjoinstyle
 

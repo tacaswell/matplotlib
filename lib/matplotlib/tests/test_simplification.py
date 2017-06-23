@@ -15,14 +15,8 @@ from matplotlib import patches, transforms
 from matplotlib.path import Path
 
 
-@pytest.fixture
-def set_simplify_and_threshold():
-    plt.rcParams['path.simplify'] = True
-    plt.rcParams['path.simplify_threshold'] = 0.1111111111111111
-
-
 @image_comparison(baseline_images=['clipping'], remove_text=True)
-def test_clipping(set_simplify_and_threshold):
+def test_clipping():
     t = np.arange(0.0, 2.0, 0.01)
     s = np.sin(2*np.pi*t)
 
@@ -32,7 +26,7 @@ def test_clipping(set_simplify_and_threshold):
 
 
 @image_comparison(baseline_images=['overflow'], remove_text=True)
-def test_overflow(set_simplify_and_threshold):
+def test_overflow():
     x = np.array([1.0, 2.0, 3.0, 2.0e5])
     y = np.arange(len(x))
 
@@ -42,7 +36,7 @@ def test_overflow(set_simplify_and_threshold):
 
 
 @image_comparison(baseline_images=['clipping_diamond'], remove_text=True)
-def test_diamond(set_simplify_and_threshold):
+def test_diamond():
     x = np.array([0.0, 1.0, 0.0, -1.0, 0.0])
     y = np.array([1.0, 0.0, -1.0, 0.0, 1.0])
 
@@ -52,7 +46,7 @@ def test_diamond(set_simplify_and_threshold):
     ax.set_ylim(ymin=-0.6, ymax=0.6)
 
 
-def test_noise(set_simplify_and_threshold):
+def test_noise():
     np.random.seed(0)
     x = np.random.uniform(size=(50000,)) * 50
 
@@ -64,10 +58,10 @@ def test_noise(set_simplify_and_threshold):
     path = transform.transform_path(path)
     simplified = path.cleaned(simplify=True)
 
-    assert simplified.vertices.size == 25888
+    assert simplified.vertices.size == 25510
 
 
-def test_antiparallel_simplification(set_simplify_and_threshold):
+def test_antiparallel_simplification():
     def _get_simplified(x,y):
         fig, ax = plt.subplots()
         p1 = ax.plot(x, y)
@@ -141,7 +135,7 @@ def test_antiparallel_simplification(set_simplify_and_threshold):
                                [ 1. ,  0.5]],
                               simplified.vertices[:-2, :])
 
-def test_sine_plus_noise(set_simplify_and_threshold):
+def test_sine_plus_noise():
     np.random.seed(0)
     x = (np.sin(np.linspace(0, np.pi * 2.0, 50000)) +
          np.random.uniform(size=(50000,)) * 0.01)
@@ -154,11 +148,11 @@ def test_sine_plus_noise(set_simplify_and_threshold):
     path = transform.transform_path(path)
     simplified = path.cleaned(simplify=True)
 
-    assert simplified.vertices.size == 25598
+    assert simplified.vertices.size == 25238
 
 
 @image_comparison(baseline_images=['simplify_curve'], remove_text=True)
-def test_simplify_curve(set_simplify_and_threshold):
+def test_simplify_curve():
     pp1 = patches.PathPatch(
         Path([(0, 0), (1, 0), (1, 1), (np.nan, 1), (0, 0), (2, 0), (2, 2),
               (0, 0)],
@@ -173,7 +167,7 @@ def test_simplify_curve(set_simplify_and_threshold):
 
 
 @image_comparison(baseline_images=['hatch_simplify'], remove_text=True)
-def test_hatch(set_simplify_and_threshold):
+def test_hatch():
     fig, ax = plt.subplots()
     ax.add_patch(plt.Rectangle((0, 0), 1, 1, fill=False, hatch="/"))
     ax.set_xlim((0.45, 0.55))
@@ -181,7 +175,7 @@ def test_hatch(set_simplify_and_threshold):
 
 
 @image_comparison(baseline_images=['fft_peaks'], remove_text=True)
-def test_fft_peaks(set_simplify_and_threshold):
+def test_fft_peaks():
     fig, ax = plt.subplots()
     t = np.arange(65536)
     p1 = ax.plot(abs(np.fft.fft(np.sin(2*np.pi*.01*t)*np.blackman(len(t)))))
@@ -191,10 +185,10 @@ def test_fft_peaks(set_simplify_and_threshold):
     path = transform.transform_path(path)
     simplified = path.cleaned(simplify=True)
 
-    assert simplified.vertices.size == 38
+    assert simplified.vertices.size == 36
 
 
-def test_start_with_moveto(set_simplify_and_threshold):
+def test_start_with_moveto():
     # Should be entirely clipped away to a single MOVETO
     data = b"""
 ZwAAAAku+v9UAQAA+Tj6/z8CAADpQ/r/KAMAANlO+v8QBAAAyVn6//UEAAC6ZPr/2gUAAKpv+v+8
@@ -249,7 +243,7 @@ def test_throw_rendering_complexity_exceeded():
 
 
 @image_comparison(baseline_images=['clipper_edge'], remove_text=True)
-def test_clipper(set_simplify_and_threshold):
+def test_clipper():
     dat = (0, 1, 0, 2, 0, 3, 0, 4, 0, 5)
     fig = plt.figure(figsize=(2, 1))
     fig.subplots_adjust(left=0, bottom=0, wspace=0, hspace=0)
@@ -265,7 +259,7 @@ def test_clipper(set_simplify_and_threshold):
 
 
 @image_comparison(baseline_images=['para_equal_perp'], remove_text=True)
-def test_para_equal_perp(set_simplify_and_threshold):
+def test_para_equal_perp():
     x = np.array([0, 1, 2, 1, 0, -1, 0, 1] + [1] * 128)
     y = np.array([1, 1, 2, 1, 0, -1, 0, 0] + [0] * 128)
 
@@ -275,7 +269,7 @@ def test_para_equal_perp(set_simplify_and_threshold):
 
 
 @image_comparison(baseline_images=['clipping_with_nans'])
-def test_clipping_with_nans(set_simplify_and_threshold):
+def test_clipping_with_nans():
     x = np.linspace(0, 3.14 * 2, 3000)
     y = np.sin(x)
     x[::100] = np.nan
@@ -285,7 +279,7 @@ def test_clipping_with_nans(set_simplify_and_threshold):
     ax.set_ylim(-0.25, 0.25)
 
 
-def test_clipping_full(set_simplify_and_threshold):
+def test_clipping_full():
     p = Path([[1e30, 1e30]] * 5)
     simplified = list(p.iter_segments(clip=[0, 0, 100, 100]))
     assert simplified == []
