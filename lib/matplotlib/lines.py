@@ -792,7 +792,6 @@ class Line2D(Artist):
                 else:
                     cap = self._solidcapstyle
                     join = self._solidjoinstyle
-
                 gc.set_joinstyle(join)
                 gc.set_capstyle(cap)
                 gc.set_snap(self.get_snap())
