@@ -15,6 +15,9 @@ from matplotlib import patches, transforms
 from matplotlib.path import Path
 
 
+# NOTE: All of these tests assume that path.simplify is set to True
+# (the default)
+
 @image_comparison(baseline_images=['clipping'], remove_text=True)
 def test_clipping():
     t = np.arange(0.0, 2.0, 0.01)
