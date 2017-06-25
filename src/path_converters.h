@@ -609,12 +609,8 @@ class PathSimplifier : protected EmbeddedQueue<9>
             return m_source->vertex(x, y);
         }
 
-        /* NOTE: the below comment is out of date. Lines < 1 pixel in
-           length are no longer removed. (Sequential parallel lines
-           *are* still merged.) */
-
-        /* idea: we can skip drawing many lines: lines < 1 pixel in
-           length, and we can combine sequential parallel lines into a
+        /* idea: we can skip drawing many lines: we can combine
+           sequential parallel lines into a
            single line instead of redrawing lines over the same
            points.  The loop below works a bit like a state machine,
            where what it does depends on what it did in the last
