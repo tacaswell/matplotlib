@@ -38,7 +38,9 @@ AUTOGEN_MSG = """
 AXES_CMAPPABLE_METHOD_TEMPLATE = AUTOGEN_MSG + """
 @docstring.copy(Axes.{called_name})
 def {name}{signature}:
-    __ret = gca().{called_name}{call}
+    if ax is None:
+        ax = gca()
+    __ret = ax.{called_name}{call}
     {sci_command}
     return __ret
 """
@@ -46,13 +48,17 @@ def {name}{signature}:
 AXES_METHOD_TEMPLATE = AUTOGEN_MSG + """
 @docstring.copy(Axes.{called_name})
 def {name}{signature}:
-    return gca().{called_name}{call}
+    if ax is None:
+        ax = gca()
+    return ax.{called_name}{call}
 """
 
 FIGURE_METHOD_TEMPLATE = AUTOGEN_MSG + """
 @docstring.copy(Figure.{called_name})
 def {name}{signature}:
-    return gcf().{called_name}{call}
+    if fig is None:
+        fig = gcf()
+    return fig.{called_name}{call}
 """
 
 # Used for colormap functions
@@ -91,7 +97,8 @@ class value_formatter:
         return self._repr
 
 
-def generate_function(name, called_fullname, template, **kwargs):
+def generate_function(name, called_fullname, template, implicit_input,
+                      **kwargs):
     """
     Create a wrapper function *pyplot_name* calling *call_name*.
 
@@ -110,6 +117,9 @@ def generate_function(name, called_fullname, template, **kwargs):
         - called_name: The name of the called function.
         - call: Parameters passed to *called_name* (including parentheses).
 
+    implicit_input : {'ax', 'fig', None}
+        Any extra kwargs that should be injected.
+
     **kwargs
         Additional parameters are passed to ``template.format()``.
     """
@@ -124,10 +134,20 @@ def generate_function(name, called_fullname, template, **kwargs):
     signature = inspect.signature(getattr(class_, called_name))
     # Replace self argument.
     params = list(signature.parameters.values())[1:]
+    param_tail = []
+    if implicit_input is not None:
+        param_tail.append(inspect.Parameter(name=implicit_input,
+                                            default=None,
+                                            kind=inspect.Parameter.KEYWORD_ONLY))
+    param_tail.extend(
+        [p for p in params
+         if p.kind is inspect.Parameter.VAR_KEYWORD])
+    non_var_params = [p for p in params
+                      if p.kind is not inspect.Parameter.VAR_KEYWORD]
     signature = str(signature.replace(parameters=[
         param.replace(default=value_formatter(param.default))
         if param.default is not param.empty else param
-        for param in params]))
+        for param in non_var_params] + param_tail))
     if len('def ' + name + signature) >= 80:
         # Move opening parenthesis before newline.
         signature = '(\n' + text_wrapper.fill(signature).replace('(', '', 1)
@@ -158,7 +178,7 @@ def generate_function(name, called_fullname, template, **kwargs):
     if MAX_CALL_PREFIX + max(len(name), len(called_name)) + len(call) >= 80:
         call = '(\n' + text_wrapper.fill(call[1:])
     # Bail out in case of name collision.
-    for reserved in ('gca', 'gci', 'gcf', '__ret'):
+    for reserved in ('gca', 'gci', 'gcf', '__ret', implicit_input):
         if reserved in params:
             raise ValueError(
                 f'Method {called_fullname} has kwarg named {reserved}')
@@ -288,7 +308,7 @@ def boilerplate_gen():
         else:
             name = called_name = spec
         yield generate_function(name, f'Figure.{called_name}',
-                                FIGURE_METHOD_TEMPLATE)
+                                FIGURE_METHOD_TEMPLATE, implicit_input='fig')
 
     for spec in _axes_commands:
         if ':' in spec:
@@ -299,7 +319,8 @@ def boilerplate_gen():
         template = (AXES_CMAPPABLE_METHOD_TEMPLATE if name in cmappable else
                     AXES_METHOD_TEMPLATE)
         yield generate_function(name, f'Axes.{called_name}', template,
-                                sci_command=cmappable.get(name))
+                                sci_command=cmappable.get(name),
+                                implicit_input='ax')
 
     cmaps = (
         'autumn',

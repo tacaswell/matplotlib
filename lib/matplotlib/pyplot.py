@@ -69,7 +69,7 @@ from .ticker import (
 _log = logging.getLogger(__name__)
 
 
-## Global ##
+# # Global # #
 
 
 _IP_REGISTERED = None
@@ -405,7 +405,7 @@ def xkcd(scale=1, length=100, randomness=2):
     })
 
 
-## Figures ##
+# # Figures # #
 
 def figure(num=None,  # autoincrement if None, else integer from 1-N
            figsize=None,  # defaults to rc figure.figsize
@@ -600,7 +600,7 @@ def get_figlabels():
     return [m.canvas.figure.get_label() for m in figManagers]
 
 
-def get_current_fig_manager():
+def get_current_fig_manager(*, fig=None):
     """
     Return the figure manager of the current figure.
 
@@ -614,17 +614,23 @@ def get_current_fig_manager():
     -------
     manager : `.FigureManagerBase` or backend-dependent subclass thereof
     """
-    return gcf().canvas.manager
+    if fig is None:
+        fig = gcf()
+    return fig.canvas.manager
 
 
 @docstring.copy(FigureCanvasBase.mpl_connect)
-def connect(s, func):
-    return gcf().canvas.mpl_connect(s, func)
+def connect(s, func, *, fig=None):
+    if fig is None:
+        fig = gcf()
+    return fig.canvas.mpl_connect(s, func)
 
 
 @docstring.copy(FigureCanvasBase.mpl_disconnect)
-def disconnect(cid):
-    return gcf().canvas.mpl_disconnect(cid)
+def disconnect(cid, *, fig=None):
+    if fig is None:
+        fig = gcf()
+    return fig.canvas.mpl_disconnect(cid)
 
 
 def close(fig=None):
@@ -669,14 +675,17 @@ def close(fig=None):
                         "or None, not '%s'")
 
 
-def clf():
-    """Clear the current figure."""
-    gcf().clf()
-
-
-def draw():
+def clf(*, fig=None):
     """
-    Redraw the current figure.
+    Clear the current figure.
+    """
+    if fig is None:
+        fig = gcf()
+    fig.clf()
+
+
+def draw(*, fig=None):
+    """Redraw the current figure.
 
     This is used to update a figure that has been altered, but not
     automatically re-drawn.  If interactive mode is on (via `.ion()`), this
@@ -686,12 +695,14 @@ def draw():
     This is equivalent to calling ``fig.canvas.draw_idle()``, where ``fig`` is
     the current figure.
     """
-    gcf().canvas.draw_idle()
+    if fig is None:
+        fig = gcf()
+    fig.canvas.draw_idle()
 
 
 @docstring.copy(Figure.savefig)
 def savefig(*args, **kwargs):
-    fig = gcf()
+    fig = kwargs.pop('fig', None) or gcf()
     res = fig.savefig(*args, **kwargs)
     fig.canvas.draw_idle()   # need this if 'transparent=True' to reset colors
     return res
@@ -700,7 +711,9 @@ def savefig(*args, **kwargs):
 ## Putting things in figures ##
 
 
-def figlegend(*args, **kwargs):
+def figlegend(*args, fig=None, **kwargs):
+    if fig is None:
+        fig = gcf()
     return gcf().legend(*args, **kwargs)
 if Figure.legend.__doc__:
     figlegend.__doc__ = Figure.legend.__doc__.replace("legend(", "figlegend(")
@@ -825,7 +838,7 @@ def sca(ax):
 ## More ways of creating axes ##
 
 @docstring.dedent_interpd
-def subplot(*args, **kwargs):
+def subplot(*args, fig=None, **kwargs):
     """
     Add a subplot to the current figure.
 
@@ -973,8 +986,8 @@ def subplot(*args, **kwargs):
     if 'nrows' in kwargs or 'ncols' in kwargs:
         raise TypeError("subplot() got an unexpected keyword argument 'ncols' "
                          "and/or 'nrows'.  Did you intend to call subplots()?")
-
-    fig = gcf()
+    if fig is None:
+        fig = gcf()
     ax = fig.add_subplot(*args, **kwargs)
     bbox = ax.bbox
     axes_to_delete = []
@@ -1212,7 +1225,7 @@ def twiny(ax=None):
 
 
 def subplots_adjust(left=None, bottom=None, right=None, top=None,
-                    wspace=None, hspace=None):
+                    wspace=None, hspace=None, fig=None):
     """
     Tune the subplot layout.
 
@@ -1229,7 +1242,8 @@ def subplots_adjust(left=None, bottom=None, right=None, top=None,
 
     The actual defaults are controlled by the rc file
     """
-    fig = gcf()
+    if fig is None:
+        fig = gcf()
     fig.subplots_adjust(left, bottom, right, top, wspace, hspace)
 
 
@@ -1252,7 +1266,7 @@ def subplot_tool(targetfig=None):
     return SubplotTool(targetfig, toolfig)
 
 
-def tight_layout(pad=1.08, h_pad=None, w_pad=None, rect=None):
+def tight_layout(pad=1.08, h_pad=None, w_pad=None, rect=None, *, fig=None):
     """
     Automatically adjust subplot parameters to give specified padding.
 
@@ -1269,10 +1283,12 @@ def tight_layout(pad=1.08, h_pad=None, w_pad=None, rect=None):
         figure coordinate that the whole subplots area (including
         labels) will fit into.
     """
-    gcf().tight_layout(pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
+    if fig is None:
+        fig = gcf()
+    fig.tight_layout(pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
 
 
-def box(on=None):
+def box(on=None, ax=None):
     """
     Turn the axes box on or off on the current axes.
 
@@ -1287,7 +1303,8 @@ def box(on=None):
     :meth:`matplotlib.axes.Axes.set_frame_on`
     :meth:`matplotlib.axes.Axes.get_frame_on`
     """
-    ax = gca()
+    if ax is None:
+        ax = gca()
     if on is None:
         on = not ax.get_frame_on()
     ax.set_frame_on(on)
@@ -1312,6 +1329,9 @@ def xlim(*args, **kwargs):
         xlim(left=1)  # adjust the left leaving right unchanged
 
     Setting limits turns autoscaling off for the x-axis.
+
+    ax : matplotlib.axes.Axes, optional
+       Defaults to the current axes.
 
     Returns
     -------
@@ -1469,7 +1489,7 @@ def yticks(ticks=None, labels=None, **kwargs):
     ...        rotation=45)  # Set text labels and properties.
     >>> yticks([])  # Disable yticks.
     """
-    ax = gca()
+    ax = kwargs.pop('ax', None) or gca()
 
     if ticks is None:
         locs = ax.get_yticks()
@@ -1545,7 +1565,7 @@ def rgrids(*args, **kwargs):
     .Axis.get_gridlines
     .Axis.get_ticklabels
     """
-    ax = gca()
+    ax = kwargs.pop('ax', None) or gca()
     if not isinstance(ax, PolarAxes):
         raise RuntimeError('rgrids only defined for polar axes')
     if len(args) == 0:
@@ -1609,7 +1629,7 @@ def thetagrids(*args, **kwargs):
     .Axis.get_gridlines
     .Axis.get_ticklabels
     """
-    ax = gca()
+    ax = kwargs.pop('ax', None) or gca()
     if not isinstance(ax, PolarAxes):
         raise RuntimeError('thetagrids only defined for polar axes')
     if len(args) == 0:
@@ -2105,36 +2125,46 @@ install_repl_displayhook()
 @docstring.copy(Figure.figimage)
 def figimage(
         X, xo=0, yo=0, alpha=None, norm=None, cmap=None, vmin=None,
-        vmax=None, origin=None, resize=False, **kwargs):
-    return gcf().figimage(
+        vmax=None, origin=None, resize=False, *, fig=None, **kwargs):
+    if fig is None:
+        fig = gcf()
+    return fig.figimage(
         X, xo=xo, yo=yo, alpha=alpha, norm=norm, cmap=cmap, vmin=vmin,
         vmax=vmax, origin=origin, resize=resize, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Figure.text)
-def figtext(x, y, s, fontdict=None, **kwargs):
-    return gcf().text(x, y, s, fontdict=fontdict, **kwargs)
+def figtext(x, y, s, fontdict=None, *, fig=None, **kwargs):
+    if fig is None:
+        fig = gcf()
+    return fig.text(x, y, s, fontdict=fontdict, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Figure.gca)
-def gca(**kwargs):
-    return gcf().gca(**kwargs)
+def gca(*, fig=None, **kwargs):
+    if fig is None:
+        fig = gcf()
+    return fig.gca(**kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Figure._gci)
-def gci():
-    return gcf()._gci()
+def gci(*, fig=None):
+    if fig is None:
+        fig = gcf()
+    return fig._gci()
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Figure.ginput)
 def ginput(
         n=1, timeout=30, show_clicks=True, mouse_add=1, mouse_pop=3,
-        mouse_stop=2):
-    return gcf().ginput(
+        mouse_stop=2, *, fig=None):
+    if fig is None:
+        fig = gcf()
+    return fig.ginput(
         n=n, timeout=timeout, show_clicks=show_clicks,
         mouse_add=mouse_add, mouse_pop=mouse_pop,
         mouse_stop=mouse_stop)
@@ -2142,20 +2172,26 @@ def ginput(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Figure.suptitle)
-def suptitle(t, **kwargs):
-    return gcf().suptitle(t, **kwargs)
+def suptitle(t, *, fig=None, **kwargs):
+    if fig is None:
+        fig = gcf()
+    return fig.suptitle(t, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Figure.waitforbuttonpress)
-def waitforbuttonpress(timeout=-1):
-    return gcf().waitforbuttonpress(timeout=timeout)
+def waitforbuttonpress(timeout=-1, *, fig=None):
+    if fig is None:
+        fig = gcf()
+    return fig.waitforbuttonpress(timeout=timeout)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.acorr)
-def acorr(x, *, data=None, **kwargs):
-    return gca().acorr(
+def acorr(x, *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.acorr(
         x, **({"data": data} if data is not None else {}), **kwargs)
 
 
@@ -2163,87 +2199,113 @@ def acorr(x, *, data=None, **kwargs):
 @docstring.copy(Axes.angle_spectrum)
 def angle_spectrum(
         x, Fs=None, Fc=None, window=None, pad_to=None, sides=None, *,
-        data=None, **kwargs):
-    return gca().angle_spectrum(
+        data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.angle_spectrum(
         x, Fs=Fs, Fc=Fc, window=window, pad_to=pad_to, sides=sides,
         **({"data": data} if data is not None else {}), **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.annotate)
-def annotate(s, xy, *args, **kwargs):
-    return gca().annotate(s, xy, *args, **kwargs)
+def annotate(s, xy, *args, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.annotate(s, xy, *args, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.arrow)
-def arrow(x, y, dx, dy, **kwargs):
-    return gca().arrow(x, y, dx, dy, **kwargs)
+def arrow(x, y, dx, dy, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.arrow(x, y, dx, dy, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.autoscale)
-def autoscale(enable=True, axis='both', tight=None):
-    return gca().autoscale(enable=enable, axis=axis, tight=tight)
+def autoscale(enable=True, axis='both', tight=None, *, ax=None):
+    if ax is None:
+        ax = gca()
+    return ax.autoscale(enable=enable, axis=axis, tight=tight)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.axhline)
-def axhline(y=0, xmin=0, xmax=1, **kwargs):
-    return gca().axhline(y=y, xmin=xmin, xmax=xmax, **kwargs)
+def axhline(y=0, xmin=0, xmax=1, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.axhline(y=y, xmin=xmin, xmax=xmax, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.axhspan)
-def axhspan(ymin, ymax, xmin=0, xmax=1, **kwargs):
-    return gca().axhspan(ymin, ymax, xmin=xmin, xmax=xmax, **kwargs)
+def axhspan(ymin, ymax, xmin=0, xmax=1, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.axhspan(ymin, ymax, xmin=xmin, xmax=xmax, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.axis)
-def axis(*args, emit=True, **kwargs):
-    return gca().axis(*args, emit=emit, **kwargs)
+def axis(*args, emit=True, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.axis(*args, emit=emit, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.axline)
-def axline(xy1, xy2, **kwargs):
-    return gca().axline(xy1, xy2, **kwargs)
+def axline(xy1, xy2, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.axline(xy1, xy2, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.axvline)
-def axvline(x=0, ymin=0, ymax=1, **kwargs):
-    return gca().axvline(x=x, ymin=ymin, ymax=ymax, **kwargs)
+def axvline(x=0, ymin=0, ymax=1, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.axvline(x=x, ymin=ymin, ymax=ymax, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.axvspan)
-def axvspan(xmin, xmax, ymin=0, ymax=1, **kwargs):
-    return gca().axvspan(xmin, xmax, ymin=ymin, ymax=ymax, **kwargs)
+def axvspan(xmin, xmax, ymin=0, ymax=1, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.axvspan(xmin, xmax, ymin=ymin, ymax=ymax, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.bar)
 def bar(
         x, height, width=0.8, bottom=None, *, align='center',
-        data=None, **kwargs):
-    return gca().bar(
+        data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.bar(
         x, height, width=width, bottom=bottom, align=align,
         **({"data": data} if data is not None else {}), **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.barbs)
-def barbs(*args, data=None, **kw):
-    return gca().barbs(
+def barbs(*args, data=None, ax=None, **kw):
+    if ax is None:
+        ax = gca()
+    return ax.barbs(
         *args, **({"data": data} if data is not None else {}), **kw)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.barh)
-def barh(y, width, height=0.8, left=None, *, align='center', **kwargs):
-    return gca().barh(
+def barh(y, width, height=0.8, left=None, *, align='center', ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.barh(
         y, width, height=height, left=left, align=align, **kwargs)
 
 
@@ -2257,8 +2319,10 @@ def boxplot(
         showfliers=None, boxprops=None, labels=None, flierprops=None,
         medianprops=None, meanprops=None, capprops=None,
         whiskerprops=None, manage_ticks=True, autorange=False,
-        zorder=None, *, data=None):
-    return gca().boxplot(
+        zorder=None, *, data=None, ax=None):
+    if ax is None:
+        ax = gca()
+    return ax.boxplot(
         x, notch=notch, sym=sym, vert=vert, whis=whis,
         positions=positions, widths=widths, patch_artist=patch_artist,
         bootstrap=bootstrap, usermedians=usermedians,
@@ -2274,22 +2338,28 @@ def boxplot(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.broken_barh)
-def broken_barh(xranges, yrange, *, data=None, **kwargs):
-    return gca().broken_barh(
+def broken_barh(xranges, yrange, *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.broken_barh(
         xranges, yrange, **({"data": data} if data is not None else
         {}), **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.cla)
-def cla():
-    return gca().cla()
+def cla(*, ax=None):
+    if ax is None:
+        ax = gca()
+    return ax.cla()
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.clabel)
-def clabel(CS, *args, **kwargs):
-    return gca().clabel(CS, *args, **kwargs)
+def clabel(CS, *args, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.clabel(CS, *args, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
@@ -2297,8 +2367,11 @@ def clabel(CS, *args, **kwargs):
 def cohere(
         x, y, NFFT=256, Fs=2, Fc=0, detrend=mlab.detrend_none,
         window=mlab.window_hanning, noverlap=0, pad_to=None,
-        sides='default', scale_by_freq=None, *, data=None, **kwargs):
-    return gca().cohere(
+        sides='default', scale_by_freq=None, *, data=None, ax=None,
+        **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.cohere(
         x, y, NFFT=NFFT, Fs=Fs, Fc=Fc, detrend=detrend, window=window,
         noverlap=noverlap, pad_to=pad_to, sides=sides,
         scale_by_freq=scale_by_freq, **({"data": data} if data is not
@@ -2307,8 +2380,10 @@ def cohere(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.contour)
-def contour(*args, data=None, **kwargs):
-    __ret = gca().contour(
+def contour(*args, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.contour(
         *args, **({"data": data} if data is not None else {}),
         **kwargs)
     if __ret._A is not None: sci(__ret)  # noqa
@@ -2317,8 +2392,10 @@ def contour(*args, data=None, **kwargs):
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.contourf)
-def contourf(*args, data=None, **kwargs):
-    __ret = gca().contourf(
+def contourf(*args, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.contourf(
         *args, **({"data": data} if data is not None else {}),
         **kwargs)
     if __ret._A is not None: sci(__ret)  # noqa
@@ -2330,8 +2407,10 @@ def contourf(*args, data=None, **kwargs):
 def csd(
         x, y, NFFT=None, Fs=None, Fc=None, detrend=None, window=None,
         noverlap=None, pad_to=None, sides=None, scale_by_freq=None,
-        return_line=None, *, data=None, **kwargs):
-    return gca().csd(
+        return_line=None, *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.csd(
         x, y, NFFT=NFFT, Fs=Fs, Fc=Fc, detrend=detrend, window=window,
         noverlap=noverlap, pad_to=pad_to, sides=sides,
         scale_by_freq=scale_by_freq, return_line=return_line,
@@ -2344,8 +2423,10 @@ def errorbar(
         x, y, yerr=None, xerr=None, fmt='', ecolor=None,
         elinewidth=None, capsize=None, barsabove=False, lolims=False,
         uplims=False, xlolims=False, xuplims=False, errorevery=1,
-        capthick=None, *, data=None, **kwargs):
-    return gca().errorbar(
+        capthick=None, *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.errorbar(
         x, y, yerr=yerr, xerr=xerr, fmt=fmt, ecolor=ecolor,
         elinewidth=elinewidth, capsize=capsize, barsabove=barsabove,
         lolims=lolims, uplims=uplims, xlolims=xlolims,
@@ -2358,8 +2439,10 @@ def errorbar(
 def eventplot(
         positions, orientation='horizontal', lineoffsets=1,
         linelengths=1, linewidths=None, colors=None,
-        linestyles='solid', *, data=None, **kwargs):
-    return gca().eventplot(
+        linestyles='solid', *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.eventplot(
         positions, orientation=orientation, lineoffsets=lineoffsets,
         linelengths=linelengths, linewidths=linewidths, colors=colors,
         linestyles=linestyles, **({"data": data} if data is not None
@@ -2368,8 +2451,10 @@ def eventplot(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.fill)
-def fill(*args, data=None, **kwargs):
-    return gca().fill(
+def fill(*args, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.fill(
         *args, **({"data": data} if data is not None else {}),
         **kwargs)
 
@@ -2378,8 +2463,10 @@ def fill(*args, data=None, **kwargs):
 @docstring.copy(Axes.fill_between)
 def fill_between(
         x, y1, y2=0, where=None, interpolate=False, step=None, *,
-        data=None, **kwargs):
-    return gca().fill_between(
+        data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.fill_between(
         x, y1, y2=y2, where=where, interpolate=interpolate, step=step,
         **({"data": data} if data is not None else {}), **kwargs)
 
@@ -2388,16 +2475,20 @@ def fill_between(
 @docstring.copy(Axes.fill_betweenx)
 def fill_betweenx(
         y, x1, x2=0, where=None, step=None, interpolate=False, *,
-        data=None, **kwargs):
-    return gca().fill_betweenx(
+        data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.fill_betweenx(
         y, x1, x2=x2, where=where, step=step, interpolate=interpolate,
         **({"data": data} if data is not None else {}), **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.grid)
-def grid(b=None, which='major', axis='both', **kwargs):
-    return gca().grid(b=b, which=which, axis=axis, **kwargs)
+def grid(b=None, which='major', axis='both', *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.grid(b=b, which=which, axis=axis, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
@@ -2407,8 +2498,10 @@ def hexbin(
         yscale='linear', extent=None, cmap=None, norm=None, vmin=None,
         vmax=None, alpha=None, linewidths=None, edgecolors='face',
         reduce_C_function=np.mean, mincnt=None, marginals=False, *,
-        data=None, **kwargs):
-    __ret = gca().hexbin(
+        data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.hexbin(
         x, y, C=C, gridsize=gridsize, bins=bins, xscale=xscale,
         yscale=yscale, extent=extent, cmap=cmap, norm=norm, vmin=vmin,
         vmax=vmax, alpha=alpha, linewidths=linewidths,
@@ -2425,8 +2518,10 @@ def hist(
         x, bins=None, range=None, density=False, weights=None,
         cumulative=False, bottom=None, histtype='bar', align='mid',
         orientation='vertical', rwidth=None, log=False, color=None,
-        label=None, stacked=False, *, data=None, **kwargs):
-    return gca().hist(
+        label=None, stacked=False, *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.hist(
         x, bins=bins, range=range, density=density, weights=weights,
         cumulative=cumulative, bottom=bottom, histtype=histtype,
         align=align, orientation=orientation, rwidth=rwidth, log=log,
@@ -2438,8 +2533,10 @@ def hist(
 @docstring.copy(Axes.hist2d)
 def hist2d(
         x, y, bins=10, range=None, density=False, weights=None,
-        cmin=None, cmax=None, *, data=None, **kwargs):
-    __ret = gca().hist2d(
+        cmin=None, cmax=None, *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.hist2d(
         x, y, bins=bins, range=range, density=density,
         weights=weights, cmin=cmin, cmax=cmax, **({"data": data} if
         data is not None else {}), **kwargs)
@@ -2451,8 +2548,10 @@ def hist2d(
 @docstring.copy(Axes.hlines)
 def hlines(
         y, xmin, xmax, colors='k', linestyles='solid', label='', *,
-        data=None, **kwargs):
-    return gca().hlines(
+        data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.hlines(
         y, xmin, xmax, colors=colors, linestyles=linestyles,
         label=label, **({"data": data} if data is not None else {}),
         **kwargs)
@@ -2464,8 +2563,10 @@ def imshow(
         X, cmap=None, norm=None, aspect=None, interpolation=None,
         alpha=None, vmin=None, vmax=None, origin=None, extent=None, *,
         filternorm=True, filterrad=4.0, resample=None, url=None,
-        data=None, **kwargs):
-    __ret = gca().imshow(
+        data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.imshow(
         X, cmap=cmap, norm=norm, aspect=aspect,
         interpolation=interpolation, alpha=alpha, vmin=vmin,
         vmax=vmax, origin=origin, extent=extent,
@@ -2478,28 +2579,36 @@ def imshow(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.legend)
-def legend(*args, **kwargs):
-    return gca().legend(*args, **kwargs)
+def legend(*args, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.legend(*args, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.locator_params)
-def locator_params(axis='both', tight=None, **kwargs):
-    return gca().locator_params(axis=axis, tight=tight, **kwargs)
+def locator_params(axis='both', tight=None, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.locator_params(axis=axis, tight=tight, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.loglog)
-def loglog(*args, **kwargs):
-    return gca().loglog(*args, **kwargs)
+def loglog(*args, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.loglog(*args, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.magnitude_spectrum)
 def magnitude_spectrum(
         x, Fs=None, Fc=None, window=None, pad_to=None, sides=None,
-        scale=None, *, data=None, **kwargs):
-    return gca().magnitude_spectrum(
+        scale=None, *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.magnitude_spectrum(
         x, Fs=Fs, Fc=Fc, window=window, pad_to=pad_to, sides=sides,
         scale=scale, **({"data": data} if data is not None else {}),
         **kwargs)
@@ -2507,28 +2616,36 @@ def magnitude_spectrum(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.margins)
-def margins(*margins, x=None, y=None, tight=True):
-    return gca().margins(*margins, x=x, y=y, tight=tight)
+def margins(*margins, x=None, y=None, tight=True, ax=None):
+    if ax is None:
+        ax = gca()
+    return ax.margins(*margins, x=x, y=y, tight=tight)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.minorticks_off)
-def minorticks_off():
-    return gca().minorticks_off()
+def minorticks_off(*, ax=None):
+    if ax is None:
+        ax = gca()
+    return ax.minorticks_off()
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.minorticks_on)
-def minorticks_on():
-    return gca().minorticks_on()
+def minorticks_on(*, ax=None):
+    if ax is None:
+        ax = gca()
+    return ax.minorticks_on()
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.pcolor)
 def pcolor(
         *args, alpha=None, norm=None, cmap=None, vmin=None,
-        vmax=None, data=None, **kwargs):
-    __ret = gca().pcolor(
+        vmax=None, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.pcolor(
         *args, alpha=alpha, norm=norm, cmap=cmap, vmin=vmin,
         vmax=vmax, **({"data": data} if data is not None else {}),
         **kwargs)
@@ -2541,8 +2658,10 @@ def pcolor(
 def pcolormesh(
         *args, alpha=None, norm=None, cmap=None, vmin=None,
         vmax=None, shading='flat', antialiased=False, data=None,
-        **kwargs):
-    __ret = gca().pcolormesh(
+        ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.pcolormesh(
         *args, alpha=alpha, norm=norm, cmap=cmap, vmin=vmin,
         vmax=vmax, shading=shading, antialiased=antialiased,
         **({"data": data} if data is not None else {}), **kwargs)
@@ -2554,8 +2673,10 @@ def pcolormesh(
 @docstring.copy(Axes.phase_spectrum)
 def phase_spectrum(
         x, Fs=None, Fc=None, window=None, pad_to=None, sides=None, *,
-        data=None, **kwargs):
-    return gca().phase_spectrum(
+        data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.phase_spectrum(
         x, Fs=Fs, Fc=Fc, window=window, pad_to=pad_to, sides=sides,
         **({"data": data} if data is not None else {}), **kwargs)
 
@@ -2567,8 +2688,10 @@ def pie(
         pctdistance=0.6, shadow=False, labeldistance=1.1,
         startangle=None, radius=None, counterclock=True,
         wedgeprops=None, textprops=None, center=(0, 0), frame=False,
-        rotatelabels=False, *, data=None):
-    return gca().pie(
+        rotatelabels=False, *, data=None, ax=None):
+    if ax is None:
+        ax = gca()
+    return ax.pie(
         x, explode=explode, labels=labels, colors=colors,
         autopct=autopct, pctdistance=pctdistance, shadow=shadow,
         labeldistance=labeldistance, startangle=startangle,
@@ -2580,8 +2703,10 @@ def pie(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.plot)
-def plot(*args, scalex=True, scaley=True, data=None, **kwargs):
-    return gca().plot(
+def plot(*args, scalex=True, scaley=True, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.plot(
         *args, scalex=scalex, scaley=scaley, **({"data": data} if data
         is not None else {}), **kwargs)
 
@@ -2590,8 +2715,10 @@ def plot(*args, scalex=True, scaley=True, data=None, **kwargs):
 @docstring.copy(Axes.plot_date)
 def plot_date(
         x, y, fmt='o', tz=None, xdate=True, ydate=False, *,
-        data=None, **kwargs):
-    return gca().plot_date(
+        data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.plot_date(
         x, y, fmt=fmt, tz=tz, xdate=xdate, ydate=ydate, **({"data":
         data} if data is not None else {}), **kwargs)
 
@@ -2601,8 +2728,10 @@ def plot_date(
 def psd(
         x, NFFT=None, Fs=None, Fc=None, detrend=None, window=None,
         noverlap=None, pad_to=None, sides=None, scale_by_freq=None,
-        return_line=None, *, data=None, **kwargs):
-    return gca().psd(
+        return_line=None, *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.psd(
         x, NFFT=NFFT, Fs=Fs, Fc=Fc, detrend=detrend, window=window,
         noverlap=noverlap, pad_to=pad_to, sides=sides,
         scale_by_freq=scale_by_freq, return_line=return_line,
@@ -2611,8 +2740,10 @@ def psd(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.quiver)
-def quiver(*args, data=None, **kw):
-    __ret = gca().quiver(
+def quiver(*args, data=None, ax=None, **kw):
+    if ax is None:
+        ax = gca()
+    __ret = ax.quiver(
         *args, **({"data": data} if data is not None else {}), **kw)
     sci(__ret)
     return __ret
@@ -2620,8 +2751,10 @@ def quiver(*args, data=None, **kw):
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.quiverkey)
-def quiverkey(Q, X, Y, U, label, **kw):
-    return gca().quiverkey(Q, X, Y, U, label, **kw)
+def quiverkey(Q, X, Y, U, label, *, ax=None, **kw):
+    if ax is None:
+        ax = gca()
+    return ax.quiverkey(Q, X, Y, U, label, **kw)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
@@ -2630,8 +2763,11 @@ def scatter(
         x, y, s=None, c=None, marker=None, cmap=None, norm=None,
         vmin=None, vmax=None, alpha=None, linewidths=None,
         verts=cbook.deprecation._deprecated_parameter,
-        edgecolors=None, *, plotnonfinite=False, data=None, **kwargs):
-    __ret = gca().scatter(
+        edgecolors=None, *, plotnonfinite=False, data=None, ax=None,
+        **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.scatter(
         x, y, s=s, c=c, marker=marker, cmap=cmap, norm=norm,
         vmin=vmin, vmax=vmax, alpha=alpha, linewidths=linewidths,
         verts=verts, edgecolors=edgecolors,
@@ -2643,14 +2779,18 @@ def scatter(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.semilogx)
-def semilogx(*args, **kwargs):
-    return gca().semilogx(*args, **kwargs)
+def semilogx(*args, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.semilogx(*args, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.semilogy)
-def semilogy(*args, **kwargs):
-    return gca().semilogy(*args, **kwargs)
+def semilogy(*args, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.semilogy(*args, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
@@ -2659,8 +2799,10 @@ def specgram(
         x, NFFT=None, Fs=None, Fc=None, detrend=None, window=None,
         noverlap=None, cmap=None, xextent=None, pad_to=None,
         sides=None, scale_by_freq=None, mode=None, scale=None,
-        vmin=None, vmax=None, *, data=None, **kwargs):
-    __ret = gca().specgram(
+        vmin=None, vmax=None, *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.specgram(
         x, NFFT=NFFT, Fs=Fs, Fc=Fc, detrend=detrend, window=window,
         noverlap=noverlap, cmap=cmap, xextent=xextent, pad_to=pad_to,
         sides=sides, scale_by_freq=scale_by_freq, mode=mode,
@@ -2674,8 +2816,10 @@ def specgram(
 @docstring.copy(Axes.spy)
 def spy(
         Z, precision=0, marker=None, markersize=None, aspect='equal',
-        origin='upper', **kwargs):
-    __ret = gca().spy(
+        origin='upper', *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.spy(
         Z, precision=precision, marker=marker, markersize=markersize,
         aspect=aspect, origin=origin, **kwargs)
     if isinstance(__ret, cm.ScalarMappable): sci(__ret)  # noqa
@@ -2686,8 +2830,10 @@ def spy(
 @docstring.copy(Axes.stackplot)
 def stackplot(
         x, *args, labels=(), colors=None, baseline='zero', data=None,
-        **kwargs):
-    return gca().stackplot(
+        ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.stackplot(
         x, *args, labels=labels, colors=colors, baseline=baseline,
         **({"data": data} if data is not None else {}), **kwargs)
 
@@ -2696,8 +2842,10 @@ def stackplot(
 @docstring.copy(Axes.stem)
 def stem(
         *args, linefmt=None, markerfmt=None, basefmt=None, bottom=0,
-        label=None, use_line_collection=False, data=None):
-    return gca().stem(
+        label=None, use_line_collection=False, data=None, ax=None):
+    if ax is None:
+        ax = gca()
+    return ax.stem(
         *args, linefmt=linefmt, markerfmt=markerfmt, basefmt=basefmt,
         bottom=bottom, label=label,
         use_line_collection=use_line_collection, **({"data": data} if
@@ -2706,8 +2854,10 @@ def stem(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.step)
-def step(x, y, *args, where='pre', data=None, **kwargs):
-    return gca().step(
+def step(x, y, *args, where='pre', data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.step(
         x, y, *args, where=where, **({"data": data} if data is not
         None else {}), **kwargs)
 
@@ -2718,8 +2868,10 @@ def streamplot(
         x, y, u, v, density=1, linewidth=None, color=None, cmap=None,
         norm=None, arrowsize=1, arrowstyle='-|>', minlength=0.1,
         transform=None, zorder=None, start_points=None, maxlength=4.0,
-        integration_direction='both', *, data=None):
-    __ret = gca().streamplot(
+        integration_direction='both', *, data=None, ax=None):
+    if ax is None:
+        ax = gca()
+    __ret = ax.streamplot(
         x, y, u, v, density=density, linewidth=linewidth, color=color,
         cmap=cmap, norm=norm, arrowsize=arrowsize,
         arrowstyle=arrowstyle, minlength=minlength,
@@ -2737,9 +2889,11 @@ def table(
         cellText=None, cellColours=None, cellLoc='right',
         colWidths=None, rowLabels=None, rowColours=None,
         rowLoc='left', colLabels=None, colColours=None,
-        colLoc='center', loc='bottom', bbox=None, edges='closed',
-        **kwargs):
-    return gca().table(
+        colLoc='center', loc='bottom', bbox=None, edges='closed', *,
+        ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.table(
         cellText=cellText, cellColours=cellColours, cellLoc=cellLoc,
         colWidths=colWidths, rowLabels=rowLabels,
         rowColours=rowColours, rowLoc=rowLoc, colLabels=colLabels,
@@ -2749,22 +2903,28 @@ def table(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.text)
-def text(x, y, s, fontdict=None, **kwargs):
-    return gca().text(x, y, s, fontdict=fontdict, **kwargs)
+def text(x, y, s, fontdict=None, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.text(x, y, s, fontdict=fontdict, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.tick_params)
-def tick_params(axis='both', **kwargs):
-    return gca().tick_params(axis=axis, **kwargs)
+def tick_params(axis='both', *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.tick_params(axis=axis, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.ticklabel_format)
 def ticklabel_format(
         *, axis='both', style='', scilimits=None, useOffset=None,
-        useLocale=None, useMathText=None):
-    return gca().ticklabel_format(
+        useLocale=None, useMathText=None, ax=None):
+    if ax is None:
+        ax = gca()
+    return ax.ticklabel_format(
         axis=axis, style=style, scilimits=scilimits,
         useOffset=useOffset, useLocale=useLocale,
         useMathText=useMathText)
@@ -2772,16 +2932,20 @@ def ticklabel_format(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.tricontour)
-def tricontour(*args, **kwargs):
-    __ret = gca().tricontour(*args, **kwargs)
+def tricontour(*args, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.tricontour(*args, **kwargs)
     if __ret._A is not None: sci(__ret)  # noqa
     return __ret
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.tricontourf)
-def tricontourf(*args, **kwargs):
-    __ret = gca().tricontourf(*args, **kwargs)
+def tricontourf(*args, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.tricontourf(*args, **kwargs)
     if __ret._A is not None: sci(__ret)  # noqa
     return __ret
 
@@ -2790,8 +2954,10 @@ def tricontourf(*args, **kwargs):
 @docstring.copy(Axes.tripcolor)
 def tripcolor(
         *args, alpha=1.0, norm=None, cmap=None, vmin=None, vmax=None,
-        shading='flat', facecolors=None, **kwargs):
-    __ret = gca().tripcolor(
+        shading='flat', facecolors=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    __ret = ax.tripcolor(
         *args, alpha=alpha, norm=norm, cmap=cmap, vmin=vmin,
         vmax=vmax, shading=shading, facecolors=facecolors, **kwargs)
     sci(__ret)
@@ -2800,8 +2966,10 @@ def tripcolor(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.triplot)
-def triplot(*args, **kwargs):
-    return gca().triplot(*args, **kwargs)
+def triplot(*args, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.triplot(*args, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
@@ -2809,8 +2977,11 @@ def triplot(*args, **kwargs):
 def violinplot(
         dataset, positions=None, vert=True, widths=0.5,
         showmeans=False, showextrema=True, showmedians=False,
-        quantiles=None, points=100, bw_method=None, *, data=None):
-    return gca().violinplot(
+        quantiles=None, points=100, bw_method=None, *, data=None,
+        ax=None):
+    if ax is None:
+        ax = gca()
+    return ax.violinplot(
         dataset, positions=positions, vert=vert, widths=widths,
         showmeans=showmeans, showextrema=showextrema,
         showmedians=showmedians, quantiles=quantiles, points=points,
@@ -2822,8 +2993,10 @@ def violinplot(
 @docstring.copy(Axes.vlines)
 def vlines(
         x, ymin, ymax, colors='k', linestyles='solid', label='', *,
-        data=None, **kwargs):
-    return gca().vlines(
+        data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.vlines(
         x, ymin, ymax, colors=colors, linestyles=linestyles,
         label=label, **({"data": data} if data is not None else {}),
         **kwargs)
@@ -2833,8 +3006,10 @@ def vlines(
 @docstring.copy(Axes.xcorr)
 def xcorr(
         x, y, normed=True, detrend=mlab.detrend_none, usevlines=True,
-        maxlags=10, *, data=None, **kwargs):
-    return gca().xcorr(
+        maxlags=10, *, data=None, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.xcorr(
         x, y, normed=normed, detrend=detrend, usevlines=usevlines,
         maxlags=maxlags, **({"data": data} if data is not None else
         {}), **kwargs)
@@ -2842,41 +3017,53 @@ def xcorr(
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes._sci)
-def sci(im):
-    return gca()._sci(im)
+def sci(im, *, ax=None):
+    if ax is None:
+        ax = gca()
+    return ax._sci(im)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.set_title)
-def title(label, fontdict=None, loc=None, pad=None, **kwargs):
-    return gca().set_title(
+def title(label, fontdict=None, loc=None, pad=None, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.set_title(
         label, fontdict=fontdict, loc=loc, pad=pad, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.set_xlabel)
-def xlabel(xlabel, fontdict=None, labelpad=None, **kwargs):
-    return gca().set_xlabel(
+def xlabel(xlabel, fontdict=None, labelpad=None, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.set_xlabel(
         xlabel, fontdict=fontdict, labelpad=labelpad, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.set_ylabel)
-def ylabel(ylabel, fontdict=None, labelpad=None, **kwargs):
-    return gca().set_ylabel(
+def ylabel(ylabel, fontdict=None, labelpad=None, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.set_ylabel(
         ylabel, fontdict=fontdict, labelpad=labelpad, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.set_xscale)
-def xscale(value, **kwargs):
-    return gca().set_xscale(value, **kwargs)
+def xscale(value, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.set_xscale(value, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.
 @docstring.copy(Axes.set_yscale)
-def yscale(value, **kwargs):
-    return gca().set_yscale(value, **kwargs)
+def yscale(value, *, ax=None, **kwargs):
+    if ax is None:
+        ax = gca()
+    return ax.set_yscale(value, **kwargs)
 
 
 # Autogenerated by boilerplate.py.  Do not edit as changes will be lost.

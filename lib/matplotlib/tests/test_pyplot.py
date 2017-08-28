@@ -58,3 +58,11 @@ def test_nrows_error():
         plt.subplot(nrows=1)
     with pytest.raises(TypeError):
         plt.subplot(ncols=1)
+
+
+def test_explicit_ax():
+    fig, (ax1, ax2) = plt.subplots(2)
+    plt.plot(range(5))
+    plt.plot(range(5)[::-1], ax=ax1)
+    assert len(ax1.lines) == 1
+    assert len(ax2.lines) == 1
