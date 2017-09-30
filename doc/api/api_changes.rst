@@ -13,6 +13,25 @@ For new features that were added to Matplotlib, please see
 API Changes in 2.1.0
 ====================
 
+`scatter` inputs no longer implicitly flattened
+-----------------------------------------------
+
+
+`Collection` (and thus `scatter` -- both 2D and 3D) no longer implicitly
+flattens its offsets.  As a consequence, `scatter` 's x and y arguments can no
+longer be 2+-dimensional arrays.
+
+
+
+Invalid (Non-finite) Axis Limit Error
+-------------------------------------
+
+When using :func:`set_xlim` and :func:`set_ylim`, passing non-finite values now
+results in a ValueError. The previous behavior resulted in the limits being
+erroneously reset to `(-0.001, 0.001)`.
+
+
+
 cbook deprecations
 ------------------
 
