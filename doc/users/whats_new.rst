@@ -363,6 +363,11 @@ Specify minimum value to format as scalar for ``LogFormatterMathtext``
 ``LogFormatterMathtext`` now includes the option to specify a minimum value
 exponent to format as a scalar (ie. 0.001 instead of 10^-3).
 
+Small things
+------------
+
+ - busy cursors during drawing for interactive backends
+ -
 
 
 
@@ -433,6 +438,19 @@ This class differs from the older
 itself based on the underlying patch while the older class uses an immutable
 path.
 
+Event loop changes
+------------------
+
+pytest
+------
+
+LockedBBox
+----------
+TODO write me
+
+Class to help wtih backend module
+---------------------------------
+TODO wirte me
 
 Abstract base class for movie writers
 -------------------------------------
