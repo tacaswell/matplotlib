@@ -12,6 +12,7 @@ from six import unichr
 import matplotlib
 
 from matplotlib._pylab_helpers import Gcf
+from matplotlib.cbook import deprecated
 from matplotlib.backend_bases import (
     _Backend, FigureCanvasBase, FigureManagerBase, NavigationToolbar2,
     TimerBase, cursors)
@@ -818,6 +819,9 @@ class SubplotToolQt(UiSubplotTool):
             self._widgets[attr].setValue(value)
 
 
+@deprecated('2.2',
+            '%(name)s is no longer used internally by Matplotlib.',
+            alternative='a vendored copy if you need this functionality')
 def error_msg_qt(msg, parent=None):
     if not isinstance(msg, six.string_types):
         msg = ','.join(map(str, msg))
@@ -826,6 +830,9 @@ def error_msg_qt(msg, parent=None):
                                   msg, QtWidgets.QMessageBox.Ok)
 
 
+@deprecated('2.2',
+            '%(name)s is no longer used internally by Matplotlib.',
+            alternative='a vendored copy if you need this functionality')
 def exception_handler(type, value, tb):
     """Handle uncaught exceptions
     It does not catch SystemExit

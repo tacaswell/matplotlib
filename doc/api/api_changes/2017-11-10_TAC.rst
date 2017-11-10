@@ -1,0 +1,12 @@
+Deprecate custom exception handlers in Qt backend
+-------------------------------------------------
+
+
+These deprecates:
+ - matplotlib.backends.backend_qt5.exception_handler
+ - matplotlib.backends.backend_qt5.error_msg_qt
+ - matplotlib.backends.backend_qt4.exception_handler
+ - matplotlib.backends.backend_qt4.error_msg_qt
+
+which are not used internally.  If you need this functionality, please
+vendor them.
