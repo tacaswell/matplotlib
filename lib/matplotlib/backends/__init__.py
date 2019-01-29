@@ -25,6 +25,8 @@ def _get_running_interactive_framework():
         One of the following values: "qt5", "qt4", "gtk3", "wx", "tk",
         "macosx", "headless", ``None``.
     """
+    if 'matplotlib.backends._macosx' in sys.modules:
+        return "macosx"
     QtWidgets = (sys.modules.get("PyQt5.QtWidgets")
                  or sys.modules.get("PySide2.QtWidgets"))
     if QtWidgets and QtWidgets.QApplication.instance():
@@ -46,9 +48,6 @@ def _get_running_interactive_framework():
                 if frame.f_code == tkinter.mainloop.__code__:
                     return "tk"
                 frame = frame.f_back
-    if 'matplotlib.backends._macosx' in sys.modules:
-        if sys.modules["matplotlib.backends._macosx"].event_loop_is_running():
-            return "macosx"
     if sys.platform.startswith("linux") and not os.environ.get("DISPLAY"):
         return "headless"
     return None
