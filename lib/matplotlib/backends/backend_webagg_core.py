@@ -343,7 +343,8 @@ class FigureCanvasWebAggCore(backend_agg.FigureCanvasAgg):
             self.draw_idle()
 
     def send_event(self, event_type, **kwargs):
-        self.manager._send_event(event_type, **kwargs)
+        if self.manager is not None:
+            self.manager._send_event(event_type, **kwargs)
 
 
 _JQUERY_ICON_CLASSES = {

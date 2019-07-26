@@ -2731,10 +2731,20 @@ class NavigationToolbar2:
             time.time(), getattr(self, "_draw_time", -np.inf))
         if self._draw_time - last_draw_time > 1:
             try:
-                self.set_cursor(cursors.WAIT)
+                try:
+                    self.set_cursor(cursors.WAIT)
+                except Exception:
+                    # under do condition do we want UI related failures
+                    # to fail a draw
+                    ...
                 yield
             finally:
-                self.set_cursor(self._lastCursor)
+                try:
+                    self.set_cursor(self._lastCursor)
+                except Exception:
+                    # under do condition do we want UI related failures
+                    # to fail a draw
+                    ...
         else:
             yield
 
