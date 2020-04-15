@@ -174,6 +174,8 @@ def _check_versions():
 _check_versions()
 
 
+
+
 # The decorator ensures this always returns the same handler (and it is only
 # attached once).
 @functools.lru_cache()
@@ -190,7 +192,7 @@ def _ensure_handler():
     return handler
 
 
-def set_loglevel(level):
+def set_loglevel(level) :
     """
     Set Matplotlib's root logger and root logger handler level, creating
     the handler if it does not exist yet.

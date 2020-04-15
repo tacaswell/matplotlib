@@ -315,7 +315,7 @@ class Artist:
         """
         oid = self._oid
         self._propobservers[oid] = func
-        self._oid += 1
+        self._oid +=1
         return oid
 
     def remove_callback(self, oid):
@@ -405,6 +405,7 @@ class Artist:
             return False, {}
         return None, {}
 
+
     def contains(self, mouseevent):
         """
         Test whether the artist contains the mouse event.
@@ -425,9 +426,8 @@ class Artist:
         inside, info = self._default_contains(mouseevent)
         if inside is not None:
             return inside, info
-        _log.warning("%r needs 'contains' method", self.__class__.__name__)
+        _log.warning("%r needs 'contains' method",self.__class__.__name__)
         return False, {}
-
     @cbook.deprecated("3.3", alternative="set_picker")
     def set_contains(self, picker):
         """
@@ -492,9 +492,9 @@ class Artist:
         if self.pickable():
             picker = self.get_picker()
             if callable(picker):
-                inside, prop = picker(self, mouseevent)
+                inside, prop=picker(self, mouseevent)
             else:
-                inside, prop = self.contains(mouseevent)
+                inside, prop =  self.contains(mouseevent)
             if inside:
                 self.figure.canvas.pick_event(mouseevent, self, **prop)
 
