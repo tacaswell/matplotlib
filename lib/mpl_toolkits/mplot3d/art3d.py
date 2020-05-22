@@ -301,7 +301,7 @@ class Line3DCollection(LineCollection):
         """
         Set 3D segments.
         """
-        self._segments3d = np.asanyarray(segments)
+        self._segments3d = segments
         LineCollection.set_segments(self, [])
 
     def do_3d_projection(self, renderer):
