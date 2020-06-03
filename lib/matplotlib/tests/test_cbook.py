@@ -651,3 +651,51 @@ def test_check_shape(target, test_shape):
     with pytest.raises(ValueError,
                        match=error_pattern):
         cbook._check_shape(target, aardvark=data)
+
+
+def test_setattr_cm():
+    class A:
+        def __init__(self):
+            self.aardvark = 'aardvark'
+            self._p = 'p'
+
+        def meth(self):
+            ...
+
+        @property
+        def prop(self):
+            return self._p
+
+        @prop.setter
+        def prop(self, val):
+            self._p = val
+
+    a = A()
+    # When you access a Python method the function is bound
+    # to the object at access time so you get a new instance
+    # of MethodType every time.
+    #
+    # https://docs.python.org/3/howto/descriptor.html#functions-and-methods
+    assert a.meth is not a.meth
+    # normal attribute should give you back the same
+    # instance every time
+    assert a.aardvark is a.aardvark
+    # and our property happens to give the same instance every time
+    assert a.prop is a.prop
+
+    with cbook._setattr_cm(
+            a,
+            aardvark='moose', meth=lambda: None, prop='b'
+    ):
+        # because we have set a lambda, it is normal attribute access
+        # and the same every time
+        assert a.meth is a.meth
+        assert a.aardvark is a.aardvark
+        assert a.aardvark == 'moose'
+        assert a.prop == 'b'
+
+    # check that we get different MethodType instances each time
+    assert a.meth is not a.meth
+    assert a.aardvark is a.aardvark
+    assert a.aardvark == 'aardvark'
+    assert a.prop is a.prop

@@ -24,6 +24,7 @@ import traceback
 import types
 import warnings
 import weakref
+import inspect
 
 import numpy as np
 
@@ -2033,6 +2034,13 @@ def _setattr_cm(obj, **kwargs):
     """
     sentinel = object()
     origs = [(attr, getattr(obj, attr, sentinel)) for attr in kwargs]
+    # When you access a Python method the function is bound
+    # to the object at access time so you get a new instance
+    # of MethodType every time so replace them with sentinel
+    #
+    # https://docs.python.org/3/howto/descriptor.html#functions-and-methods
+    origs = [(attr, _ if not inspect.ismethod(_) else sentinel)
+             for attr, _ in origs]
     try:
         for attr, val in kwargs.items():
             setattr(obj, attr, val)
