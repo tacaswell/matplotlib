@@ -24,7 +24,6 @@ import traceback
 import types
 import warnings
 import weakref
-import inspect
 
 import numpy as np
 
@@ -2034,13 +2033,20 @@ def _setattr_cm(obj, **kwargs):
     """
     sentinel = object()
     origs = [(attr, getattr(obj, attr, sentinel)) for attr in kwargs]
-    # When you access a Python method the function is bound
-    # to the object at access time so you get a new instance
-    # of MethodType every time so replace them with sentinel
-    #
-    # https://docs.python.org/3/howto/descriptor.html#functions-and-methods
-    origs = [(attr, _ if not inspect.ismethod(_) else sentinel)
-             for attr, _ in origs]
+
+    # we only want to set back things that are in the instance dict or
+    # are properties.  Everything else we are either introducing to begin with
+    # or are shadowing from something later in the resolution order.
+    def filter_restores(obj, attr, val):
+        if attr in obj.__dict__:
+            return True
+
+        if isinstance(getattr(type(obj), attr), property):
+            return True
+        return False
+
+    origs = [(attr, val if filter_restores(obj, attr, val) else sentinel)
+             for attr, val in origs]
     try:
         for attr, val in kwargs.items():
             setattr(obj, attr, val)

@@ -655,8 +655,12 @@ def test_check_shape(target, test_shape):
 
 def test_setattr_cm():
     class A:
+
+        cls_level = object()
+        override = object()
         def __init__(self):
             self.aardvark = 'aardvark'
+            self.override = 'override'
             self._p = 'p'
 
         def meth(self):
@@ -670,7 +674,10 @@ def test_setattr_cm():
         def prop(self, val):
             self._p = val
 
-    a = A()
+    class B(A):
+        ...
+
+    a = B()
     # When you access a Python method the function is bound
     # to the object at access time so you get a new instance
     # of MethodType every time.
@@ -683,9 +690,14 @@ def test_setattr_cm():
     # and our property happens to give the same instance every time
     assert a.prop is a.prop
 
+    assert a.cls_level is A.cls_level
+
+    assert a.override == 'override'
+
     with cbook._setattr_cm(
             a,
-            aardvark='moose', meth=lambda: None, prop='b'
+            aardvark='moose', meth=lambda: None, prop='b', cls_level='bob',
+            override='boo'
     ):
         # because we have set a lambda, it is normal attribute access
         # and the same every time
@@ -693,9 +705,13 @@ def test_setattr_cm():
         assert a.aardvark is a.aardvark
         assert a.aardvark == 'moose'
         assert a.prop == 'b'
+        assert a.cls_level == 'bob'
+        assert a.override == 'boo'
 
     # check that we get different MethodType instances each time
     assert a.meth is not a.meth
     assert a.aardvark is a.aardvark
     assert a.aardvark == 'aardvark'
     assert a.prop is a.prop
+    assert a.cls_level is A.cls_level
+    assert a.override == 'override'
