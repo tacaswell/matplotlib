@@ -11,6 +11,7 @@ import collections.abc
 import contextlib
 import functools
 import gzip
+import inspect
 import itertools
 import operator
 import os
@@ -2030,6 +2031,10 @@ def _array_patch_perimeters(x, rstride, cstride):
 def _setattr_cm(obj, **kwargs):
     """
     Temporarily set some attributes; restore original state at context exit.
+
+    .. warning ::
+
+        This is not threadsafe.
     """
     sentinel = object()
 
@@ -2038,14 +2043,28 @@ def _setattr_cm(obj, **kwargs):
     # or are shadowing from something later in the resolution order.
     def get_filtered_attr(obj, attr):
         val = getattr(obj, attr, sentinel)
+        # this is the case where we are adding a new attribute, bail now
+        if val is sentinel:
+            return sentinel
 
+        # we are replacing something in the instance dict, we have to restore
+        # it so return the value
         if attr in obj.__dict__:
             return val
-        if isinstance(getattr(type(obj), attr), property):
+
+        # detect when we have Python Descriptors that supports
+        # setting so we will need to restore it
+        #
+        # https://docs.python.org/3/howto/descriptor.html
+        if hasattr(inspect.getattr_static(type(obj), attr), '__set__'):
             return val
 
+        # in all other cases we are shadowing something from deeper in the
+        # resolution order by putting a value in the instance dict so we
+        # will want to remove it at the end.
         return sentinel
 
+    # grab the original values or sentinel so we can clean up
     origs = [(attr, get_filtered_attr(obj, attr)) for attr in kwargs]
     try:
         for attr, val in kwargs.items():

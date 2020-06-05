@@ -677,27 +677,29 @@ def test_setattr_cm():
     class B(A):
         ...
 
+    def verify_pre_post_state(obj):
+        # When you access a Python method the function is bound
+        # to the object at access time so you get a new instance
+        # of MethodType every time.
+        #
+        # https://docs.python.org/3/howto/descriptor.html#functions-and-methods
+        assert obj.meth is not obj.meth
+        # normal attribute should give you back the same
+        # instance every time
+        assert obj.aardvark is obj.aardvark
+        assert a.aardvark == 'aardvark'
+        # and our property happens to give the same instance every time
+        assert obj.prop is obj.prop
+        assert obj.cls_level is A.cls_level
+        assert obj.override == 'override'
+        assert not hasattr(obj, 'extra')
+
     a = B()
-    # When you access a Python method the function is bound
-    # to the object at access time so you get a new instance
-    # of MethodType every time.
-    #
-    # https://docs.python.org/3/howto/descriptor.html#functions-and-methods
-    assert a.meth is not a.meth
-    # normal attribute should give you back the same
-    # instance every time
-    assert a.aardvark is a.aardvark
-    # and our property happens to give the same instance every time
-    assert a.prop is a.prop
-
-    assert a.cls_level is A.cls_level
-
-    assert a.override == 'override'
-
+    verify_pre_post_state(a)
     with cbook._setattr_cm(
             a,
-            aardvark='moose', meth=lambda: None, prop='b', cls_level='bob',
-            override='boo'
+            aardvark='moose', meth=lambda: None, prop='b',
+            cls_level='bob', override='boo', extra='extra'
     ):
         # because we have set a lambda, it is normal attribute access
         # and the same every time
@@ -707,11 +709,5 @@ def test_setattr_cm():
         assert a.prop == 'b'
         assert a.cls_level == 'bob'
         assert a.override == 'boo'
-
-    # check that we get different MethodType instances each time
-    assert a.meth is not a.meth
-    assert a.aardvark is a.aardvark
-    assert a.aardvark == 'aardvark'
-    assert a.prop is a.prop
-    assert a.cls_level is A.cls_level
-    assert a.override == 'override'
+        assert a.extra == 'extra'
+    verify_pre_post_state(a)
