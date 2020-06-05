@@ -2032,21 +2032,21 @@ def _setattr_cm(obj, **kwargs):
     Temporarily set some attributes; restore original state at context exit.
     """
     sentinel = object()
-    origs = [(attr, getattr(obj, attr, sentinel)) for attr in kwargs]
 
     # we only want to set back things that are in the instance dict or
     # are properties.  Everything else we are either introducing to begin with
     # or are shadowing from something later in the resolution order.
-    def filter_restores(obj, attr, val):
+    def get_filtered_attr(obj, attr):
+        val = getattr(obj, attr, sentinel)
+
         if attr in obj.__dict__:
-            return True
-
+            return val
         if isinstance(getattr(type(obj), attr), property):
-            return True
-        return False
+            return val
 
-    origs = [(attr, val if filter_restores(obj, attr, val) else sentinel)
-             for attr, val in origs]
+        return sentinel
+
+    origs = [(attr, get_filtered_attr(obj, attr)) for attr in kwargs]
     try:
         for attr, val in kwargs.items():
             setattr(obj, attr, val)
