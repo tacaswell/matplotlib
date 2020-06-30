@@ -272,3 +272,21 @@ def test_funcanimation_cache_frame_data(cache_frame_data):
         # If cache_frame_data is True, then the weakref should be alive;
         # if cache_frame_data is False, then the weakref should be dead (None).
         assert (f() is None) != cache_frame_data
+
+
+def test_exhausted_animation(tmpdir):
+    fig, ax = plt.subplots()
+
+    plt.plot(range(5))
+
+    def update(frame):
+        return []
+
+    anim = animation.FuncAnimation(
+        fig, update, frames=iter(range(10)), repeat=False
+    )
+
+    with tmpdir.as_cwd():
+        anim.save("test.gif", writer='pillow')
+
+    anim._start()

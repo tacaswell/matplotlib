@@ -946,8 +946,13 @@ class Animation:
         # First disconnect our draw event handler
         self._fig.canvas.mpl_disconnect(self._first_draw_id)
 
-        # Now do any initial draw
-        self._init_draw()
+        try:
+            # Now do any initial draw
+            self._init_draw()
+        except StopIteration:
+            # we can't start the iteration, it may have already been
+            # exhausted by a previous save, bail.
+            return
 
         # Add our callback for stepping the animation and
         # actually start the event_source.
