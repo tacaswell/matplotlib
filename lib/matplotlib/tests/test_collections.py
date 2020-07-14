@@ -448,7 +448,6 @@ def test_picking():
 
 def test_linestyle_single_dashes():
     plt.scatter([0, 1, 2], [0, 1, 2], linestyle=(0., [2., 2.]))
-    plt.draw()
 
 
 @image_comparison(['size_in_xy.png'], remove_text=True)

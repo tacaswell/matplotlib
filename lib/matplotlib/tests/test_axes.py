@@ -286,7 +286,7 @@ def test_twinx_cla():
     fig, ax = plt.subplots()
     ax2 = ax.twinx()
     ax3 = ax2.twiny()
-    plt.draw()
+
     assert not ax2.xaxis.get_visible()
     assert not ax2.patch.get_visible()
     ax2.cla()
@@ -430,7 +430,7 @@ def test_autoscale_log_shared():
     ax2.semilogx(x, x)
     ax1.autoscale(tight=True)
     ax2.autoscale(tight=True)
-    plt.draw()
+
     lims = (x[1], x[-1])
     assert_allclose(ax1.get_xlim(), lims)
     assert_allclose(ax1.get_ylim(), lims)
@@ -3688,7 +3688,7 @@ def test_eventplot_problem_kwargs(recwarn):
 def test_empty_eventplot():
     fig, ax = plt.subplots(1, 1)
     ax.eventplot([[]], colors=[(0.0, 0.0, 0.0, 0.0)])
-    plt.draw()
+
 
 
 @pytest.mark.parametrize('data', [[[]], [[], [0, 1]], [[0, 1], []]])
@@ -3701,7 +3701,7 @@ def test_eventplot_orientation(data, orientation):
     with (pytest.warns(MatplotlibDeprecationWarning)
           if orientation in [None, 'none'] else nullcontext()):
         ax.eventplot(data, **opts)
-    plt.draw()
+
 
 
 @image_comparison(['marker_styles.png'], remove_text=True)
@@ -4314,7 +4314,6 @@ def test_shared_with_aspect_2():
     axs[0].set_aspect(2, share=True)
     axs[0].plot([1, 2], [3, 4])
     axs[1].plot([3, 4], [1, 2])
-    plt.draw()  # Trigger apply_aspect().
     assert axs[0].get_xlim() == axs[1].get_xlim()
     assert axs[0].get_ylim() == axs[1].get_ylim()
 
@@ -4327,7 +4326,6 @@ def test_shared_with_aspect_3():
         axs[1].set_aspect(0.5, adjustable=adjustable)
         axs[0].plot([1, 2], [3, 4])
         axs[1].plot([3, 4], [1, 2])
-        plt.draw()  # Trigger apply_aspect().
         assert axs[0].get_xlim() != axs[1].get_xlim()
         assert axs[0].get_ylim() == axs[1].get_ylim()
         fig_aspect = fig.bbox_inches.height / fig.bbox_inches.width
@@ -4612,7 +4610,7 @@ def test_subsampled_ticklabels():
     ax.xaxis.set_ticks(np.arange(10) + 0.1)
     ax.locator_params(nbins=5)
     ax.xaxis.set_ticklabels([c for c in "bcdefghijk"])
-    plt.draw()
+
     labels = [t.get_text() for t in ax.xaxis.get_ticklabels()]
     assert labels == ['b', 'd', 'f', 'h', 'j']
 

@@ -140,7 +140,6 @@ def test_polar():
     fig = plt.gcf()
     pf = pickle.dumps(fig)
     pickle.loads(pf)
-    plt.draw()
 
 
 class TransformBlob:
