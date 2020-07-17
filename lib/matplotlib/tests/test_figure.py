@@ -230,7 +230,7 @@ def test_suptitle_fontproperties():
                   # only test png and svg. The PDF output appears correct,
                   # but Ghostscript does not preserve the background color.
                   extensions=['png', 'svg'],
-                  savefig_kwarg={'facecolor': (0, 1, 0.4),
+                  savefig_kwargs={'facecolor': (0, 1, 0.4),
                                  'edgecolor': 'none'})
 def test_alpha():
     # We want an image which has a background color and an alpha of 0.4.
@@ -576,7 +576,7 @@ def test_add_subplot_twotuple():
 
 
 @image_comparison(['tightbbox_box_aspect.svg'], style='mpl20',
-                  savefig_kwarg={'bbox_inches': 'tight',
+                  savefig_kwargs={'bbox_inches': 'tight',
                                  'facecolor': 'teal'},
                   remove_text=True)
 def test_tightbbox_box_aspect():

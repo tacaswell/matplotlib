@@ -364,7 +364,7 @@ def test_axes_locatable_position():
 
 @image_comparison(['image_grid.png'],
                   remove_text=True, style='mpl20',
-                  savefig_kwarg={'bbox_inches': 'tight'})
+                  savefig_kwargs={'bbox_inches': 'tight'})
 def test_image_grid():
     # test that image grid works with bbox_inches=tight.
     im = np.arange(100).reshape((10, 10))

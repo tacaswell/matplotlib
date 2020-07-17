@@ -110,7 +110,7 @@ def test_contour_uniform_z():
 
 
 @image_comparison(['contour_manual_labels'],
-                  savefig_kwarg={'dpi': 200}, remove_text=True, style='mpl20')
+                  savefig_kwargs={'dpi': 200}, remove_text=True, style='mpl20')
 def test_contour_manual_labels():
 
     x, y = np.meshgrid(np.arange(0, 10), np.arange(0, 10))

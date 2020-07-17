@@ -128,7 +128,7 @@ def test_colorbar_extension_length():
                    'cbar_sharing',
                    ],
                   extensions=['png'], remove_text=True,
-                  savefig_kwarg={'dpi': 40})
+                  savefig_kwargs={'dpi': 40})
 def test_colorbar_positioning(use_gridspec):
     # Remove this line when this test image is regenerated.
     plt.rcParams['pcolormesh.snap'] = False
@@ -184,7 +184,7 @@ def test_colorbar_positioning(use_gridspec):
 
 
 @image_comparison(['cbar_with_subplots_adjust.png'], remove_text=True,
-                  savefig_kwarg={'dpi': 40})
+                  savefig_kwargs={'dpi': 40})
 def test_gridspec_make_colorbar():
     plt.figure()
     data = np.arange(1200).reshape(30, 40)
@@ -202,7 +202,7 @@ def test_gridspec_make_colorbar():
 
 
 @image_comparison(['colorbar_single_scatter.png'], remove_text=True,
-                  savefig_kwarg={'dpi': 40})
+                  savefig_kwargs={'dpi': 40})
 def test_colorbar_single_scatter():
     # Issue #2642: if a path collection has only one entry,
     # the norm scaling within the colorbar must ensure a

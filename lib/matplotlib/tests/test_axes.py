@@ -545,7 +545,7 @@ def test_annotate_default_arrow():
     assert ann.arrow_patch is not None
 
 
-@image_comparison(['fill_units.png'], savefig_kwarg={'dpi': 60})
+@image_comparison(['fill_units.png'], savefig_kwargs={'dpi': 60})
 def test_fill_units():
     import matplotlib.testing.jpl_units as units
     units.register()
@@ -2293,28 +2293,28 @@ def _bxp_test_helper(
 
 
 @image_comparison(['bxp_baseline.png'],
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_baseline():
     _bxp_test_helper()
 
 
 @image_comparison(['bxp_rangewhis.png'],
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_rangewhis():
     _bxp_test_helper(stats_kwargs=dict(whis=[0, 100]))
 
 
 @image_comparison(['bxp_percentilewhis.png'],
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_percentilewhis():
     _bxp_test_helper(stats_kwargs=dict(whis=[5, 95]))
 
 
 @image_comparison(['bxp_with_xlabels.png'],
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_with_xlabels():
     def transform(stats):
@@ -2327,7 +2327,7 @@ def test_bxp_with_xlabels():
 
 @image_comparison(['bxp_horizontal.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default',
                   tol=0.1)
 def test_bxp_horizontal():
@@ -2335,7 +2335,7 @@ def test_bxp_horizontal():
 
 
 @image_comparison(['bxp_with_ylabels.png'],
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default',
                   tol=0.1)
 def test_bxp_with_ylabels():
@@ -2349,7 +2349,7 @@ def test_bxp_with_ylabels():
 
 @image_comparison(['bxp_patchartist.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_patchartist():
     _bxp_test_helper(bxp_kwargs=dict(patch_artist=True))
@@ -2357,7 +2357,7 @@ def test_bxp_patchartist():
 
 @image_comparison(['bxp_custompatchartist.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 100},
+                  savefig_kwargs={'dpi': 100},
                   style='default')
 def test_bxp_custompatchartist():
     _bxp_test_helper(bxp_kwargs=dict(
@@ -2367,7 +2367,7 @@ def test_bxp_custompatchartist():
 
 @image_comparison(['bxp_customoutlier.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_customoutlier():
     _bxp_test_helper(bxp_kwargs=dict(
@@ -2376,7 +2376,7 @@ def test_bxp_customoutlier():
 
 @image_comparison(['bxp_withmean_custompoint.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_showcustommean():
     _bxp_test_helper(bxp_kwargs=dict(
@@ -2387,7 +2387,7 @@ def test_bxp_showcustommean():
 
 @image_comparison(['bxp_custombox.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_custombox():
     _bxp_test_helper(bxp_kwargs=dict(
@@ -2396,7 +2396,7 @@ def test_bxp_custombox():
 
 @image_comparison(['bxp_custommedian.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_custommedian():
     _bxp_test_helper(bxp_kwargs=dict(
@@ -2405,7 +2405,7 @@ def test_bxp_custommedian():
 
 @image_comparison(['bxp_customcap.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_customcap():
     _bxp_test_helper(bxp_kwargs=dict(
@@ -2414,7 +2414,7 @@ def test_bxp_customcap():
 
 @image_comparison(['bxp_customwhisker.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_customwhisker():
     _bxp_test_helper(bxp_kwargs=dict(
@@ -2423,7 +2423,7 @@ def test_bxp_customwhisker():
 
 @image_comparison(['bxp_withnotch.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_shownotches():
     _bxp_test_helper(bxp_kwargs=dict(shownotches=True))
@@ -2431,7 +2431,7 @@ def test_bxp_shownotches():
 
 @image_comparison(['bxp_nocaps.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_nocaps():
     _bxp_test_helper(bxp_kwargs=dict(showcaps=False))
@@ -2439,7 +2439,7 @@ def test_bxp_nocaps():
 
 @image_comparison(['bxp_nobox.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_nobox():
     _bxp_test_helper(bxp_kwargs=dict(showbox=False))
@@ -2447,7 +2447,7 @@ def test_bxp_nobox():
 
 @image_comparison(['bxp_no_flier_stats.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_no_flier_stats():
     def transform(stats):
@@ -2461,7 +2461,7 @@ def test_bxp_no_flier_stats():
 
 @image_comparison(['bxp_withmean_point.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_showmean():
     _bxp_test_helper(bxp_kwargs=dict(showmeans=True, meanline=False))
@@ -2469,7 +2469,7 @@ def test_bxp_showmean():
 
 @image_comparison(['bxp_withmean_line.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_showmeanasline():
     _bxp_test_helper(bxp_kwargs=dict(showmeans=True, meanline=True))
@@ -2477,7 +2477,7 @@ def test_bxp_showmeanasline():
 
 @image_comparison(['bxp_scalarwidth.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_scalarwidth():
     _bxp_test_helper(bxp_kwargs=dict(widths=.25))
@@ -2485,7 +2485,7 @@ def test_bxp_scalarwidth():
 
 @image_comparison(['bxp_customwidths.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_customwidths():
     _bxp_test_helper(bxp_kwargs=dict(widths=[0.10, 0.25, 0.65, 0.85]))
@@ -2493,7 +2493,7 @@ def test_bxp_customwidths():
 
 @image_comparison(['bxp_custompositions.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_bxp_custompositions():
     _bxp_test_helper(bxp_kwargs=dict(positions=[1, 5, 6, 7]))
@@ -2546,7 +2546,7 @@ def test_boxplot_sym2():
 
 @image_comparison(['boxplot_sym.png'],
                   remove_text=True,
-                  savefig_kwarg={'dpi': 40},
+                  savefig_kwargs={'dpi': 40},
                   style='default')
 def test_boxplot_sym():
     x = np.linspace(-7, 7, 140)
@@ -2585,7 +2585,7 @@ def _rc_test_bxp_helper(ax, rc_dict):
 
 
 @image_comparison(['boxplot_rc_parameters'],
-                  savefig_kwarg={'dpi': 100}, remove_text=True,
+                  savefig_kwargs={'dpi': 100}, remove_text=True,
                   tol=1, style='default')
 def test_boxplot_rc_parameters():
     # Randomness used for bootstrapping.
@@ -2650,7 +2650,7 @@ def test_boxplot_rc_parameters():
 
 
 @image_comparison(['boxplot_with_CIarray.png'],
-                  remove_text=True, savefig_kwarg={'dpi': 40}, style='default')
+                  remove_text=True, savefig_kwargs={'dpi': 40}, style='default')
 def test_boxplot_with_CIarray():
     # Randomness used for bootstrapping.
     np.random.seed(937)
@@ -2669,7 +2669,7 @@ def test_boxplot_with_CIarray():
 
 
 @image_comparison(['boxplot_no_inverted_whisker.png'],
-                  remove_text=True, savefig_kwarg={'dpi': 40}, style='default')
+                  remove_text=True, savefig_kwargs={'dpi': 40}, style='default')
 def test_boxplot_no_weird_whisker():
     x = np.array([3, 9000, 150, 88, 350, 200000, 1400, 960],
                  dtype=np.float64)
@@ -2726,7 +2726,7 @@ def test_boxplot_marker_behavior():
 
 
 @image_comparison(['boxplot_mod_artists_after_plotting.png'],
-                  remove_text=True, savefig_kwarg={'dpi': 40}, style='default')
+                  remove_text=True, savefig_kwargs={'dpi': 40}, style='default')
 def test_boxplot_mod_artist_after_plotting():
     x = [0.15, 0.11, 0.06, 0.06, 0.12, 0.56, -0.56]
     fig, ax = plt.subplots()
@@ -4714,7 +4714,7 @@ def test_tick_label_update():
     assert tick_texts == ["", "", "unit value", "", ""]
 
 
-@image_comparison(['o_marker_path_snap.png'], savefig_kwarg={'dpi': 72})
+@image_comparison(['o_marker_path_snap.png'], savefig_kwargs={'dpi': 72})
 def test_o_marker_path_snap():
     fig, ax = plt.subplots()
     ax.margins(.1)
@@ -4842,7 +4842,7 @@ def test_move_offsetlabel():
     assert ax.xaxis.offsetText.get_verticalalignment() == 'bottom'
 
 
-@image_comparison(['rc_spines.png'], savefig_kwarg={'dpi': 40})
+@image_comparison(['rc_spines.png'], savefig_kwargs={'dpi': 40})
 def test_rc_spines():
     rc_dict = {
         'axes.spines.left': False,
@@ -4853,7 +4853,7 @@ def test_rc_spines():
         fig, ax = plt.subplots()
 
 
-@image_comparison(['rc_grid.png'], savefig_kwarg={'dpi': 40})
+@image_comparison(['rc_grid.png'], savefig_kwargs={'dpi': 40})
 def test_rc_grid():
     fig = plt.figure()
     rc_dict0 = {

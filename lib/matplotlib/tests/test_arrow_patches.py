@@ -68,7 +68,7 @@ def __prepare_fancyarrow_dpi_cor_test():
 
 @image_comparison(['fancyarrow_dpi_cor_100dpi.png'], remove_text=True,
                   tol=0 if platform.machine() == 'x86_64' else 0.02,
-                  savefig_kwarg=dict(dpi=100))
+                  savefig_kwargs=dict(dpi=100))
 def test_fancyarrow_dpi_cor_100dpi():
     """
     Check the export of a FancyArrowPatch @ 100 DPI. FancyArrowPatch is
@@ -83,7 +83,7 @@ def test_fancyarrow_dpi_cor_100dpi():
 
 @image_comparison(['fancyarrow_dpi_cor_200dpi.png'], remove_text=True,
                   tol=0 if platform.machine() == 'x86_64' else 0.02,
-                  savefig_kwarg=dict(dpi=200))
+                  savefig_kwargs=dict(dpi=200))
 def test_fancyarrow_dpi_cor_200dpi():
     """
     As test_fancyarrow_dpi_cor_100dpi, but exports @ 200 DPI. The relative size

@@ -121,7 +121,7 @@ def test_empty_set_limits_with_units(quantity_converter):
 
 
 @image_comparison(['jpl_bar_units.png'],
-                  savefig_kwarg={'dpi': 120}, style='mpl20')
+                  savefig_kwargs={'dpi': 120}, style='mpl20')
 def test_jpl_bar_units():
     import matplotlib.testing.jpl_units as units
     units.register()
@@ -136,7 +136,7 @@ def test_jpl_bar_units():
 
 
 @image_comparison(['jpl_barh_units.png'],
-                  savefig_kwarg={'dpi': 120}, style='mpl20')
+                  savefig_kwargs={'dpi': 120}, style='mpl20')
 def test_jpl_barh_units():
     import matplotlib.testing.jpl_units as units
     units.register()
