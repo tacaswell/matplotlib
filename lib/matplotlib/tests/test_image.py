@@ -111,7 +111,8 @@ def test_image_python_io():
      (3, 2.9, "hanning"),  # <3 upsample.
      (3, 9.1, "nearest"),  # >3 upsample.
      ])
-@check_figures_equal(extensions=['png'])
+@check_figures_equal(extensions=['png'],
+                     style=('default', {'savefig.dpi': 100}))
 def test_imshow_antialiased(fig_test, fig_ref,
                             img_size, fig_size, interpolation):
     np.random.seed(19680801)
@@ -127,7 +128,8 @@ def test_imshow_antialiased(fig_test, fig_ref,
     axs.imshow(A, interpolation=interpolation)
 
 
-@check_figures_equal(extensions=['png'])
+@check_figures_equal(extensions=['png'],
+                     style=('default', {'savefig.dpi': 100}))
 def test_imshow_zoom(fig_test, fig_ref):
     # should be less than 3 upsample, so should be nearest...
     np.random.seed(19680801)

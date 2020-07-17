@@ -120,7 +120,7 @@ def test_acorr(fig_test, fig_ref):
     ax_ref.axhline(y=0, xmin=0, xmax=1)
 
 
-@check_figures_equal(extensions=["png"])
+@check_figures_equal(extensions=["png"], style='classic')
 def test_spy(fig_test, fig_ref):
     np.random.seed(19680801)
     a = np.ones(32 * 32)
@@ -623,7 +623,7 @@ def test_single_date():
     ax[1].plot(time1, data1, 'o', color='r')
 
 
-@check_figures_equal(extensions=["png"])
+@check_figures_equal(extensions=["png"], style='classic')
 def test_shaped_data(fig_test, fig_ref):
     row = np.arange(10).reshape((1, -1))
     col = np.arange(0, 100, 10).reshape((-1, 1))

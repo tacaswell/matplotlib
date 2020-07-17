@@ -288,6 +288,7 @@ class Entry:
             path = self.source / baseline_dir / reldir
             if path.is_dir():
                 return path
+        return '.'
         raise ValueError("Can't find baseline dir for {}".format(reldir))
 
     @property

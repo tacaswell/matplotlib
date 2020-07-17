@@ -20,8 +20,8 @@ def test_log_scales(fig_test, fig_ref):
     ylim = ax_test.get_ylim()
     ax_ref = fig_ref.add_subplot(122, yscale='log', xscale='symlog')
     ax_ref.set(xlim=xlim, ylim=ylim)
-    ax_ref.plot([24.1, 24.1], ylim, 'b')
-    ax_ref.plot(xlim, [24.1, 24.1], 'b')
+    ax_ref.plot([24.1, 24.1], ylim, 'C0')
+    ax_ref.plot(xlim, [24.1, 24.1], 'C0')
 
 
 def test_symlog_mask_nan():

@@ -393,7 +393,8 @@ def image_comparison(baseline_images, extensions=None, tol=0,
         savefig_kwargs=savefig_kwargs, style=style)
 
 
-def check_figures_equal(*, extensions=("png", "pdf", "svg"), tol=0):
+def check_figures_equal(*, extensions=("png", "pdf", "svg"), tol=0,
+                        savefig_kwargs=None, style='default'):
     """
     Decorator for test cases that generate and compare two figures.
 
@@ -411,6 +412,14 @@ def check_figures_equal(*, extensions=("png", "pdf", "svg"), tol=0):
     tol : float
         The RMS threshold above which the test is considered failed.
 
+    savefig_kwargs : dict
+        Optional arguments that are passed to the savefig method.
+
+    style : str, dict, or list
+        The optional style(s) to apply to the image test. The test itself
+        can also apply additional styles if desired. Defaults to ``["classic",
+        "_classic_test_patch"]``.
+
     Examples
     --------
     Check that calling `.Axes.plot` with a single argument plots it against
@@ -422,6 +431,7 @@ def check_figures_equal(*, extensions=("png", "pdf", "svg"), tol=0):
             fig_ref.subplots().plot([0, 1, 2], [1, 3, 5])
 
     """
+    savefig_kwargs = savefig_kwargs or {}
     ALLOWED_CHARS = set(string.digits + string.ascii_letters + '_-[]()')
     KEYWORD_ONLY = inspect.Parameter.KEYWORD_ONLY
     def decorator(func):
@@ -435,6 +445,7 @@ def check_figures_equal(*, extensions=("png", "pdf", "svg"), tol=0):
                              "parameters 'fig_ref' and 'fig_test', but your "
                              f"function has the signature {old_sig}")
 
+        @pytest.mark.style(style)
         @pytest.mark.parametrize("ext", extensions)
         def wrapper(*args, ext, request, **kwargs):
             if 'ext' in old_sig.parameters:
@@ -450,8 +461,8 @@ def check_figures_equal(*, extensions=("png", "pdf", "svg"), tol=0):
                 func(*args, fig_test=fig_test, fig_ref=fig_ref, **kwargs)
                 test_image_path = result_dir / (file_name + "." + ext)
                 ref_image_path = result_dir / (file_name + "-expected." + ext)
-                fig_test.savefig(test_image_path)
-                fig_ref.savefig(ref_image_path)
+                fig_test.savefig(test_image_path, **savefig_kwargs)
+                fig_ref.savefig(ref_image_path, **savefig_kwargs)
                 _raise_on_image_difference(
                     ref_image_path, test_image_path, tol=tol
                 )
