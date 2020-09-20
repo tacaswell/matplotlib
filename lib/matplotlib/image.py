@@ -1555,8 +1555,6 @@ def imsave(fname, arr, vmin=None, vmax=None, cmap=None, format=None,
     else:
         # Don't bother creating an image; this avoids rounding errors on the
         # size when dividing and then multiplying by dpi.
-        sm = cm.ScalarMappable(cmap=cmap)
-        sm.set_clim(vmin, vmax)
         if origin is None:
             origin = mpl.rcParams["image.origin"]
         if origin == "lower":
@@ -1569,6 +1567,8 @@ def imsave(fname, arr, vmin=None, vmax=None, cmap=None, format=None,
             # as is, saving a few operations.
             rgba = arr
         else:
+            sm = cm.ScalarMappable(cmap=cmap)
+            sm.set_clim(vmin, vmax)
             rgba = sm.to_rgba(arr, bytes=True)
         if pil_kwargs is None:
             pil_kwargs = {}
