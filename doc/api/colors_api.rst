@@ -32,6 +32,8 @@ Color Conversion tools
    get_named_colors_mapping
 
 
+.. _norms_and_colormaps:
+
 Normalization and Colormapping
 ------------------------------
 
