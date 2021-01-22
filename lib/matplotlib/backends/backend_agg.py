@@ -154,15 +154,62 @@ class RendererAgg(RendererBase):
                 try:
                     self._renderer.draw_path(gc, p, transform, rgbFace)
                 except OverflowError as err:
-                    raise OverflowError(
-                        "Exceeded cell block limit (set 'agg.path.chunksize' "
-                        "rcparam)") from err
+                    msg = ("Exceeded cell block limit in Agg.\n\n"
+                           "Please reduce "
+                           "the value of rcParams['agg.path.chunksize'] "
+                           f"(currently {nmax}) or increase the "
+                           "path simplification threshold"
+                           "(rcParams['path.simplify_threshold'] = "
+                           f"{mpl.rcParams['path.simplify_threshold']} "
+                           "by default and path.simplify_threshold "
+                           f"= {path.simplify_threshold} "
+                           "on the input)."
+                           )
+                    raise OverflowError(msg) from err
         else:
             try:
                 self._renderer.draw_path(gc, path, transform, rgbFace)
             except OverflowError as err:
-                raise OverflowError("Exceeded cell block limit (set "
-                                    "'agg.path.chunksize' rcparam)") from err
+                cant_chunk = ''
+                if rgbFace is not None:
+                    cant_chunk += "- can not split path with rgbFace\n"
+                if gc.get_hatch() is not None:
+                    cant_chunk += "- can not split path with hatch\n"
+                if not path.should_simplify:
+                    cant_chunk += "- this path says it can't be simplified\n"
+                if len(cant_chunk):
+                    msg = ("Exceeded cell block limit in Agg, however "
+                           "for the following reasons:\n\n"
+                           f"{cant_chunk}\n"
+                           "we can not automatically split up this path "
+                           "to draw.\n\n"
+                           "Please manually simplify your path.")
+
+                else:
+                    inc_threhold = (
+                        "or increase the "
+                        "path simplification threshold"
+                        "(rcParams['path.simplify_threshold'] = "
+                        f"{mpl.rcParams['path.simplify_threshold']} "
+                        "by default and path.simplify_threshold "
+                        f"= {path.simplify_threshold} "
+                        "on the input)."
+                        )
+                    if nmax > 100:
+                        msg = ("Exceeded cell block limit in Agg.  Please "
+                               "reduce the value of "
+                               "rcParams['agg.path.chunksize'] "
+                               f"(currently {nmax}) "
+                               + inc_threhold
+                               )
+                    else:
+                        msg = ("Exceeded cell block limit in Agg.  Please set "
+                               "the value of rcParams['agg.path.chunksize'], "
+                               f"(currently {nmax}) to be greater than 100 "
+                               + inc_threhold
+                               )
+
+                raise OverflowError(msg) from err
 
     def draw_path_collection(self, gc, master_transform, paths, all_transforms,
                              offsets, offsetTrans, facecolors, edgecolors,
