@@ -30,7 +30,9 @@ from matplotlib.backend_bases import (
     GraphicsContextBase, RendererBase)
 from matplotlib.backends.backend_mixed import MixedModeRenderer
 from matplotlib.figure import Figure
-from matplotlib.font_manager import findfont, is_opentype_cff_font, get_font
+from matplotlib.font_manager import (
+    findfont, is_opentype_cff_font, get_font, protect_font
+)
 from matplotlib.afm import AFM
 import matplotlib.type1font as type1font
 import matplotlib.dviread as dviread
@@ -794,6 +796,7 @@ class PdfFile:
             effects=psfont.effects)
         return pdfname
 
+    @protect_font
     def writeFonts(self):
         fonts = {}
         for dviname, info in sorted(self.dviFontInfo.items()):

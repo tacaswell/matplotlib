@@ -33,9 +33,9 @@ import re
 import subprocess
 import sys
 try:
-    from threading import Timer
+    from threading import Timer, RLock, Semaphore
 except ImportError:
-    from dummy_threading import Timer
+    from dummy_threading import Timer, RLock, Semaphore
 
 import matplotlib as mpl
 from matplotlib import afm, cbook, ft2font, rcParams
@@ -1408,14 +1408,48 @@ if hasattr(os, "register_at_fork"):
     os.register_at_fork(after_in_child=_get_font.cache_clear)
 
 
+def protect_font(func):
+    import functools
+    import numpy as np
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        with protect_font.lock:
+            # push the semaphore up to 1 to "release get_font"
+            protect_font.flag.release()
+            try:
+                ret = func(*args, **kwargs)
+            finally:
+                # push the semaphore back to 0
+                protect_font.flag.acquire()
+            if (
+                    ret is not None and
+                    not isinstance(ret, str) and
+                    np.iterable(ret)
+            ):
+                for v in ret:
+                    if isinstance(v, ft2font.FT2Font):
+                        raise Exception("no returny")
+        return ret
+
+    return inner
+protect_font.lock = RLock()
+protect_font.flag = Semaphore(value=0)
+
+
 def get_font(filename, hinting_factor=None):
-    # Resolving the path avoids embedding the font twice in pdf/ps output if a
-    # single font is selected using two different relative paths.
-    filename = os.path.realpath(filename)
-    if hinting_factor is None:
-        hinting_factor = rcParams['text.hinting_factor']
-    return _get_font(os.fspath(filename), hinting_factor,
-                     _kerning_factor=rcParams['text.kerning_factor'])
+    if not protect_font.flag.acquire(blocking=False):
+        raise Exception("no")
+    try:
+        # Resolving the path avoids embedding the font twice in pdf/ps output if a
+        # single font is selected using two different relative paths.
+        filename = os.path.realpath(filename)
+        if hinting_factor is None:
+            hinting_factor = rcParams['text.hinting_factor']
+        return _get_font(os.fspath(filename), hinting_factor,
+                         _kerning_factor=rcParams['text.kerning_factor'])
+    finally:
+        protect_font.flag.release()
 
 
 def _rebuild():

@@ -40,7 +40,7 @@ from matplotlib import colors as mcolors
 from matplotlib.backend_bases import (
     _Backend, _check_savefig_extra_args, FigureCanvasBase, FigureManagerBase,
     RendererBase)
-from matplotlib.font_manager import findfont, get_font
+from matplotlib.font_manager import findfont, get_font, protect_font
 from matplotlib.ft2font import (LOAD_FORCE_AUTOHINT, LOAD_NO_HINTING,
                                 LOAD_DEFAULT, LOAD_NO_AUTOHINT)
 from matplotlib.mathtext import MathTextParser
@@ -174,6 +174,7 @@ class RendererAgg(RendererBase):
             facecolors, edgecolors, linewidths, linestyles, antialiaseds, urls,
             offset_position)
 
+    @protect_font
     def draw_mathtext(self, gc, x, y, s, prop, angle):
         """Draw mathtext using :mod:`matplotlib.mathtext`."""
         ox, oy, width, height, descent, font_image, used_characters = \
@@ -185,6 +186,7 @@ class RendererAgg(RendererBase):
         y = round(y - oy + yd)
         self._renderer.draw_text_image(font_image, x, y + 1, angle, gc)
 
+    @protect_font
     def draw_text(self, gc, x, y, s, prop, angle, ismath=False, mtext=None):
         # docstring inherited
 
@@ -212,6 +214,7 @@ class RendererAgg(RendererBase):
         y = round(y + yo + yd)
         self._renderer.draw_text_image(font, x, y + 1, angle, gc)
 
+    @protect_font
     def get_text_width_height_descent(self, s, prop, ismath):
         # docstring inherited
 

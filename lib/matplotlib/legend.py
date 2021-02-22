@@ -31,7 +31,7 @@ import matplotlib as mpl
 from matplotlib import cbook, docstring, colors
 from matplotlib.artist import Artist, allow_rasterization
 from matplotlib.cbook import silent_list
-from matplotlib.font_manager import FontProperties
+from matplotlib.font_manager import FontProperties, protect_font
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch, Rectangle, Shadow, FancyBboxPatch
 from matplotlib.collections import (LineCollection, RegularPolyCollection,
@@ -586,6 +586,7 @@ class Legend(Artist):
         return x + xdescent, y + ydescent
 
     @allow_rasterization
+    @protect_font
     def draw(self, renderer):
         # docstring inherited
         if not self.get_visible():
@@ -890,6 +891,7 @@ class Legend(Artist):
         """Return the `.Text` instance for the legend title."""
         return self._legend_title_box._text
 
+    @protect_font
     def get_window_extent(self, renderer=None):
         # docstring inherited
         if renderer is None:

@@ -33,7 +33,9 @@ from pyparsing import (
 from matplotlib import cbook, colors as mcolors, rcParams
 from matplotlib.afm import AFM
 from matplotlib.ft2font import FT2Image, KERNING_DEFAULT, LOAD_NO_HINTING
-from matplotlib.font_manager import findfont, FontProperties, get_font
+from matplotlib.font_manager import (
+    findfont, FontProperties, get_font, protect_font
+)
 from matplotlib._mathtext_data import (latex_to_bakoma, latex_to_standard,
                                        tex2uni, latex_to_cmex,
                                        stix_virtual_fonts)
@@ -610,6 +612,7 @@ class TruetypeFonts(Fonts):
             )
         return result
 
+    @protect_font
     def get_xheight(self, fontname, fontsize, dpi):
         font = self._get_font(fontname)
         font.set_size(fontsize, dpi)
@@ -1217,10 +1220,12 @@ class StandardPsFonts(Fonts):
         return Fonts.get_kern(self, font1, fontclass1, sym1, fontsize1,
                               font2, fontclass2, sym2, fontsize2, dpi)
 
+    @protect_font
     def get_xheight(self, font, fontsize, dpi):
         font = self._get_font(font)
         return font.get_xheight() * 0.001 * fontsize
 
+    @protect_font
     def get_underline_thickness(self, font, fontsize, dpi):
         font = self._get_font(font)
         return font.get_underline_thickness() * 0.001 * fontsize
@@ -1470,6 +1475,7 @@ class Char(Node):
     def __repr__(self):
         return '`%s`' % self.c
 
+    @protect_font
     def _update_metrics(self):
         metrics = self._metrics = self.font_output.get_metrics(
             self.font, self.font_class, self.c, self.fontsize, self.dpi,
@@ -3333,6 +3339,7 @@ class MathTextParser:
             s, dpi, prop, rcParams['ps.useafm'], rcParams['mathtext.fontset'])
 
     @functools.lru_cache(50)
+    @protect_font
     def _parse_cached(self, s, dpi, prop, ps_useafm, fontset):
 
         if prop is None:

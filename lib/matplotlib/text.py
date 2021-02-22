@@ -11,7 +11,7 @@ import numpy as np
 
 from . import artist, cbook, docstring, rcParams
 from .artist import Artist
-from .font_manager import FontProperties
+from .font_manager import FontProperties, protect_font
 from .patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 from .textpath import TextPath  # Unused, but imported by others.
 from .transforms import (
@@ -665,6 +665,7 @@ class Text(Artist):
         return '\n'.join(wrapped_lines)
 
     @artist.allow_rasterization
+    @protect_font
     def draw(self, renderer):
         # docstring inherited
 
@@ -860,6 +861,7 @@ class Text(Artist):
         """
         return self._verticalalignment
 
+    @protect_font
     def get_window_extent(self, renderer=None, dpi=None):
         """
         Return the `.Bbox` bounding the text, in display units.

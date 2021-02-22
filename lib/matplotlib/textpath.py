@@ -6,7 +6,7 @@ import urllib.parse
 import numpy as np
 
 from matplotlib import _text_layout, dviread, font_manager, rcParams
-from matplotlib.font_manager import FontProperties, get_font
+from matplotlib.font_manager import FontProperties, get_font, protect_font
 from matplotlib.ft2font import LOAD_NO_HINTING, LOAD_TARGET_LIGHT
 from matplotlib.mathtext import MathTextParser
 from matplotlib.path import Path
@@ -51,6 +51,7 @@ class TextToPath:
         char_id = urllib.parse.quote('%s-%d' % (ps_name, ccode))
         return char_id
 
+    @protect_font
     def get_text_width_height_descent(self, s, prop, ismath):
         if ismath == "TeX":
             texmanager = self.get_texmanager()
@@ -79,6 +80,7 @@ class TextToPath:
         d /= 64.0
         return w * scale, h * scale, d * scale
 
+    @protect_font
     def get_text_path(self, prop, s, ismath=False):
         """
         Convert text *s* to path (a tuple of vertices and codes for

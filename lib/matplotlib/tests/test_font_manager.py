@@ -13,12 +13,13 @@ from matplotlib import font_manager as fm
 from matplotlib.font_manager import (
     findfont, findSystemFonts, FontProperties, fontManager, json_dump,
     json_load, get_font, get_fontconfig_fonts, is_opentype_cff_font,
-    MSUserFontDirectories, _call_fc_list)
+    MSUserFontDirectories, _call_fc_list, protect_font)
 from matplotlib import pyplot as plt, rc_context
 
 has_fclist = shutil.which('fc-list') is not None
 
 
+@protect_font
 def test_font_priority():
     with rc_context(rc={
             'font.sans-serif':
@@ -77,6 +78,7 @@ def test_get_fontconfig_fonts():
 
 
 @pytest.mark.parametrize('factor', [2, 4, 6, 8])
+@protect_font
 def test_hinting_factor(factor):
     font = findfont(FontProperties(family=["sans-serif"]))
 
@@ -128,6 +130,7 @@ def test_find_ttc():
         fig.savefig(BytesIO(), format="ps")
 
 
+@protect_font
 def test_find_invalid(tmpdir):
     tmp_path = Path(tmpdir)
 

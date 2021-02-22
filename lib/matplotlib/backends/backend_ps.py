@@ -24,7 +24,7 @@ from matplotlib.backend_bases import (
     _Backend, _check_savefig_extra_args, FigureCanvasBase, FigureManagerBase,
     GraphicsContextBase, RendererBase)
 from matplotlib.cbook import is_writable_file_like, file_requires_unicode
-from matplotlib.font_manager import is_opentype_cff_font, get_font
+from matplotlib.font_manager import is_opentype_cff_font, get_font, protect_font
 from matplotlib.ft2font import LOAD_NO_HINTING
 from matplotlib._ttconv import convert_ttf_to_ps
 from matplotlib.mathtext import MathTextParser
@@ -881,6 +881,7 @@ class FigureCanvasPS(FigureCanvasBase):
         if dryrun:  # return immediately if dryrun (tightbbox=True)
             return
 
+        @protect_font
         def print_figure_impl(fh):
             # write the PostScript headers
             if is_eps:

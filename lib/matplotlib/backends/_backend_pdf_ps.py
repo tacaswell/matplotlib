@@ -78,6 +78,7 @@ class RendererPDFPSBase(RendererBase):
         # docstring inherited
         return self.width * 72.0, self.height * 72.0
 
+    @font_manager.protect_font
     def get_text_width_height_descent(self, s, prop, ismath):
         # docstring inherited
         if ismath == "TeX":

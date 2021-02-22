@@ -21,7 +21,7 @@ from matplotlib.backend_bases import (
 from matplotlib.backends.backend_mixed import MixedModeRenderer
 from matplotlib.colors import rgb2hex
 from matplotlib.dates import UTC
-from matplotlib.font_manager import findfont, get_font
+from matplotlib.font_manager import findfont, get_font, protect_font
 from matplotlib.ft2font import LOAD_NO_HINTING
 from matplotlib.mathtext import MathTextParser
 from matplotlib.path import Path
@@ -1027,6 +1027,7 @@ class RendererSVG(RendererBase):
     def _adjust_char_id(self, char_id):
         return char_id.replace("%20", "_")
 
+    @protect_font
     def _draw_text_as_path(self, gc, x, y, s, prop, angle, ismath, mtext=None):
         """
         Draw the text by converting them to paths using the textpath module.
@@ -1108,6 +1109,7 @@ class RendererSVG(RendererBase):
 
         writer.end('g')
 
+    @protect_font
     def _draw_text_as_text(self, gc, x, y, s, prop, angle, ismath, mtext=None):
         writer = self.writer
 
@@ -1272,6 +1274,7 @@ class RendererSVG(RendererBase):
         # docstring inherited
         return self.width, self.height
 
+    @protect_font
     def get_text_width_height_descent(self, s, prop, ismath):
         # docstring inherited
         return self._text2path.get_text_width_height_descent(s, prop, ismath)
