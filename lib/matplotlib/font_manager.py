@@ -1441,7 +1441,6 @@ class FontManager:
 
         return fpaths
 
-
     @lru_cache()
     def _findfontsprop_cached(
         self, family, prop, fontext, directory,
@@ -1465,7 +1464,6 @@ class FontManager:
                     _log.warning(
                         'findfont: Font family \'%s\' not found.', family
                     )
-
 
     @lru_cache()
     def _findfont_cached(self, prop, fontext, directory, fallback_to_default,
@@ -1569,13 +1567,11 @@ def _get_font(fpaths, hinting_factor, *, _kerning_factor, thread_id):
         )
         ftobjects.append(ftobject)
 
-    print("\nIn Python:", ftobjects, "\n")
     ft2font_object = ft2font.FT2Font(
         fpaths[0], hinting_factor,
         _fallback_list=ftobjects,
         _kerning_factor=_kerning_factor
     )
-    print("\nBack to Python!\n")
     return ft2font_object
 
 
