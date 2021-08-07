@@ -381,7 +381,6 @@ FT2Font::~FT2Font()
     }
 
     if (face) {
-        printf("Deleting face from: %lu\n", face->num_glyphs);
         FT_Done_Face(face);
     }
 }
