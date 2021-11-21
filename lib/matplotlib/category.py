@@ -190,6 +190,10 @@ class UnitData:
         if data is not None:
             self.update(data)
 
+    @property
+    def known_categories(self):
+        return tuple(self._mapping)
+
     @staticmethod
     def _str_is_convertible(val):
         """
