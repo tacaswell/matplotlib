@@ -384,12 +384,15 @@ class _ImageBase(martist.Artist, cm.ScalarMappable):
                 (out_width_base % 1.0 != 0.0 or out_height_base % 1.0 != 0.0)):
             out_width = math.ceil(out_width_base)
             out_height = math.ceil(out_height_base)
-            extra_width = (out_width - out_width_base) / out_width_base
-            extra_height = (out_height - out_height_base) / out_height_base
-            t += Affine2D().scale(1.0 + extra_width, 1.0 + extra_height)
         else:
             out_width = int(out_width_base)
             out_height = int(out_height_base)
+        # In either case we need to adjust the transform a bit to account for the
+        # gained or lost space
+        extra_width = (out_width - out_width_base) / out_width_base
+        extra_height = (out_height - out_height_base) / out_height_base
+        t += Affine2D().scale(1.0 + extra_width, 1.0 + extra_height)
+
         out_shape = (out_height, out_width)
 
         if not unsampled:
