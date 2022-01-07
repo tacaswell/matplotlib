@@ -683,7 +683,7 @@ default: %(va)s
             present figure but not in the figure's list of Axes.
 
         projection : {None, 'aitoff', 'hammer', 'lambert', 'mollweide', \
-'polar', 'rectilinear', str}, optional
+        'polar', 'rectilinear', str}, optional
             The projection type of the subplot (`~.axes.Axes`). *str* is the
             name of a custom projection, see `~matplotlib.projections`. The
             default None results in a 'rectilinear' projection.
@@ -2003,7 +2003,6 @@ class SubFigure(FigureBase):
         self._parent = parent
         self.figure = parent.figure
         # subfigures use the parent axstack
-        self._axstack = parent._axstack
         self.subplotpars = parent.subplotpars
         self.dpi_scale_trans = parent.dpi_scale_trans
         self._axobservers = parent._axobservers
@@ -2023,6 +2022,9 @@ class SubFigure(FigureBase):
             in_layout=False, transform=self.transSubfigure)
         self._set_artist_props(self.patch)
         self.patch.set_antialiased(False)
+    @property
+    def _axstack(self):
+        return parent._axstack
 
     @property
     def dpi(self):
@@ -2125,6 +2127,42 @@ class SubFigure(FigureBase):
 
         finally:
             self.stale = False
+
+    def clf(self, keep_observers=False):
+        """
+        Clear the figure.
+
+        Set *keep_observers* to True if, for example,
+        a gui widget is tracking the Axes in the figure.
+        """
+        self.suppressComposite = None
+        self.callbacks = cbook.CallbackRegistry()
+
+        for ax in tuple(self.axes):  # Iterate over the copy.
+            ax.cla()
+            self.delaxes(ax)  # Remove ax from self._axstack.
+
+        toolbar = getattr(self.canvas, 'toolbar', None)
+        if toolbar is not None:
+            toolbar.update()
+        self._axstack.clear()
+        self.artists = []
+        self.lines = []
+        self.patches = []
+        self.texts = []
+        self.images = []
+        self.legends = []
+        if not keep_observers:
+            self._axobservers = cbook.CallbackRegistry()
+        self._suptitle = None
+        self._supxlabel = None
+        self._supylabel = None
+
+        self.stale = True
+
+    def clear(self, keep_observers=False):
+        """Clear the figure -- synonym for `clf`."""
+        self.clf(keep_observers=keep_observers)
 
 
 @docstring.interpd
