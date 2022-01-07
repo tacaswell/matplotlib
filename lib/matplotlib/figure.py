@@ -949,7 +949,7 @@ default: %(va)s
         self.suppressComposite = None
         self.callbacks = cbook.CallbackRegistry()
 
-        for subfig in self.subfigs: 
+        for subfig in self.subfigs:
             #first clear the axes in any subfigures
             subfig.clf(keep_observers=keep_observers)
 
@@ -957,9 +957,6 @@ default: %(va)s
             ax.cla()
             self.delaxes(ax)  # Remove ax from self._axstack.
 
-        toolbar = self.canvas.toolbar
-        if toolbar is not None:
-            toolbar.update()
         self._axstack.clear()
         self.artists = []
         self.subfigs = []
@@ -2854,6 +2851,20 @@ class Figure(FigureBase):
         matplotlib.figure.Figure.set_size_inches
         """
         self.set_size_inches(self.get_figwidth(), val, forward=forward)
+
+    def clf(self, keep_observers=False):
+        """
+        Clear the figure.
+
+        Set *keep_observers* to True if, for example,
+        a gui widget is tracking the Axes in the figure.
+        """
+        super().clf(keep_observers=keep_observers)
+        # FigureBase.clf does not clear toolbars, as
+        # only Figure can have toolbars
+        toolbar = self.canvas.toolbar
+        if toolbar is not None:
+            toolbar.update()
 
     @_finalize_rasterization
     @allow_rasterization
