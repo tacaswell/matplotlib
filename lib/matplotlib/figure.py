@@ -2042,6 +2042,7 @@ class SubFigure(FigureBase):
         self._subplotspec = subplotspec
         self._parent = parent
         self.figure = parent.figure
+        self._axstack = parent._axstack
         self.subplotpars = parent.subplotpars
         self.dpi_scale_trans = parent.dpi_scale_trans
         self._axobservers = parent._axobservers
@@ -2061,11 +2062,6 @@ class SubFigure(FigureBase):
             in_layout=False, transform=self.transSubfigure)
         self._set_artist_props(self.patch)
         self.patch.set_antialiased(False)
-
-    @property
-    def _axstack(self):
-        # subfigures use the parent axstack
-        return self._parent._axstack
 
     @property
     def dpi(self):
