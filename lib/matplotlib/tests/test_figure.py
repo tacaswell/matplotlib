@@ -774,7 +774,6 @@ def test_figure_clear():
     #f.1) clearing only one subfigure
     subfigs[0].clear()
     assert subaxes[0] not in fig.axes
-    assert subfigs[0] not in fig.subfigs
     assert subaxes[1] in fig.axes
     assert subfigs[1] in fig.subfigs
 
