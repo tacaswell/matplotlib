@@ -1,0 +1,33 @@
+Figure & subfigure clearing
+~~~~~~~~~~~~~~~~~~~~~~~~
+Fixed a bug in which ``Figure.clf()`` and ``Figure.clear()`` were broken 
+when ``Figure`` contained axes not stored in `Figure._localaxes`.  Moved the
+``clear`` and ``clf`` methods to ``FigureBase``, so ``Subfigure``s can now be
+independently cleared. Added a routine to clear ``Figure.subfigs`` when 
+``Figure.clear()`` is called. This effects the API as it removes active 
+subfigure references when clearing a figure.     
+
+This scenario occurred when ``Figure`` was instantiated with ``Subfigure``s.
+The bug was thrown in a call to ``_localaxes.remove`` in ``FigureBase.delaxes``.
+The children ``Subfigure``s do not register their axes in ``_localaxes``,
+which lead to the ``_localaxes`` being empty during clear.  
+This was fixed first by moving the ``.clear`` and ``.clf``
+methods into ``FigureBase``, so that ``Subfigure`` would inherit these methods.
+This allowed for ``Subfigure`` to clear its own axes, but because each child 
+``Subfigure`` shares its ``_axstack`` with its parent ``Figure``, the ``clf``
+function had to be modified: an extra call to ``_axstack.clear`` was removed.
+This call had no effect on normal operation, as the stack is previously cleared
+in ``clf`` by iterating over the ``_localaxes`` returned by ``FigureBase.axes``;
+however, in the case of ``Subfigure.clear``, ``_axstack.clear`` cleared
+the entire ``_axstack`` of the parent, thus wiping all axes independent of their
+parent subfigure/figure. With these two changes (``clf/clear`` inheritance and 
+removing the call to ``_axstack``), subfigures can now be cleared.  
+However, the initial bug remained. To fix the bug in the clearing of the parent figure,
+an additional loop was added to the beginning of ``clf``. This loop recurses through
+child ``Subfigures``,clearing all children before returning to the original function.
+As the child axes, which live in ``_axstack`` but not ``_localaxes``, are no longer in 
+``Figure.axes``, the remainder of ``clf`` functions as before, clearing out
+``Figure.axes`` without risk of calling ``delaxes`` on an axis that is not contained in
+``_localaxes``. Finally, to make ``FigureBase.clf`` an exhaustive function that truely removes
+all references to child objects, a line was added to clear ``Figure.subfigs`` of any
+unlinked, cleared subfigures.
