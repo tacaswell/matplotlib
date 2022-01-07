@@ -949,6 +949,10 @@ default: %(va)s
         self.suppressComposite = None
         self.callbacks = cbook.CallbackRegistry()
 
+        for subfig in self.subfigs: 
+            #first clear the axes in any subfigures
+            subfig.clf(keep_observers=keep_observers)
+
         for ax in tuple(self.axes):  # Iterate over the copy.
             ax.cla()
             self.delaxes(ax)  # Remove ax from self._axstack.
