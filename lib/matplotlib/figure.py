@@ -2039,6 +2039,7 @@ class SubFigure(FigureBase):
         self._subplotspec = subplotspec
         self._parent = parent
         self.figure = parent.figure
+        # subfigures use the parent axstack
         self._axstack = parent._axstack
         self.subplotpars = parent.subplotpars
         self.dpi_scale_trans = parent.dpi_scale_trans
