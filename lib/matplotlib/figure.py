@@ -2025,8 +2025,8 @@ class SubFigure(FigureBase):
     @property
     def _axstack(self):
         # subfigures use the parent axstack
-        return parent._axstack
-        
+        return self._parent._axstack
+
     @property
     def dpi(self):
         return self._parent.dpi
