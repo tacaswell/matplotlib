@@ -1,5 +1,5 @@
 Figure & subfigure clearing
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Fixed a bug in which ``Figure.clf()`` and ``Figure.clear()`` were broken 
 when ``Figure`` contained axes not stored in `Figure._localaxes`.  Moved the
 ``clear`` and ``clf`` methods to ``FigureBase``, so ``Subfigure``s can now be
