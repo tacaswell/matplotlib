@@ -683,7 +683,7 @@ default: %(va)s
             present figure but not in the figure's list of Axes.
 
         projection : {None, 'aitoff', 'hammer', 'lambert', 'mollweide', \
-        'polar', 'rectilinear', str}, optional
+'polar', 'rectilinear', str}, optional
             The projection type of the subplot (`~.axes.Axes`). *str* is the
             name of a custom projection, see `~matplotlib.projections`. The
             default None results in a 'rectilinear' projection.
