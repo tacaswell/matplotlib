@@ -940,6 +940,43 @@ default: %(va)s
         # Break link between any twinned axes
         _break_share_link(ax, ax._twinned_axes)
 
+    def clf(self, keep_observers=False):
+        """
+        Clear the figure.
+        Set *keep_observers* to True if, for example,
+        a gui widget is tracking the Axes in the figure.
+        """
+        self.suppressComposite = None
+        self.callbacks = cbook.CallbackRegistry()
+
+        for subfig in self.subfigs:
+            # first clear the axes in any subfigures
+            subfig.clf(keep_observers=keep_observers)
+
+        for ax in tuple(self.axes):  # Iterate over the copy.
+            ax.cla()
+            self.delaxes(ax)  # Remove ax from self._axstack.
+
+        self._axstack = _AxesStack()
+        self.artists = []
+        self.subfigs = []
+        self.lines = []
+        self.patches = []
+        self.texts = []
+        self.images = []
+        self.legends = []
+        if not keep_observers:
+            self._axobservers = cbook.CallbackRegistry()
+        self._suptitle = None
+        self._supxlabel = None
+        self._supylabel = None
+
+        self.stale = True
+
+    def clear(self, keep_observers=False):
+        """Clear the figure -- synonym for `clf`."""
+        self.clf(keep_observers=keep_observers)
+
     # Note: in the docstring below, the newlines in the examples after the
     # calls to legend() allow replacing it with figlegend() to generate the
     # docstring of pyplot.figlegend.
@@ -2824,35 +2861,17 @@ class Figure(FigureBase):
         Set *keep_observers* to True if, for example,
         a gui widget is tracking the Axes in the figure.
         """
-        self.suppressComposite = None
-        self.callbacks = cbook.CallbackRegistry()
-
-        for ax in tuple(self.axes):  # Iterate over the copy.
-            ax.cla()
-            self.delaxes(ax)  # Remove ax from self._axstack.
-
+        super().clf(keep_observers=keep_observers)
+        # FigureBase.clf does not clear toolbars, as
+        # only Figure can have toolbars
         toolbar = self.canvas.toolbar
         if toolbar is not None:
             toolbar.update()
-        self._axstack.clear()
-        self.artists = []
-        self.lines = []
-        self.patches = []
-        self.texts = []
-        self.images = []
-        self.legends = []
-        if not keep_observers:
-            self._axobservers = cbook.CallbackRegistry()
-        self._suptitle = None
-        self._supxlabel = None
-        self._supylabel = None
-
-        self.stale = True
 
     def clear(self, keep_observers=False):
         """Clear the figure -- synonym for `clf`."""
         self.clf(keep_observers=keep_observers)
-
+        
     @_finalize_rasterization
     @allow_rasterization
     def draw(self, renderer):
