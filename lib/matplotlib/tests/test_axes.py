@@ -489,6 +489,20 @@ def test_autoscale_tight():
     assert_allclose(ax.get_xlim(), (-0.15, 3.15))
     assert_allclose(ax.get_ylim(), (1.0, 4.0))
 
+    # Check that autoscale is on
+    assert ax.get_autoscalex_on()
+    assert ax.get_autoscaley_on()
+    assert ax.get_autoscale_on()
+    # Set enable to None
+    ax.autoscale(enable=None)
+    # Same limits
+    assert_allclose(ax.get_xlim(), (-0.15, 3.15))
+    assert_allclose(ax.get_ylim(), (1.0, 4.0))
+    # autoscale still on
+    assert ax.get_autoscalex_on()
+    assert ax.get_autoscaley_on()
+    assert ax.get_autoscale_on()
+
 
 @mpl.style.context('default')
 def test_autoscale_log_shared():
@@ -529,8 +543,8 @@ def test_use_sticky_edges():
 
 @check_figures_equal(extensions=["png"])
 def test_sticky_shared_axes(fig_test, fig_ref):
-    # Check that sticky edges work whether they are set in an axes that is a
-    # "leader" in a share, or an axes that is a "follower".
+    # Check that sticky edges work whether they are set in an Axes that is a
+    # "leader" in a share, or an Axes that is a "follower".
     Z = np.arange(15).reshape(3, 5)
 
     ax0 = fig_test.add_subplot(211)
@@ -1025,19 +1039,13 @@ def test_fill_between_interpolate_nan():
     y1 = np.asarray([8, 18, np.nan, 18, 8, 18, 24, 18, 8, 18])
     y2 = np.asarray([18, 11, 8, 11, 18, 26, 32, 30, np.nan, np.nan])
 
-    # NumPy <1.19 issues warning 'invalid value encountered in greater_equal'
-    # for comparisons that include nan.
-    with np.errstate(invalid='ignore'):
-        greater2 = y2 >= y1
-        greater1 = y1 >= y2
-
     fig, ax = plt.subplots()
 
     ax.plot(x, y1, c='k')
     ax.plot(x, y2, c='b')
-    ax.fill_between(x, y1, y2, where=greater2, facecolor="green",
+    ax.fill_between(x, y1, y2, where=y2 >= y1, facecolor="green",
                     interpolate=True, alpha=0.5)
-    ax.fill_between(x, y1, y2, where=greater1, facecolor="red",
+    ax.fill_between(x, y1, y2, where=y1 >= y2, facecolor="red",
                     interpolate=True, alpha=0.5)
 
 
@@ -1673,6 +1681,23 @@ def test_boxplot_dates_pandas(pd):
                           periods=2, freq=pd.DateOffset(years=1)).year
     plt.figure()
     plt.boxplot(data, positions=years)
+
+
+def test_boxplot_capwidths():
+    data = np.random.rand(5, 3)
+    fig, axs = plt.subplots(9)
+
+    axs[0].boxplot(data, capwidths=[0.3, 0.2, 0.1], widths=[0.1, 0.2, 0.3])
+    axs[1].boxplot(data, capwidths=[0.3, 0.2, 0.1], widths=0.2)
+    axs[2].boxplot(data, capwidths=[0.3, 0.2, 0.1])
+
+    axs[3].boxplot(data, capwidths=0.5, widths=[0.1, 0.2, 0.3])
+    axs[4].boxplot(data, capwidths=0.5, widths=0.2)
+    axs[5].boxplot(data, capwidths=0.5)
+
+    axs[6].boxplot(data, widths=[0.1, 0.2, 0.3])
+    axs[7].boxplot(data, widths=0.2)
+    axs[8].boxplot(data)
 
 
 def test_pcolor_regression(pd):
@@ -2545,6 +2570,9 @@ def test_pyplot_axes():
 
 @image_comparison(['log_scales'])
 def test_log_scales():
+    # Remove this if regenerating the image.
+    plt.rcParams['axes.unicode_minus'] = False
+
     fig, ax = plt.subplots()
     ax.plot(np.log(np.linspace(0.1, 100)))
     ax.set_yscale('log', base=5.5)
@@ -2849,6 +2877,25 @@ def test_bxp_bad_positions():
         _bxp_test_helper(bxp_kwargs=dict(positions=[2, 3]))
 
 
+@image_comparison(['bxp_custom_capwidths.png'],
+                  savefig_kwarg={'dpi': 40},
+                  style='default')
+def test_bxp_custom_capwidths():
+    _bxp_test_helper(bxp_kwargs=dict(capwidths=[0.0, 0.1, 0.5, 1.0]))
+
+
+@image_comparison(['bxp_custom_capwidth.png'],
+                  savefig_kwarg={'dpi': 40},
+                  style='default')
+def test_bxp_custom_capwidth():
+    _bxp_test_helper(bxp_kwargs=dict(capwidths=0.6))
+
+
+def test_bxp_bad_capwidths():
+    with pytest.raises(ValueError):
+        _bxp_test_helper(bxp_kwargs=dict(capwidths=[1]))
+
+
 @image_comparison(['boxplot', 'boxplot'], tol=1.28, style='default')
 def test_boxplot():
     # Randomness used for bootstrapping.
@@ -2866,6 +2913,17 @@ def test_boxplot():
     fig, ax = plt.subplots()
     ax.boxplot("x", bootstrap=10000, notch=1, data=data)
     ax.set_ylim((-30, 30))
+
+
+@image_comparison(['boxplot_custom_capwidths.png'],
+                  savefig_kwarg={'dpi': 40}, style='default')
+def test_boxplot_custom_capwidths():
+
+    x = np.linspace(-7, 7, 140)
+    x = np.hstack([-25, x, 25])
+    fig, ax = plt.subplots()
+
+    ax.boxplot([x, x], notch=1, capwidths=[0.01, 0.2])
 
 
 @image_comparison(['boxplot_sym2.png'], remove_text=True, style='default')
@@ -4985,6 +5043,23 @@ def test_shared_aspect_error():
         fig.draw_without_rendering()
 
 
+@pytest.mark.parametrize('err, args, kwargs, match',
+                         ((TypeError, (1, 2), {},
+                           r"axis\(\) takes 0 or 1 positional arguments but 2"
+                           " were given"),
+                          (ValueError, ('foo', ), {},
+                           "Unrecognized string foo to axis; try on or off"),
+                          (TypeError, ([1, 2], ), {},
+                           "the first argument to axis*"),
+                          (TypeError, tuple(), {'foo': None},
+                           r"axis\(\) got an unexpected keyword argument "
+                           "'foo'"),
+                          ))
+def test_axis_errors(err, args, kwargs, match):
+    with pytest.raises(err, match=match):
+        plt.axis(*args, **kwargs)
+
+
 @pytest.mark.parametrize('twin', ('x', 'y'))
 def test_twin_with_aspect(twin):
     fig, ax = plt.subplots()
@@ -5378,10 +5453,56 @@ def test_set_margin_updates_limits():
     assert ax.get_xlim() == (1, 2)
 
 
+@pytest.mark.parametrize('err, args, kwargs, match',
+                         ((ValueError, (-1,), {},
+                           'margin must be greater than -0.5'),
+                          (ValueError, (1, -1), {},
+                           'margin must be greater than -0.5'),
+                          (ValueError, tuple(), {'x': -1},
+                           'margin must be greater than -0.5'),
+                          (ValueError, tuple(), {'y': -1},
+                           'margin must be greater than -0.5'),
+                          (TypeError, (1, ), {'x': 1, 'y': 1},
+                           'Cannot pass both positional and keyword '
+                           'arguments for x and/or y.'),
+                          (TypeError, (1, 1, 1), {},
+                           'Must pass a single positional argument for all*'),
+                          ))
+def test_margins_errors(err, args, kwargs, match):
+    with pytest.raises(err, match=match):
+        fig = plt.figure()
+        ax = fig.add_subplot()
+        ax.margins(*args, **kwargs)
+
+
 def test_length_one_hist():
     fig, ax = plt.subplots()
     ax.hist(1)
     ax.hist([1])
+
+
+def test_set_xy_bound():
+    fig = plt.figure()
+    ax = fig.add_subplot()
+    ax.set_xbound(2.0, 3.0)
+    assert ax.get_xbound() == (2.0, 3.0)
+    assert ax.get_xlim() == (2.0, 3.0)
+    ax.set_xbound(upper=4.0)
+    assert ax.get_xbound() == (2.0, 4.0)
+    assert ax.get_xlim() == (2.0, 4.0)
+    ax.set_xbound(lower=3.0)
+    assert ax.get_xbound() == (3.0, 4.0)
+    assert ax.get_xlim() == (3.0, 4.0)
+
+    ax.set_ybound(2.0, 3.0)
+    assert ax.get_ybound() == (2.0, 3.0)
+    assert ax.get_ylim() == (2.0, 3.0)
+    ax.set_ybound(upper=4.0)
+    assert ax.get_ybound() == (2.0, 4.0)
+    assert ax.get_ylim() == (2.0, 4.0)
+    ax.set_ybound(lower=3.0)
+    assert ax.get_ybound() == (3.0, 4.0)
+    assert ax.get_ylim() == (3.0, 4.0)
 
 
 def test_pathological_hexbin():
@@ -6070,6 +6191,7 @@ def test_axisbelow():
                        left=False, right=False)
         ax.spines[:].set_visible(False)
         ax.set_axisbelow(setting)
+        assert ax.get_axisbelow() == setting
 
 
 def test_titletwiny():
@@ -6154,7 +6276,7 @@ def test_title_above_offset(left, center):
 
 
 def test_title_no_move_off_page():
-    # If an axes is off the figure (ie. if it is cropped during a save)
+    # If an Axes is off the figure (ie. if it is cropped during a save)
     # make sure that the automatic title repositioning does not get done.
     mpl.rcParams['axes.titley'] = None
     fig = plt.figure()
@@ -6616,6 +6738,12 @@ def test_secondary_formatter():
         secax.xaxis.get_major_formatter(), mticker.ScalarFormatter)
 
 
+def test_secondary_repr():
+    fig, ax = plt.subplots()
+    secax = ax.secondary_xaxis("top")
+    assert repr(secax) == '<SecondaryAxis:>'
+
+
 def color_boxes(fig, ax):
     """
     Helper for the tests below that test the extents of various axes elements
@@ -6830,6 +6958,23 @@ def test_axis_extent_arg():
     ymin = 15
     ymax = 20
     extent = ax.axis([xmin, xmax, ymin, ymax])
+
+    # test that the docstring is correct
+    assert tuple(extent) == (xmin, xmax, ymin, ymax)
+
+    # test that limits were set per the docstring
+    assert (xmin, xmax) == ax.get_xlim()
+    assert (ymin, ymax) == ax.get_ylim()
+
+
+def test_axis_extent_arg2():
+    # Same as test_axis_extent_arg, but with keyword arguments
+    fig, ax = plt.subplots()
+    xmin = 5
+    xmax = 10
+    ymin = 15
+    ymax = 20
+    extent = ax.axis(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
 
     # test that the docstring is correct
     assert tuple(extent) == (xmin, xmax, ymin, ymax)

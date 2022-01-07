@@ -18,6 +18,7 @@ import logging
 import numpy as np
 
 from matplotlib import _api, artist as martist
+from matplotlib.backend_bases import _get_renderer
 import matplotlib.transforms as mtransforms
 import matplotlib._layoutgrid as mlayoutgrid
 
@@ -33,8 +34,8 @@ with heights and widths set by ``height_ratios`` and ``width_ratios``,
 often just set to 1 for an equal grid.
 
 Subplotspecs that are derived from this gridspec can contain either a
-``SubPanel``, a ``GridSpecFromSubplotSpec``, or an axes.  The ``SubPanel`` and
-``GridSpecFromSubplotSpec`` are dealt with recursively and each contain an
+``SubPanel``, a ``GridSpecFromSubplotSpec``, or an ``Axes``.  The ``SubPanel``
+and ``GridSpecFromSubplotSpec`` are dealt with recursively and each contain an
 analogous layout.
 
 Each ``GridSpec`` has a ``_layoutgrid`` attached to it.  The ``_layoutgrid``
@@ -62,7 +63,7 @@ for more discussion of the algorithm with examples.
 
 
 ######################################################
-def do_constrained_layout(fig, renderer, h_pad, w_pad,
+def do_constrained_layout(fig, h_pad, w_pad,
                           hspace=None, wspace=None):
     """
     Do the constrained_layout.  Called at draw time in
@@ -91,6 +92,7 @@ def do_constrained_layout(fig, renderer, h_pad, w_pad,
     layoutgrid : private debugging structure
     """
 
+    renderer = _get_renderer(fig)
     # make layoutgrid tree...
     layoutgrids = make_layoutgrids(fig, None)
     if not layoutgrids['hasgrids']:
@@ -204,14 +206,16 @@ def make_layoutgrids_gs(layoutgrids, gs):
             layoutgrids = make_layoutgrids_gs(layoutgrids, parentgs)
         subspeclb = layoutgrids[parentgs]
         # gridspecfromsubplotspec need an outer container:
-        if f'{gs}top' not in layoutgrids:
-            layoutgrids[f'{gs}top'] = mlayoutgrid.LayoutGrid(
+        # get a unique representation:
+        rep = (gs, 'top')
+        if rep not in layoutgrids:
+            layoutgrids[rep] = mlayoutgrid.LayoutGrid(
                 parent=subspeclb,
                 name='top',
                 nrows=1, ncols=1,
                 parent_pos=(subplot_spec.rowspan, subplot_spec.colspan))
         layoutgrids[gs] = mlayoutgrid.LayoutGrid(
-                parent=layoutgrids[f'{gs}top'],
+                parent=layoutgrids[rep],
                 name='gridspec',
                 nrows=gs._nrows, ncols=gs._ncols,
                 width_ratios=gs.get_width_ratios(),
@@ -569,7 +573,6 @@ def reposition_axes(layoutgrids, fig, renderer, *,
         # coordinates...
         ss = ax.get_subplotspec()
         gs = ss.get_gridspec()
-        nrows, ncols = gs.get_geometry()
         if gs not in layoutgrids:
             return
 

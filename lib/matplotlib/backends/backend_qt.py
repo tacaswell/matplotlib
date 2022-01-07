@@ -586,9 +586,9 @@ class FigureManagerQT(FigureManagerBase):
         # must be inited after the window, drawingArea and figure
         # attrs are set
         if mpl.rcParams['toolbar'] == 'toolbar2':
-            toolbar = NavigationToolbar2QT(canvas, parent, True)
+            toolbar = NavigationToolbar2QT(canvas)
         elif mpl.rcParams['toolbar'] == 'toolmanager':
-            toolbar = ToolbarQt(self.toolmanager, self.window)
+            toolbar = ToolbarQt(self.toolmanager)
         else:
             toolbar = None
         return toolbar
@@ -637,7 +637,7 @@ class NavigationToolbar2QT(NavigationToolbar2, QtWidgets.QToolBar):
         ("Customize", "Edit axis, curve and image parameters",
          "qt4_editor_options", "edit_parameters"))
 
-    def __init__(self, canvas, parent, coordinates=True):
+    def __init__(self, canvas, parent=None, coordinates=True):
         """coordinates: should we show the coordinates on the right?"""
         QtWidgets.QToolBar.__init__(self, parent)
         self.setAllowedAreas(QtCore.Qt.ToolBarArea(
@@ -682,8 +682,14 @@ class NavigationToolbar2QT(NavigationToolbar2, QtWidgets.QToolBar):
         Construct a `.QIcon` from an image file *name*, including the extension
         and relative to Matplotlib's "images" data directory.
         """
-        name = name.replace('.png', '_large.png')
-        pm = QtGui.QPixmap(str(cbook._get_data_path('images', name)))
+        # use a high-resolution icon with suffix '_large' if available
+        # note: user-provided icons may not have '_large' versions
+        path_regular = cbook._get_data_path('images', name)
+        path_large = path_regular.with_name(
+            path_regular.name.replace('.png', '_large.png'))
+        filename = str(path_large if path_large.exists() else path_regular)
+
+        pm = QtGui.QPixmap(filename)
         _setDevicePixelRatio(pm, _devicePixelRatioF(self))
         if self.palette().color(self.backgroundRole()).value() < 128:
             icon_color = self.palette().color(self.foregroundRole())
@@ -793,7 +799,8 @@ class NavigationToolbar2QT(NavigationToolbar2, QtWidgets.QToolBar):
             except Exception as e:
                 QtWidgets.QMessageBox.critical(
                     self, "Error saving file", str(e),
-                    QtWidgets.QMessageBox.Ok, QtWidgets.QMessageBox.NoButton)
+                    _enum("QtWidgets.QMessageBox.StandardButton").Ok,
+                    _enum("QtWidgets.QMessageBox.StandardButton").NoButton)
 
     def set_history_buttons(self):
         can_backward = self._nav_stack._pos > 0
@@ -903,7 +910,7 @@ class SubplotToolQt(QtWidgets.QDialog):
 
 
 class ToolbarQt(ToolContainerBase, QtWidgets.QToolBar):
-    def __init__(self, toolmanager, parent):
+    def __init__(self, toolmanager, parent=None):
         ToolContainerBase.__init__(self, toolmanager)
         QtWidgets.QToolBar.__init__(self, parent)
         self.setAllowedAreas(QtCore.Qt.ToolBarArea(

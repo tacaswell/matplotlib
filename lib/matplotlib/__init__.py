@@ -196,7 +196,7 @@ def _check_versions():
             ("cycler", "0.10"),
             ("dateutil", "2.7"),
             ("kiwisolver", "1.0.1"),
-            ("numpy", "1.17"),
+            ("numpy", "1.19"),
             ("pyparsing", "2.2.1"),
     ]:
         module = importlib.import_module(modname)
@@ -1229,7 +1229,6 @@ def test(verbosity=None, coverage=False, **kwargs):
         return -1
 
     old_backend = get_backend()
-    old_recursionlimit = sys.getrecursionlimit()
     try:
         use('agg')
 

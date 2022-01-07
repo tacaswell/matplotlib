@@ -24,6 +24,7 @@ Future versions may implement the Level 2 or 2.1 specifications.
 #   - 'light' is an invalid weight value, remove it.
 
 from base64 import b64encode
+import copy
 import dataclasses
 from functools import lru_cache
 from io import BytesIO
@@ -43,8 +44,8 @@ except ImportError:
     from dummy_threading import Timer
 
 import matplotlib as mpl
-from matplotlib import _api, afm, cbook, ft2font, rcParams
-from matplotlib.fontconfig_pattern import (
+from matplotlib import _api, _afm, cbook, ft2font, rcParams
+from matplotlib._fontconfig_pattern import (
     parse_fontconfig_pattern, generate_fontconfig_pattern)
 from matplotlib.rcsetup import _validators
 
@@ -553,7 +554,7 @@ def afmFontProperty(fontpath, font):
 
     Parameters
     ----------
-    font : `.AFM`
+    font : AFM
         The AFM font file from which information will be extracted.
 
     Returns
@@ -964,9 +965,7 @@ class FontProperties:
 
     def copy(self):
         """Return a copy of self."""
-        new = type(self)()
-        vars(new).update(vars(self))
-        return new
+        return copy.copy(self)
 
 
 class _JSONEncoder(json.JSONEncoder):
@@ -1107,7 +1106,7 @@ class FontManager:
         """
         if Path(path).suffix.lower() == ".afm":
             with open(path, "rb") as fh:
-                font = afm.AFM(fh)
+                font = _afm.AFM(fh)
             prop = afmFontProperty(path, font)
             self.afmlist.append(prop)
         else:

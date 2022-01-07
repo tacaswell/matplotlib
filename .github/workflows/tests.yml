@@ -6,6 +6,8 @@ on:
       - auto-backport-of-pr-[0-9]+
       - v[0-9]+.[0-9]+.[0-9x]+-doc
   pull_request:
+    branches-ignore:
+      - v[0-9]+.[0-9]+.[0-9x]+-doc
 
 env:
   NO_AT_BRIDGE: 1  # Necessary for GTK3 interactive test.
@@ -43,7 +45,7 @@ jobs:
             extra-requirements: '-r requirements/testing/extra.txt'
             XVFB_RUN: xvfb-run -a
           - os: ubuntu-20.04
-            python-version: '3.10-dev'
+            python-version: '3.10'
             # Re-add this when extra dependencies have wheels.
             # extra-requirements: '-r requirements/testing/extra.txt'
             XVFB_RUN: xvfb-run -a

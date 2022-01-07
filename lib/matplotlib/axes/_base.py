@@ -197,7 +197,7 @@ def _process_plot_format(fmt):
             i += 2
         else:
             raise ValueError(
-                'Unrecognized character %c in format string' % c)
+                f'Unrecognized character {c} in format string {fmt!r}')
 
     if linestyle is None and marker is None:
         linestyle = mpl.rcParams['lines.linestyle']
@@ -708,9 +708,10 @@ class _AxesBase(martist.Artist):
             fields += [f"label={self.get_label()!r}"]
         titles = []
         for k in ["left", "center", "right"]:
-            title = self.get_title(loc=k)
-            if title:
-                titles.append(f"{k!r}:{title!r}")
+            if hasattr(self, 'get_title'):
+                title = self.get_title(loc=k)
+                if title:
+                    titles.append(f"{k!r}:{title!r}")
         if titles:
             fields += ["title={" + ",".join(titles) + "}"]
         if self.get_xlabel():
@@ -1039,7 +1040,7 @@ class _AxesBase(martist.Artist):
         Parameters
         ----------
         pos : [left, bottom, width, height] or `~matplotlib.transforms.Bbox`
-            The new position of the in `.Figure` coordinates.
+            The new position of the Axes in `.Figure` coordinates.
 
         which : {'both', 'active', 'original'}, default: 'both'
             Determines which position variables to change.
@@ -1058,7 +1059,7 @@ class _AxesBase(martist.Artist):
         """
         Private version of set_position.
 
-        Call this internally to get the same functionality of `get_position`,
+        Call this internally to get the same functionality of `set_position`,
         but not to take the axis out of the constrained_layout hierarchy.
         """
         if not isinstance(pos, mtransforms.BboxBase):
@@ -1317,8 +1318,12 @@ class _AxesBase(martist.Artist):
         """
         A sublist of Axes children based on their type.
 
-        This exists solely to warn on modification. In the future, the
-        type-specific children sublists will be immutable tuples.
+        The type-specific children sublists will become immutable in
+        Matplotlib 3.7. Then, these artist lists will likely be replaced by
+        tuples. Use as if this is a tuple already.
+
+        This class exists only for the transition period to warn on the
+        deprecated modifcation of artist lists.
         """
         def __init__(self, axes, prop_name, add_name,
                      valid_types=None, invalid_types=None):

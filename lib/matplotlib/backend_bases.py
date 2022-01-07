@@ -44,7 +44,7 @@ import numpy as np
 import matplotlib as mpl
 from matplotlib import (
     _api, backend_tools as tools, cbook, colors, docstring, textpath,
-    tight_bbox, transforms, widgets, get_backend, is_interactive, rcParams)
+    _tight_bbox, transforms, widgets, get_backend, is_interactive, rcParams)
 from matplotlib._pylab_helpers import Gcf
 from matplotlib.backend_managers import ToolManager
 from matplotlib.cbook import _setattr_cm
@@ -1528,7 +1528,6 @@ def _get_renderer(figure, print_method=None):
     def _draw(renderer): raise Done(renderer)
 
     with cbook._setattr_cm(figure, draw=_draw), ExitStack() as stack:
-        orig_canvas = figure.canvas
         if print_method is None:
             fmt = figure.canvas.get_default_filetype()
             # Even for a canvas' default output type, a canvas switch may be
@@ -2226,7 +2225,7 @@ class FigureCanvasBase:
             if bbox_inches is None:
                 bbox_inches = rcParams['savefig.bbox']
 
-            if (self.figure.get_constrained_layout() or
+            if (self.figure.get_layout_engine() is not None or
                     bbox_inches == "tight"):
                 # we need to trigger a draw before printing to make sure
                 # CL works.  "tight" also needs a draw to get the right
@@ -2248,15 +2247,15 @@ class FigureCanvasBase:
                     bbox_inches = bbox_inches.padded(pad_inches)
 
                 # call adjust_bbox to save only the given area
-                restore_bbox = tight_bbox.adjust_bbox(
+                restore_bbox = _tight_bbox.adjust_bbox(
                     self.figure, bbox_inches, self.figure.canvas.fixed_dpi)
 
                 _bbox_inches_restore = (bbox_inches, restore_bbox)
             else:
                 _bbox_inches_restore = None
 
-            # we have already done CL above, so turn it off:
-            stack.enter_context(self.figure._cm_set(constrained_layout=False))
+            # we have already done layout above, so turn it off:
+            stack.enter_context(self.figure._cm_set(layout_engine=None))
             try:
                 # _get_renderer may change the figure dpi (as vector formats
                 # force the figure dpi to 72), so we need to set it again here.
@@ -2491,7 +2490,7 @@ def key_press_handler(event, canvas=None, toolbar=None):
         back-compatibility, but, if set, should always be equal to
         ``event.canvas.toolbar``.
     """
-    # these bindings happen whether you are over an axes or not
+    # these bindings happen whether you are over an Axes or not
 
     if event.key is None:
         return
@@ -2554,7 +2553,7 @@ def key_press_handler(event, canvas=None, toolbar=None):
     if event.inaxes is None:
         return
 
-    # these bindings require the mouse to be over an axes to trigger
+    # these bindings require the mouse to be over an Axes to trigger
     def _get_uniform_gridstate(ticks):
         # Return True/False if all grid lines are on or off, None if they are
         # not all in the same state.
