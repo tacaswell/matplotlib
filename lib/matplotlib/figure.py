@@ -940,6 +940,41 @@ default: %(va)s
         # Break link between any twinned axes
         _break_share_link(ax, ax._twinned_axes)
 
+    def clf(self, keep_observers=False):
+        """
+        Clear the figure.
+        Set *keep_observers* to True if, for example,
+        a gui widget is tracking the Axes in the figure.
+        """
+        self.suppressComposite = None
+        self.callbacks = cbook.CallbackRegistry()
+
+        for ax in tuple(self.axes):  # Iterate over the copy.
+            ax.cla()
+            self.delaxes(ax)  # Remove ax from self._axstack.
+
+        toolbar = self.canvas.toolbar
+        if toolbar is not None:
+            toolbar.update()
+        self._axstack.clear()
+        self.artists = []
+        self.lines = []
+        self.patches = []
+        self.texts = []
+        self.images = []
+        self.legends = []
+        if not keep_observers:
+            self._axobservers = cbook.CallbackRegistry()
+        self._suptitle = None
+        self._supxlabel = None
+        self._supylabel = None
+
+        self.stale = True
+
+    def clear(self, keep_observers=False):
+        """Clear the figure -- synonym for `clf`."""
+        self.clf(keep_observers=keep_observers)
+
     # Note: in the docstring below, the newlines in the examples after the
     # calls to legend() allow replacing it with figlegend() to generate the
     # docstring of pyplot.figlegend.
@@ -2129,7 +2164,6 @@ class SubFigure(FigureBase):
         finally:
             self.stale = False
 
-
 @docstring.interpd
 class Figure(FigureBase):
     """
@@ -2819,42 +2853,6 @@ class Figure(FigureBase):
         matplotlib.figure.Figure.set_size_inches
         """
         self.set_size_inches(self.get_figwidth(), val, forward=forward)
-
-    def clf(self, keep_observers=False):
-        """
-        Clear the figure.
-
-        Set *keep_observers* to True if, for example,
-        a gui widget is tracking the Axes in the figure.
-        """
-        self.suppressComposite = None
-        self.callbacks = cbook.CallbackRegistry()
-
-        for ax in tuple(self.axes):  # Iterate over the copy.
-            ax.cla()
-            self.delaxes(ax)  # Remove ax from self._axstack.
-
-        toolbar = self.canvas.toolbar
-        if toolbar is not None:
-            toolbar.update()
-        self._axstack.clear()
-        self.artists = []
-        self.lines = []
-        self.patches = []
-        self.texts = []
-        self.images = []
-        self.legends = []
-        if not keep_observers:
-            self._axobservers = cbook.CallbackRegistry()
-        self._suptitle = None
-        self._supxlabel = None
-        self._supylabel = None
-
-        self.stale = True
-
-    def clear(self, keep_observers=False):
-        """Clear the figure -- synonym for `clf`."""
-        self.clf(keep_observers=keep_observers)
 
     @_finalize_rasterization
     @allow_rasterization
