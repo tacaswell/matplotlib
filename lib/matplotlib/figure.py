@@ -962,7 +962,7 @@ default: %(va)s
             toolbar.update()
         self._axstack.clear()
         self.artists = []
-        self.subfigs = [sfig for sfig in self.subfigs if sfig.axes != []]
+        self.subfigs = []
         self.lines = []
         self.patches = []
         self.texts = []
