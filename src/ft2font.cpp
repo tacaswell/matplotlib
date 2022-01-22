@@ -199,14 +199,17 @@ exit:
     return 0;
 }
 
-static FT_UInt ft_get_char_index_or_warn(FT_Face face, FT_ULong charcode, bool warn = true)
+static FT_UInt
+ft_get_char_index_or_warn(FT_Face face, FT_ULong charcode, bool warn = true)
 {
     FT_UInt glyph_index = FT_Get_Char_Index(face, charcode);
     if (glyph_index) {
         return glyph_index;
     }
-    if (warn) return ft_glyph_warn(charcode);
-    else return 0;
+    if (warn) {
+        return ft_glyph_warn(charcode);
+    }
+    return 0;
 }
 
 // ft_outline_decomposer should be passed to FT_Outline_Decompose.  On the
@@ -403,7 +406,7 @@ void FT2Font::clear()
     glyph_to_font.clear();
     char_to_font.clear();
 
-    for (unsigned int i = 0; i < fallbacks.size(); i++) {
+    for (size_t i = 0; i < fallbacks.size(); i++) {
         fallbacks[i]->clear();
     }
 }
@@ -418,7 +421,7 @@ void FT2Font::set_size(double ptsize, double dpi)
     FT_Matrix transform = { 65536 / hinting_factor, 0, 0, 65536 };
     FT_Set_Transform(face, &transform, 0);
 
-    for (unsigned int i = 0; i < fallbacks.size(); i++) {
+    for (size_t i = 0; i < fallbacks.size(); i++) {
         fallbacks[i]->set_size(ptsize, dpi);
     }
 }
@@ -488,7 +491,7 @@ int FT2Font::get_kerning(FT_UInt left, FT_UInt right, FT_UInt mode, FT_Vector &d
 void FT2Font::set_kerning_factor(int factor)
 {
     kerning_factor = factor;
-    for (unsigned int i = 0; i < fallbacks.size(); i ++){
+    for (size_t i = 0; i < fallbacks.size(); i++) {
         fallbacks[i]->set_kerning_factor(factor);
     }
 }
@@ -500,7 +503,7 @@ void FT2Font::set_text(
 
     angle = angle / 360.0 * 2 * M_PI;
 
-    // this computes width and height in subpixels so we have to divide by 64
+    // this computes width and height in subpixels so we have to multiply by 64
     matrix.xx = (FT_Fixed)(cos(angle) * 0x10000L);
     matrix.xy = (FT_Fixed)(-sin(angle) * 0x10000L);
     matrix.yx = (FT_Fixed)(sin(angle) * 0x10000L);
@@ -514,28 +517,25 @@ void FT2Font::set_text(
     bbox.xMin = bbox.yMin = 32000;
     bbox.xMax = bbox.yMax = -32000;
 
-    for (unsigned int n = 0; n < N; n++) {
-        FT_UInt glyph_index;
+    for (size_t n = 0; n < N; n++) {
+        FT_UInt glyph_index = 0;
         FT_BBox glyph_bbox;
         FT_Pos last_advance;
 
-        FT_UInt final_glyph_index = 0;
         FT_Error charcode_error, glyph_error;
         FT2Font *ft_object_with_glyph = this;
-        bool was_found = load_char_with_fallback(ft_object_with_glyph, final_glyph_index, glyphs,
+        bool was_found = load_char_with_fallback(ft_object_with_glyph, glyph_index, glyphs,
                                                  char_to_font, glyph_to_font, codepoints[n], flags,
                                                  charcode_error, glyph_error, false);
         if (!was_found) {
             ft_glyph_warn((FT_ULong)codepoints[n]);
 
-            // render tofu
+            // render missing glyph tofu
             // ft_object_with_glyph == this
             char_to_font[codepoints[n]] = ft_object_with_glyph;
-            glyph_to_font[final_glyph_index] = ft_object_with_glyph;
-            ft_object_with_glyph->load_glyph(final_glyph_index, flags, ft_object_with_glyph, false);
+            glyph_to_font[glyph_index] = ft_object_with_glyph;
+            ft_object_with_glyph->load_glyph(glyph_index, flags, ft_object_with_glyph, false);
         }
-
-        glyph_index = final_glyph_index;
 
         // retrieve kerning distance and move pen position
         if (use_kerning && previous && glyph_index) {
@@ -594,23 +594,20 @@ void FT2Font::fill_glyphs(
     bbox.xMin = bbox.yMin = 32000;
     bbox.xMax = bbox.yMax = -32000;
 
-    for (unsigned int n = 0; n < N; n++) {
-        FT_UInt glyph_index;
+    for (size_t n = 0; n < N; n++) {
+        FT_UInt glyph_index = 0;
         FT_BBox glyph_bbox;
         FT_Pos last_advance;
 
-        FT_UInt final_glyph_index;
         FT_Error charcode_error, glyph_error;
         FT2Font *ft_object_with_glyph = this;
-        bool was_found = load_char_with_fallback(ft_object_with_glyph, final_glyph_index, glyphs,
+        bool was_found = load_char_with_fallback(ft_object_with_glyph, glyph_index, glyphs,
                                                  char_to_font, glyph_to_font, codepoints[n], flags,
                                                  charcode_error, glyph_error, false);
         if (!was_found) {
             if (warn) ft_glyph_warn((FT_ULong)codepoints[n]);
             continue;
         }
-
-        glyph_index = final_glyph_index;
 
         // retrieve kerning distance and move pen position
         if (use_kerning && previous && glyph_index) {
@@ -699,12 +696,16 @@ bool FT2Font::load_char_with_fallback(FT2Font *&ft_object_with_glyph,
 
     if (glyph_index || override) {
         charcode_error = FT_Load_Glyph(face, glyph_index, flags);
-        FT_Glyph thisGlyph;
-        glyph_error = FT_Get_Glyph(face->glyph, &thisGlyph);
-
-        if (charcode_error || glyph_error) {
+        if (charcode_error) {
             return false;
         }
+
+        FT_Glyph thisGlyph;
+        glyph_error = FT_Get_Glyph(face->glyph, &thisGlyph);
+        if (glyph_error) {
+            return false;
+        }
+
         final_glyph_index = glyph_index;
 
         // cache the result for future
@@ -718,12 +719,13 @@ bool FT2Font::load_char_with_fallback(FT2Font *&ft_object_with_glyph,
     }
 
     else {
-        for (unsigned int i = 0; i < fallbacks.size(); ++i) {
+        for (size_t i = 0; i < fallbacks.size(); ++i) {
             bool was_found = fallbacks[i]->load_char_with_fallback(
                 ft_object_with_glyph, final_glyph_index, parent_glyphs, parent_char_to_font,
                 parent_glyph_to_font, charcode, flags, charcode_error, glyph_error, override);
-            if (was_found)
+            if (was_found) {
                 return true;
+            }
         }
         return false;
     }
