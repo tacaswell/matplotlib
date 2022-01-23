@@ -376,7 +376,7 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
     if (fallback_list && PyList_Check(fallback_list)) {
         Py_ssize_t size = PyList_Size(fallback_list);
 
-        for (int i = 0; i < size; ++i) {
+        for (Py_ssize_t i = 0; i < size; ++i) {
             PyObject* item = PyList_GetItem(fallback_list, i);
 
             // TODO: check whether item is actually an FT2Font
@@ -650,7 +650,7 @@ static PyObject *PyFT2Font_fill_glyphs(PyFT2Font *self, PyObject *args, PyObject
                       || !(val = reinterpret_cast<PyObject *>(itr.second->get_pyfont()))
                       || (PyDict_SetItem(char_to_font, key, val) == -1));
         Py_XDECREF(key);
-        // do not decref value here, it's an FT2Font pointer
+        // do not decref value here, it's a PyFT2Font pointer
 
         if (error) {
             Py_DECREF(char_to_font);
@@ -689,7 +689,7 @@ static PyObject *PyFT2Font_get_char_to_font(PyFT2Font *self, PyObject *args, PyO
                       || !(val = reinterpret_cast<PyObject *>(itr.second->get_pyfont()))
                       || (PyDict_SetItem(char_to_font, key, val) == -1));
         Py_XDECREF(key);
-        // do not decref value here, it's an FT2Font pointer
+        // do not decref value here, it's a PyFT2Font pointer
 
         if (error) {
             Py_DECREF(char_to_font);
@@ -718,7 +718,7 @@ static PyObject *PyFT2Font_get_glyph_to_font(PyFT2Font *self, PyObject *args, Py
                       || !(val = reinterpret_cast<PyObject *>(itr.second->get_pyfont()))
                       || (PyDict_SetItem(glyph_to_font, key, val) == -1));
         Py_XDECREF(key);
-        // do not decref value here, it's an FT2Font pointer
+        // do not decref value here, it's a PyFT2Font pointer
 
         if (error) {
             Py_DECREF(glyph_to_font);
@@ -949,7 +949,6 @@ static PyObject *PyFT2Font_get_glyph_name(PyFT2Font *self, PyObject *args)
     char buffer[128];
     int fallback = 1;
 
-    // parse kwds too
     if (!PyArg_ParseTuple(args, "I:get_glyph_name", &glyph_number)) {
         return NULL;
     }
