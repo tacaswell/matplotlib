@@ -32,7 +32,7 @@ from matplotlib import _api, cbook
 from matplotlib.backend_bases import (
     _Backend, FigureCanvasBase, FigureManagerBase,
     RendererBase)
-from matplotlib.font_manager import find_fontsprop, get_font
+from matplotlib.font_manager import find_fonts_by_props, get_font
 from matplotlib.ft2font import (LOAD_FORCE_AUTOHINT, LOAD_NO_HINTING,
                                 LOAD_DEFAULT, LOAD_NO_AUTOHINT)
 from matplotlib.mathtext import MathTextParser
@@ -273,7 +273,7 @@ class RendererAgg(RendererBase):
         """
         Get the `.FT2Font` for *font_prop*, clear its buffer, and set its size.
         """
-        fname = find_fontsprop(font_prop)
+        fname = find_fonts_by_props(font_prop)
         font = get_font(fname)
 
         font.clear()

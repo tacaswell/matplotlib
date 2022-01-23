@@ -1355,8 +1355,8 @@ class FontManager:
         """Return the list of available fonts."""
         return list(set([font.name for font in self.ttflist]))
 
-    def find_fontsprop(self, prop, fontext='ttf', directory=None,
-                       fallback_to_default=True, rebuild_if_missing=True):
+    def find_fonts_by_props(self, prop, fontext='ttf', directory=None,
+                            fallback_to_default=True, rebuild_if_missing=True):
         """
         Find font families that most closely matches the given properties.
 
@@ -1407,29 +1407,29 @@ class FontManager:
             "font.monospace"])
 
         prop = FontProperties._from_any(prop)
-        ffamily = prop.get_family()
 
         fpaths = OrderedDict()
-        for fidx in range(len(ffamily)):
+        for family in prop.get_family():
             cprop = prop.copy()
 
             # set current prop's family
-            cprop.set_family(ffamily[fidx])
+            cprop.set_family(family)
 
             # do not fall back to default font
             fpath = self._findfontsprop_cached(
-                ffamily[fidx], cprop, fontext, directory,
+                family, cprop, fontext, directory,
                 False, rebuild_if_missing, rc_params
             )
             if fpath:
-                fpaths[ffamily[fidx]] = fpath
+                fpaths[family] = fpath
 
         # only add default family if no other font was found
         # and fallback_to_default is enabled
         if not fpaths:
             if fallback_to_default:
                 dfamily = self.defaultFamily[fontext]
-                cprop = prop.copy().set_family(dfamily)
+                cprop = prop.copy()
+                cprop.set_family(dfamily)
                 fpath = self._findfontsprop_cached(
                     dfamily, cprop, fontext, directory,
                     True, rebuild_if_missing, rc_params
@@ -1559,20 +1559,17 @@ def is_opentype_cff_font(filename):
 
 @lru_cache(64)
 def _get_font(fpaths, hinting_factor, *, _kerning_factor, thread_id):
-    ftobjects = []
-    for fpath in fpaths[1:]:
-        ftobject = ft2font.FT2Font(
-            fpath, hinting_factor,
-            _kerning_factor=_kerning_factor
-        )
-        ftobjects.append(ftobject)
-
-    ft2font_object = ft2font.FT2Font(
+    return ft2font.FT2Font(
         fpaths[0], hinting_factor,
-        _fallback_list=ftobjects,
+        _fallback_list=[
+            ft2font.FT2Font(
+                fpath, hinting_factor,
+                _kerning_factor=_kerning_factor
+            )
+            for fpath in fpaths[1:]
+        ],
         _kerning_factor=_kerning_factor
     )
-    return ft2font_object
 
 
 # FT2Font objects cannot be used across fork()s because they reference the same
@@ -1620,4 +1617,4 @@ def _load_fontmanager(*, try_read_cache=True):
 fontManager = _load_fontmanager()
 findfont = fontManager.findfont
 get_font_names = fontManager.get_font_names
-find_fontsprop = fontManager.find_fontsprop
+find_fonts_by_props = fontManager.find_fonts_by_props
