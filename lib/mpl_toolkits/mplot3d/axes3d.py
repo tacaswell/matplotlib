@@ -1082,14 +1082,14 @@ class Axes3D(Axes):
         if self._focal_length == np.inf:
             # Orthographic projection
             viewM = proj3d.view_transformation(eye, R, V, roll_rad)
-            projM = proj3d.ortho_transformation(-self.dist, self.dist)
+            projM = proj3d.ortho_transformation(-self._dist, self._dist)
         else:
             # Perspective projection
             # Scale the eye dist to compensate for the focal length zoom effect
-            eye_focal = R + self.dist * ps * self._focal_length
+            eye_focal = R + self._dist * ps * self._focal_length
             viewM = proj3d.view_transformation(eye_focal, R, V, roll_rad)
-            projM = proj3d.persp_transformation(-self.dist,
-                                                self.dist,
+            projM = proj3d.persp_transformation(-self._dist,
+                                                self._dist,
                                                 self._focal_length)
 
         # Combine all the transformation matrices to get the final projection
