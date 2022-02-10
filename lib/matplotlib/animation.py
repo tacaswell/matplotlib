@@ -334,29 +334,6 @@ class MovieWriter(AbstractMovieWriter):
 
     def finish(self):
         """Finish any processing for writing the movie."""
-        overridden_cleanup = _api.deprecate_method_override(
-            __class__.cleanup, self, since="3.4", alternative="finish()")
-        if overridden_cleanup is not None:
-            overridden_cleanup()
-        else:
-            self._cleanup()  # Inline _cleanup() once cleanup() is removed.
-
-    def grab_frame(self, **savefig_kwargs):
-        # docstring inherited
-        _log.debug('MovieWriter.grab_frame: Grabbing frame.')
-        # Readjust the figure size in case it has been changed by the user.
-        # All frames must have the same size to save the movie correctly.
-        self.fig.set_size_inches(self._w, self._h)
-        # Save the figure data to the sink, using the frame format and dpi.
-        self.fig.savefig(self._proc.stdin, format=self.frame_format,
-                         dpi=self.dpi, **savefig_kwargs)
-
-    def _args(self):
-        """Assemble list of encoder-specific command-line arguments."""
-        return NotImplementedError("args needs to be implemented by subclass.")
-
-    def _cleanup(self):  # Inline to finish() once cleanup() is removed.
-        """Clean-up and collect the process used to write the movie file."""
         out, err = self._proc.communicate()
         # Use the encoding/errors that universal_newlines would use.
         out = TextIOWrapper(BytesIO(out)).read()
@@ -373,9 +350,19 @@ class MovieWriter(AbstractMovieWriter):
             raise subprocess.CalledProcessError(
                 self._proc.returncode, self._proc.args, out, err)
 
-    @_api.deprecated("3.4")
-    def cleanup(self):
-        self._cleanup()
+    def grab_frame(self, **savefig_kwargs):
+        # docstring inherited
+        _log.debug('MovieWriter.grab_frame: Grabbing frame.')
+        # Readjust the figure size in case it has been changed by the user.
+        # All frames must have the same size to save the movie correctly.
+        self.fig.set_size_inches(self._w, self._h)
+        # Save the figure data to the sink, using the frame format and dpi.
+        self.fig.savefig(self._proc.stdin, format=self.frame_format,
+                         dpi=self.dpi, **savefig_kwargs)
+
+    def _args(self):
+        """Assemble list of encoder-specific command-line arguments."""
+        return NotImplementedError("args needs to be implemented by subclass.")
 
     @classmethod
     def bin_path(cls):
@@ -1161,11 +1148,11 @@ class Animation:
         # Handles blitted drawing, which renders only the artists given instead
         # of the entire figure.
         updated_ax = {a.axes for a in artists}
-        # Enumerate artists to cache axes' backgrounds. We do not draw
+        # Enumerate artists to cache Axes backgrounds. We do not draw
         # artists yet to not cache foreground from plots with shared axes
         for ax in updated_ax:
             # If we haven't cached the background for the current view of this
-            # axes object, do so now. This might not always be reliable, but
+            # Axes object, do so now. This might not always be reliable, but
             # it's an attempt to automate the process.
             cur_view = ax._get_view()
             view, bg = self._blit_cache.get(ax, (object(), None))
@@ -1175,12 +1162,12 @@ class Animation:
         # Make a separate pass to draw foreground.
         for a in artists:
             a.axes.draw_artist(a)
-        # After rendering all the needed artists, blit each axes individually.
+        # After rendering all the needed artists, blit each Axes individually.
         for ax in updated_ax:
             ax.figure.canvas.blit(ax.bbox)
 
     def _blit_clear(self, artists):
-        # Get a list of the axes that need clearing from the artists that
+        # Get a list of the Axes that need clearing from the artists that
         # have been drawn. Grab the appropriate saved background from the
         # cache and restore.
         axes = {a.axes for a in artists}
@@ -1195,8 +1182,7 @@ class Animation:
                 self._blit_cache.pop(ax)
 
     def _setup_blit(self):
-        # Setting up the blit requires: a cache of the background for the
-        # axes
+        # Setting up the blit requires: a cache of the background for the Axes
         self._blit_cache = dict()
         self._drawn_artists = []
         self._resize_id = self._fig.canvas.mpl_connect('resize_event',

@@ -22,7 +22,6 @@ import matplotlib.font_manager as font_manager
 import matplotlib.image as mimage
 import matplotlib.lines as mlines
 import matplotlib.patches as mpatches
-import matplotlib.path as mpath
 from matplotlib.rcsetup import cycler, validate_axisbelow
 import matplotlib.spines as mspines
 import matplotlib.table as mtable
@@ -99,7 +98,7 @@ class _TransformedBoundsLocator:
     Axes locator for `.Axes.inset_axes` and similarly positioned Axes.
 
     The locator is a callable object used in `.Axes.set_aspect` to compute the
-    axes location depending on the renderer.
+    Axes location depending on the renderer.
     """
 
     def __init__(self, bounds, transform):
@@ -1117,7 +1116,7 @@ class _AxesBase(martist.Artist):
             The patch used to draw the background of the Axes.  It is also used
             as the clipping path for any data elements on the Axes.
 
-            In the standard axes, this is a rectangle, but in other projections
+            In the standard Axes, this is a rectangle, but in other projections
             it may not be.
 
         Notes
@@ -1149,7 +1148,7 @@ class _AxesBase(martist.Artist):
         Share the x-axis with *other*.
 
         This is equivalent to passing ``sharex=other`` when constructing the
-        axes, and cannot be used if the x-axis is already being shared with
+        Axes, and cannot be used if the x-axis is already being shared with
         another Axes.
         """
         _api.check_isinstance(_AxesBase, other=other)
@@ -1168,7 +1167,7 @@ class _AxesBase(martist.Artist):
         Share the y-axis with *other*.
 
         This is equivalent to passing ``sharey=other`` when constructing the
-        axes, and cannot be used if the y-axis is already being shared with
+        Axes, and cannot be used if the y-axis is already being shared with
         another Axes.
         """
         _api.check_isinstance(_AxesBase, other=other)
@@ -1202,7 +1201,8 @@ class _AxesBase(martist.Artist):
             spine.clear()
 
         self.ignore_existing_data_limits = True
-        self.callbacks = cbook.CallbackRegistry()
+        self.callbacks = cbook.CallbackRegistry(
+            signals=["xlim_changed", "ylim_changed", "zlim_changed"])
 
         if self._sharex is not None:
             self.sharex(self._sharex)
@@ -1367,7 +1367,7 @@ class _AxesBase(martist.Artist):
                        for artist in self._axes._children)
 
         def __iter__(self):
-            for artist in self._axes._children:
+            for artist in list(self._axes._children):
                 if self._type_check(artist):
                     yield artist
 
@@ -2382,10 +2382,18 @@ class _AxesBase(martist.Artist):
                 ((not patch.get_width()) and (not patch.get_height()))):
             return
         p = patch.get_path()
-        vertices = p.vertices if p.codes is None else p.vertices[np.isin(
-            p.codes, (mpath.Path.CLOSEPOLY, mpath.Path.STOP), invert=True)]
-        if not vertices.size:
-            return
+        # Get all vertices on the path
+        # Loop through each sement to get extrema for Bezier curve sections
+        vertices = []
+        for curve, code in p.iter_bezier():
+            # Get distance along the curve of any extrema
+            _, dzeros = curve.axis_aligned_extrema()
+            # Calculate vertcies of start, end and any extrema in between
+            vertices.append(curve([0, *dzeros, 1]))
+
+        if len(vertices):
+            vertices = np.row_stack(vertices)
+
         patch_trf = patch.get_transform()
         updatex, updatey = patch_trf.contains_branch_seperately(self.transData)
         if not (updatex or updatey):
@@ -2413,7 +2421,7 @@ class _AxesBase(martist.Artist):
 
     def add_container(self, container):
         """
-        Add a `.Container` to the axes' containers; return the container.
+        Add a `.Container` to the Axes' containers; return the container.
         """
         label = container.get_label()
         if not label:
@@ -2499,8 +2507,8 @@ class _AxesBase(martist.Artist):
             (which gets passed through).
         kwargs : dict
             Other parameters from which unit info (i.e., the *xunits*,
-            *yunits*, *zunits* (for 3D axes), *runits* and *thetaunits* (for
-            polar axes) entries) is popped, if present.  Note that this dict is
+            *yunits*, *zunits* (for 3D Axes), *runits* and *thetaunits* (for
+            polar) entries) is popped, if present.  Note that this dict is
             mutated in-place!
         convert : bool, default: True
             Whether to return the original datasets or the converted ones.
@@ -2697,11 +2705,11 @@ class _AxesBase(martist.Artist):
             only the y-axis.
 
         tight : bool or None, default: True
-            The *tight* parameter is passed to :meth:`autoscale_view`,
+            The *tight* parameter is passed to `autoscale_view`,
             which is executed after a margin is changed; the default
             here is *True*, on the assumption that when margins are
             specified, no additional padding to match tick marks is
-            usually desired.  Set *tight* to *None* will preserve
+            usually desired.  Setting *tight* to *None* preserves
             the previous setting.
 
         Returns
@@ -2779,7 +2787,7 @@ class _AxesBase(martist.Artist):
             True turns autoscaling on, False turns it off.
             None leaves the autoscaling state unchanged.
         axis : {'both', 'x', 'y'}, default: 'both'
-            The axis on which to operate.  (For 3D axes, *axis* can also be set
+            The axis on which to operate.  (For 3D Axes, *axis* can also be set
             to 'z', and 'both' refers to all three axes.)
         tight : bool or None, default: None
             If True, first set the margins to zero.  Then, this argument is
@@ -2853,7 +2861,7 @@ class _AxesBase(martist.Artist):
         if self.use_sticky_edges:
             # Only iterate over Axes and artists if needed.  The check for
             # ``hasattr(ax, "_children")`` is necessary because this can be
-            # called very early in the Axes init process (e.g., for twin axes)
+            # called very early in the Axes init process (e.g., for twin Axes)
             # when these attributes don't even exist yet, in which case
             # `get_children` would raise an AttributeError.
             if self._xmargin and scalex and self._autoscaleXon:
@@ -2953,7 +2961,7 @@ class _AxesBase(martist.Artist):
         Return a mapping of `Axis` "names" to `Axis` instances.
 
         The `Axis` name is derived from the attribute under which the instance
-        is stored, so e.g. for polar axes, the theta-axis is still named "x"
+        is stored, so e.g. for polar Axes, the theta-axis is still named "x"
         and the r-axis is still named "y" (for back-compatibility).
 
         In practice, this means that the entries are typically "x" and "y", and
@@ -3245,7 +3253,7 @@ class _AxesBase(martist.Artist):
     def ticklabel_format(self, *, axis='both', style='', scilimits=None,
                          useOffset=None, useLocale=None, useMathText=None):
         r"""
-        Configure the `.ScalarFormatter` used by default for linear axes.
+        Configure the `.ScalarFormatter` used by default for linear Axes.
 
         If a parameter is not set, the corresponding property of the formatter
         is left unchanged.
@@ -3327,7 +3335,7 @@ class _AxesBase(martist.Artist):
         Parameters
         ----------
         axis : {'both', 'x', 'y'}, default: 'both'
-            The axis on which to operate.  (For 3D axes, *axis* can also be
+            The axis on which to operate.  (For 3D Axes, *axis* can also be
             set to 'z', and 'both' refers to all three axes.)
         tight : bool or None, optional
             Parameter passed to `~.Axes.autoscale_view`.
@@ -3340,7 +3348,7 @@ class _AxesBase(martist.Artist):
             ``set_params()`` method of the locator. Supported keywords depend
             on the type of the locator. See for example
             `~.ticker.MaxNLocator.set_params` for the `.ticker.MaxNLocator`
-            used by default for linear axes.
+            used by default for linear.
 
         Examples
         --------
@@ -3377,7 +3385,7 @@ class _AxesBase(martist.Artist):
         Other Parameters
         ----------------
         direction : {'in', 'out', 'inout'}
-            Puts ticks inside the axes, outside the axes, or both.
+            Puts ticks inside the Axes, outside the Axes, or both.
         length : float
             Tick length in points.
         width : float
@@ -3588,7 +3596,7 @@ class _AxesBase(martist.Artist):
 
         See Also
         --------
-        set_xlim
+        .Axes.set_xlim
         set_xbound, get_xbound
         invert_xaxis, xaxis_inverted
 
@@ -3596,7 +3604,6 @@ class _AxesBase(martist.Artist):
         -----
         The x-axis may be inverted, in which case the *left* value will
         be greater than the *right* value.
-
         """
         return tuple(self.viewLim.intervalx)
 
@@ -3646,9 +3653,8 @@ class _AxesBase(martist.Artist):
             False turns off, None leaves unchanged.
 
         xmin, xmax : float, optional
-            They are equivalent to left and right respectively,
-            and it is an error to pass both *xmin* and *left* or
-            *xmax* and *right*.
+            They are equivalent to left and right respectively, and it is an
+            error to pass both *xmin* and *left* or *xmax* and *right*.
 
         Returns
         -------
@@ -3683,76 +3689,18 @@ class _AxesBase(martist.Artist):
         present is on the right.
 
         >>> set_xlim(5000, 0)
-
         """
         if right is None and np.iterable(left):
             left, right = left
         if xmin is not None:
             if left is not None:
-                raise TypeError('Cannot pass both `xmin` and `left`')
+                raise TypeError("Cannot pass both 'left' and 'xmin'")
             left = xmin
         if xmax is not None:
             if right is not None:
-                raise TypeError('Cannot pass both `xmax` and `right`')
+                raise TypeError("Cannot pass both 'right' and 'xmax'")
             right = xmax
-
-        self._process_unit_info([("x", (left, right))], convert=False)
-        left = self._validate_converted_limits(left, self.convert_xunits)
-        right = self._validate_converted_limits(right, self.convert_xunits)
-
-        if left is None or right is None:
-            # Axes init calls set_xlim(0, 1) before get_xlim() can be called,
-            # so only grab the limits if we really need them.
-            old_left, old_right = self.get_xlim()
-            if left is None:
-                left = old_left
-            if right is None:
-                right = old_right
-
-        if self.get_xscale() == 'log' and (left <= 0 or right <= 0):
-            # Axes init calls set_xlim(0, 1) before get_xlim() can be called,
-            # so only grab the limits if we really need them.
-            old_left, old_right = self.get_xlim()
-            if left <= 0:
-                _api.warn_external(
-                    'Attempted to set non-positive left xlim on a '
-                    'log-scaled axis.\n'
-                    'Invalid limit will be ignored.')
-                left = old_left
-            if right <= 0:
-                _api.warn_external(
-                    'Attempted to set non-positive right xlim on a '
-                    'log-scaled axis.\n'
-                    'Invalid limit will be ignored.')
-                right = old_right
-        if left == right:
-            _api.warn_external(
-                f"Attempting to set identical left == right == {left} results "
-                f"in singular transformations; automatically expanding.")
-        reverse = left > right
-        left, right = self.xaxis.get_major_locator().nonsingular(left, right)
-        left, right = self.xaxis.limit_range_for_scale(left, right)
-        # cast to bool to avoid bad interaction between python 3.8 and np.bool_
-        left, right = sorted([left, right], reverse=bool(reverse))
-
-        self._viewLim.intervalx = (left, right)
-        # Mark viewlims as no longer stale without triggering an autoscale.
-        for ax in self._shared_axes["x"].get_siblings(self):
-            ax._stale_viewlims["x"] = False
-        if auto is not None:
-            self._autoscaleXon = bool(auto)
-
-        if emit:
-            self.callbacks.process('xlim_changed', self)
-            # Call all of the other x-axes that are shared with this one
-            for other in self._shared_axes["x"].get_siblings(self):
-                if other is not self:
-                    other.set_xlim(self.viewLim.intervalx,
-                                   emit=False, auto=auto)
-                    if other.figure != self.figure:
-                        other.figure.canvas.draw_idle()
-        self.stale = True
-        return left, right
+        return self.xaxis._set_lim(left, right, emit=emit, auto=auto)
 
     get_xscale = _axis_method_wrapper("xaxis", "get_scale")
 
@@ -3936,7 +3884,7 @@ class _AxesBase(martist.Artist):
 
         See Also
         --------
-        set_ylim
+        .Axes.set_ylim
         set_ybound, get_ybound
         invert_yaxis, yaxis_inverted
 
@@ -3944,7 +3892,6 @@ class _AxesBase(martist.Artist):
         -----
         The y-axis may be inverted, in which case the *bottom* value
         will be greater than the *top* value.
-
         """
         return tuple(self.viewLim.intervaly)
 
@@ -3977,9 +3924,8 @@ class _AxesBase(martist.Artist):
             *False* turns off, *None* leaves unchanged.
 
         ymin, ymax : float, optional
-            They are equivalent to bottom and top respectively,
-            and it is an error to pass both *ymin* and *bottom* or
-            *ymax* and *top*.
+            They are equivalent to bottom and top respectively, and it is an
+            error to pass both *ymin* and *bottom* or *ymax* and *top*.
 
         Returns
         -------
@@ -4019,71 +3965,13 @@ class _AxesBase(martist.Artist):
             bottom, top = bottom
         if ymin is not None:
             if bottom is not None:
-                raise TypeError('Cannot pass both `ymin` and `bottom`')
+                raise TypeError("Cannot pass both 'bottom' and 'ymin'")
             bottom = ymin
         if ymax is not None:
             if top is not None:
-                raise TypeError('Cannot pass both `ymax` and `top`')
+                raise TypeError("Cannot pass both 'top' and 'ymax'")
             top = ymax
-
-        self._process_unit_info([("y", (bottom, top))], convert=False)
-        bottom = self._validate_converted_limits(bottom, self.convert_yunits)
-        top = self._validate_converted_limits(top, self.convert_yunits)
-
-        if bottom is None or top is None:
-            # Axes init calls set_ylim(0, 1) before get_ylim() can be called,
-            # so only grab the limits if we really need them.
-            old_bottom, old_top = self.get_ylim()
-            if bottom is None:
-                bottom = old_bottom
-            if top is None:
-                top = old_top
-
-        if self.get_yscale() == 'log' and (bottom <= 0 or top <= 0):
-            # Axes init calls set_xlim(0, 1) before get_xlim() can be called,
-            # so only grab the limits if we really need them.
-            old_bottom, old_top = self.get_ylim()
-            if bottom <= 0:
-                _api.warn_external(
-                    'Attempted to set non-positive bottom ylim on a '
-                    'log-scaled axis.\n'
-                    'Invalid limit will be ignored.')
-                bottom = old_bottom
-            if top <= 0:
-                _api.warn_external(
-                    'Attempted to set non-positive top ylim on a '
-                    'log-scaled axis.\n'
-                    'Invalid limit will be ignored.')
-                top = old_top
-        if bottom == top:
-            _api.warn_external(
-                f"Attempting to set identical bottom == top == {bottom} "
-                f"results in singular transformations; automatically "
-                f"expanding.")
-        reverse = bottom > top
-        bottom, top = self.yaxis.get_major_locator().nonsingular(bottom, top)
-        bottom, top = self.yaxis.limit_range_for_scale(bottom, top)
-        # cast to bool to avoid bad interaction between python 3.8 and np.bool_
-        bottom, top = sorted([bottom, top], reverse=bool(reverse))
-
-        self._viewLim.intervaly = (bottom, top)
-        # Mark viewlims as no longer stale without triggering an autoscale.
-        for ax in self._shared_axes["y"].get_siblings(self):
-            ax._stale_viewlims["y"] = False
-        if auto is not None:
-            self._autoscaleYon = bool(auto)
-
-        if emit:
-            self.callbacks.process('ylim_changed', self)
-            # Call all of the other y-axes that are shared with this one
-            for other in self._shared_axes["y"].get_siblings(self):
-                if other is not self:
-                    other.set_ylim(self.viewLim.intervaly,
-                                   emit=False, auto=auto)
-                    if other.figure != self.figure:
-                        other.figure.canvas.draw_idle()
-        self.stale = True
-        return bottom, top
+        return self.yaxis._set_lim(bottom, top, emit=emit, auto=auto)
 
     get_yscale = _axis_method_wrapper("yaxis", "get_scale")
 
@@ -4538,7 +4426,7 @@ class _AxesBase(martist.Artist):
 
     def contains_point(self, point):
         """
-        Return whether *point* (pair of pixel coordinates) is inside the axes
+        Return whether *point* (pair of pixel coordinates) is inside the Axes
         patch.
         """
         return self.patch.contains_point(point, radius=1.0)
@@ -4568,7 +4456,7 @@ class _AxesBase(martist.Artist):
         artists.remove(self._right_title)
 
         # always include types that do not internally implement clipping
-        # to axes. may have clip_on set to True and clip_box equivalent
+        # to Axes. may have clip_on set to True and clip_box equivalent
         # to ax.bbox but then ignore these properties during draws.
         noclip = (_AxesBase, maxis.Axis,
                   offsetbox.AnnotationBbox, offsetbox.OffsetBox)
@@ -4578,7 +4466,7 @@ class _AxesBase(martist.Artist):
     def get_tightbbox(self, renderer, call_axes_locator=True,
                       bbox_extra_artists=None, *, for_layout_only=False):
         """
-        Return the tight bounding box of the axes, including axis and their
+        Return the tight bounding box of the Axes, including axis and their
         decorators (xlabel, title, etc).
 
         Artists that have ``artist.set_in_layout(False)`` are not included

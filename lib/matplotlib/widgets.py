@@ -104,7 +104,7 @@ class AxesWidget(Widget):
     Attributes
     ----------
     ax : `~matplotlib.axes.Axes`
-        The parent axes for the widget.
+        The parent Axes for the widget.
     canvas : `~matplotlib.backend_bases.FigureCanvasBase`
         The parent figure canvas for the widget.
     active : bool
@@ -184,7 +184,7 @@ class Button(AxesWidget):
                              horizontalalignment='center',
                              transform=ax.transAxes)
 
-        self._observers = cbook.CallbackRegistry()
+        self._observers = cbook.CallbackRegistry(signals=["clicked"])
 
         self.connect_event('button_press_event', self._click)
         self.connect_event('button_release_event', self._release)
@@ -276,7 +276,7 @@ class SliderBase(AxesWidget):
         self.connect_event("button_release_event", self._update)
         if dragging:
             self.connect_event("motion_notify_event", self._update)
-        self._observers = cbook.CallbackRegistry()
+        self._observers = cbook.CallbackRegistry(signals=["changed"])
 
     def _stepped_value(self, val):
         """Return *val* coerced to closest number in the ``valstep`` grid."""
@@ -313,7 +313,7 @@ class Slider(SliderBase):
     """
     A slider representing a floating point range.
 
-    Create a slider from *valmin* to *valmax* in axes *ax*. For the slider to
+    Create a slider from *valmin* to *valmax* in Axes *ax*. For the slider to
     remain responsive you must maintain a reference to it. Call
     :meth:`on_changed` to connect to the slider event.
 
@@ -591,7 +591,7 @@ class RangeSlider(SliderBase):
     max of the range via the *val* attribute as a tuple of (min, max).
 
     Create a slider that defines a range contained within [*valmin*, *valmax*]
-    in axes *ax*. For the slider to remain responsive you must maintain a
+    in Axes *ax*. For the slider to remain responsive you must maintain a
     reference to it. Call :meth:`on_changed` to connect to the slider event.
 
     Attributes
@@ -948,7 +948,7 @@ class CheckButtons(AxesWidget):
     Attributes
     ----------
     ax : `~matplotlib.axes.Axes`
-        The parent axes for the widget.
+        The parent Axes for the widget.
     labels : list of `.Text`
 
     rectangles : list of `.Rectangle`
@@ -970,7 +970,7 @@ class CheckButtons(AxesWidget):
         Parameters
         ----------
         ax : `~matplotlib.axes.Axes`
-            The parent axes for the widget.
+            The parent Axes for the widget.
 
         labels : list of str
             The labels of the check buttons.
@@ -1028,7 +1028,7 @@ class CheckButtons(AxesWidget):
 
         self.connect_event('button_press_event', self._clicked)
 
-        self._observers = cbook.CallbackRegistry()
+        self._observers = cbook.CallbackRegistry(signals=["clicked"])
 
     def _clicked(self, event):
         if self.ignore(event) or event.button != 1 or event.inaxes != self.ax:
@@ -1101,7 +1101,7 @@ class TextBox(AxesWidget):
     Attributes
     ----------
     ax : `~matplotlib.axes.Axes`
-        The parent axes for the widget.
+        The parent Axes for the widget.
     label : `.Text`
 
     color : color
@@ -1157,7 +1157,7 @@ class TextBox(AxesWidget):
             verticalalignment='center', horizontalalignment=textalignment,
             parse_math=False)
 
-        self._observers = cbook.CallbackRegistry()
+        self._observers = cbook.CallbackRegistry(signals=["change", "submit"])
 
         ax.set(
             xlim=(0, 1), ylim=(0, 1),  # s.t. cursor appears from first click.
@@ -1378,7 +1378,7 @@ class RadioButtons(AxesWidget):
     Attributes
     ----------
     ax : `~matplotlib.axes.Axes`
-        The parent axes for the widget.
+        The parent Axes for the widget.
     activecolor : color
         The color of the selected button.
     labels : list of `.Text`
@@ -1396,7 +1396,7 @@ class RadioButtons(AxesWidget):
         Parameters
         ----------
         ax : `~matplotlib.axes.Axes`
-            The axes to add the buttons to.
+            The Axes to add the buttons to.
         labels : list of str
             The button labels.
         active : int
@@ -1444,7 +1444,7 @@ class RadioButtons(AxesWidget):
 
         self.connect_event('button_press_event', self._clicked)
 
-        self._observers = cbook.CallbackRegistry()
+        self._observers = cbook.CallbackRegistry(signals=["clicked"])
 
     cnt = _api.deprecated("3.4")(property(  # Not real, but close enough.
         lambda self: len(self._observers.callbacks['clicked'])))
@@ -1575,7 +1575,7 @@ class SubplotTool(Widget):
 
 class Cursor(AxesWidget):
     """
-    A crosshair cursor that spans the axes and moves with mouse cursor.
+    A crosshair cursor that spans the Axes and moves with mouse cursor.
 
     For the cursor to remain responsive you must keep a reference to it.
 
@@ -1671,14 +1671,14 @@ class Cursor(AxesWidget):
 class MultiCursor(Widget):
     """
     Provide a vertical (default) and/or horizontal line cursor shared between
-    multiple axes.
+    multiple Axes.
 
     For the cursor to remain responsive you must keep a reference to it.
 
     Parameters
     ----------
     canvas : `matplotlib.backend_bases.FigureCanvasBase`
-        The FigureCanvas that contains all the axes.
+        The FigureCanvas that contains all the Axes.
 
     axes : list of `matplotlib.axes.Axes`
         The `~.axes.Axes` to attach the cursor to.
@@ -1902,7 +1902,7 @@ class _SelectorWidget(AxesWidget):
                 and event.button not in self.validButtons):
             return True
         # If no button was pressed yet ignore the event if it was out
-        # of the axes
+        # of the Axes
         if self._eventpress is None:
             return event.inaxes != self.ax
         # If a button was pressed, check if the release-button is the same.
@@ -2590,7 +2590,7 @@ class ToolLineHandles:
     Parameters
     ----------
     ax : `matplotlib.axes.Axes`
-        Matplotlib axes where tool handles are displayed.
+        Matplotlib Axes where tool handles are displayed.
     positions : 1D array
         Positions of handles in data coordinates.
     direction : {"horizontal", "vertical"}
@@ -2698,7 +2698,7 @@ class ToolHandles:
     Parameters
     ----------
     ax : `matplotlib.axes.Axes`
-        Matplotlib axes where tool handles are displayed.
+        Matplotlib Axes where tool handles are displayed.
     x, y : 1D arrays
         Coordinates of control handles.
     marker : str, default: 'o'
@@ -3472,7 +3472,7 @@ class LassoSelector(_SelectorWidget):
 
     In contrast to `Lasso`, `LassoSelector` is written with an interface
     similar to `RectangleSelector` and `SpanSelector`, and will continue to
-    interact with the axes until disconnected.
+    interact with the Axes until disconnected.
 
     Example usage::
 
@@ -3486,7 +3486,7 @@ class LassoSelector(_SelectorWidget):
     Parameters
     ----------
     ax : `~matplotlib.axes.Axes`
-        The parent axes for the widget.
+        The parent Axes for the widget.
     onselect : function
         Whenever the lasso is released, the *onselect* function is called and
         passed the vertices of the selected path.
@@ -3557,7 +3557,7 @@ class PolygonSelector(_SelectorWidget):
 
     - Hold *ctrl* and click and drag a vertex to reposition it before the
       polygon has been completed.
-    - Hold the *shift* key and click and drag anywhere in the axes to move
+    - Hold the *shift* key and click and drag anywhere in the Axes to move
       all vertices.
     - Press the *esc* key to start a new polygon.
 
@@ -3566,7 +3566,7 @@ class PolygonSelector(_SelectorWidget):
     Parameters
     ----------
     ax : `~matplotlib.axes.Axes`
-        The parent axes for the widget.
+        The parent Axes for the widget.
 
     onselect : function
         When a polygon is completed or modified after completion,
@@ -3910,6 +3910,8 @@ class PolygonSelector(_SelectorWidget):
         self._xys = [*xys, xys[0]]
         self._selection_completed = True
         self.set_visible(True)
+        if self._draw_box and self._box is None:
+            self._add_box()
         self._draw_polygon()
 
 
@@ -3926,7 +3928,7 @@ class Lasso(AxesWidget):
     Parameters
     ----------
     ax : `~matplotlib.axes.Axes`
-        The parent axes for the widget.
+        The parent Axes for the widget.
     xy : (float, float)
         Coordinates of the start of the lasso.
     useblit : bool, default: True

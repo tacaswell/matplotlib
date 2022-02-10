@@ -254,7 +254,7 @@ class Formatter(TickHelper):
     def fix_minus(s):
         """
         Some classes may want to replace a hyphen for minus with the proper
-        unicode symbol (U+2212) for typographical correctness.  This is a
+        Unicode symbol (U+2212) for typographical correctness.  This is a
         helper method to perform such a replacement when it is enabled via
         :rc:`axes.unicode_minus`.
         """
@@ -344,9 +344,9 @@ class FormatStrFormatter(Formatter):
     The format string should have a single variable format (%) in it.
     It will be applied to the value (not the position) of the tick.
 
-    Negative numeric values will use a dash not a unicode minus,
-    use mathtext to get a unicode minus by wrappping the format specifier
-    with $ (e.g. "$%g$").
+    Negative numeric values will use a dash, not a Unicode minus; use mathtext
+    to get a Unicode minus by wrappping the format specifier with $ (e.g.
+    "$%g$").
     """
     def __init__(self, fmt):
         self.fmt = fmt
@@ -542,7 +542,7 @@ class ScalarFormatter(Formatter):
 
     def _format_maybe_minus_and_locale(self, fmt, arg):
         """
-        Format *arg* with *fmt*, applying unicode minus and locale if desired.
+        Format *arg* with *fmt*, applying Unicode minus and locale if desired.
         """
         return self.fix_minus(locale.format_string(fmt, (arg,), True)
                               if self._useLocale else fmt % arg)
@@ -606,7 +606,7 @@ class ScalarFormatter(Formatter):
         lims : (int, int)
             A tuple *(min_exp, max_exp)* containing the powers of 10 that
             determine the switchover threshold. For a number representable as
-            :math:`a \times 10^\mathrm{exp}`` with :math:`1 <= |a| < 10`,
+            :math:`a \times 10^\mathrm{exp}` with :math:`1 <= |a| < 10`,
             scientific notation will be used if ``exp <= min_exp`` or
             ``exp >= max_exp``.
 
@@ -989,7 +989,7 @@ class LogFormatter(Formatter):
         b = self._base
         # only label the decades
         fx = math.log(x) / math.log(b)
-        is_x_decade = is_close_to_int(fx)
+        is_x_decade = _is_close_to_int(fx)
         exponent = round(fx) if is_x_decade else np.floor(fx)
         coeff = round(b ** (fx - exponent))
 
@@ -1073,7 +1073,7 @@ class LogFormatterMathtext(LogFormatter):
 
         # only label the decades
         fx = math.log(x) / math.log(b)
-        is_x_decade = is_close_to_int(fx)
+        is_x_decade = _is_close_to_int(fx)
         exponent = round(fx) if is_x_decade else np.floor(fx)
         coeff = round(b ** (fx - exponent))
         if is_x_decade:
@@ -1109,7 +1109,7 @@ class LogFormatterSciNotation(LogFormatterMathtext):
         b = float(base)
         exponent = math.floor(fx)
         coeff = b ** (fx - exponent)
-        if is_close_to_int(coeff):
+        if _is_close_to_int(coeff):
             coeff = round(coeff)
         return r'$\mathdefault{%s%g\times%s^{%d}}$' \
             % (sign_string, coeff, base, exponent)
@@ -1213,9 +1213,10 @@ class LogitFormatter(Formatter):
         if not self._minor:
             return None
         if all(
-            is_decade(x, rtol=1e-7)
-            or is_decade(1 - x, rtol=1e-7)
-            or (is_close_to_int(2 * x) and int(np.round(2 * x)) == 1)
+            _is_decade(x, rtol=1e-7)
+            or _is_decade(1 - x, rtol=1e-7)
+            or (_is_close_to_int(2 * x) and
+                int(np.round(2 * x)) == 1)
             for x in locs
         ):
             # minor ticks are subsample from ideal, so no label
@@ -1262,7 +1263,7 @@ class LogitFormatter(Formatter):
             precision = -np.log10(diff) + exponent
             precision = (
                 int(np.round(precision))
-                if is_close_to_int(precision)
+                if _is_close_to_int(precision)
                 else math.ceil(precision)
             )
             if precision < min_precision:
@@ -1284,13 +1285,13 @@ class LogitFormatter(Formatter):
             return ""
         if x <= 0 or x >= 1:
             return ""
-        if is_close_to_int(2 * x) and round(2 * x) == 1:
+        if _is_close_to_int(2 * x) and round(2 * x) == 1:
             s = self._one_half
-        elif x < 0.5 and is_decade(x, rtol=1e-7):
-            exponent = round(np.log10(x))
+        elif x < 0.5 and _is_decade(x, rtol=1e-7):
+            exponent = round(math.log10(x))
             s = "10^{%d}" % exponent
-        elif x > 0.5 and is_decade(1 - x, rtol=1e-7):
-            exponent = round(np.log10(1 - x))
+        elif x > 0.5 and _is_decade(1 - x, rtol=1e-7):
+            exponent = round(math.log10(1 - x))
             s = self._one_minus("10^{%d}" % exponent)
         elif x < 0.1:
             s = self._format_value(x, self.locs)
@@ -1595,7 +1596,7 @@ class Locator(TickHelper):
 
         .. note::
             To get tick locations with the vmin and vmax values defined
-            automatically for the associated :attr:`axis` simply call
+            automatically for the associated ``axis`` simply call
             the Locator instance::
 
                 >>> print(type(loc))
@@ -2146,6 +2147,7 @@ class MaxNLocator(Locator):
             return dmin, dmax
 
 
+@_api.deprecated("3.6")
 def is_decade(x, base=10, *, rtol=1e-10):
     if not np.isfinite(x):
         return False
@@ -2153,6 +2155,19 @@ def is_decade(x, base=10, *, rtol=1e-10):
         return True
     lx = np.log(abs(x)) / np.log(base)
     return is_close_to_int(lx, atol=rtol)
+
+
+def _is_decade(x, *, base=10, rtol=None):
+    """Return True if *x* is an integer power of *base*."""
+    if not np.isfinite(x):
+        return False
+    if x == 0.0:
+        return True
+    lx = np.log(abs(x)) / np.log(base)
+    if rtol is None:
+        return np.isclose(lx, np.round(lx))
+    else:
+        return np.isclose(lx, np.round(lx), rtol=rtol)
 
 
 def _decade_less_equal(x, base):
@@ -2205,8 +2220,13 @@ def _decade_greater(x, base):
     return greater
 
 
+@_api.deprecated("3.6")
 def is_close_to_int(x, *, atol=1e-10):
     return abs(x - np.round(x)) < atol
+
+
+def _is_close_to_int(x):
+    return math.isclose(x, round(x))
 
 
 class LogLocator(Locator):

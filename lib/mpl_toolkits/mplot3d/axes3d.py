@@ -42,10 +42,10 @@ from . import axis3d
 
 @docstring.interpd
 @cbook._define_aliases({
-    "xlim3d": ["xlim"], "ylim3d": ["ylim"], "zlim3d": ["zlim"]})
+    "xlim": ["xlim3d"], "ylim": ["ylim3d"], "zlim": ["zlim3d"]})
 class Axes3D(Axes):
     """
-    3D axes object.
+    3D Axes object.
     """
     name = '3d'
 
@@ -80,7 +80,7 @@ class Axes3D(Axes):
             axis. A positive angle spins the camera clockwise, causing the
             scene to rotate counter-clockwise.
         sharez : Axes3D, optional
-            Other axes to share z-limits with.
+            Other Axes to share z-limits with.
         proj_type : {'persp', 'ortho'}
             The projection type, default 'persp'.
         box_aspect : 3-tuple of floats, default: None
@@ -210,10 +210,10 @@ class Axes3D(Axes):
         xdw = 0.9 / self._dist
         ydwl = 0.95 / self._dist
         ydw = 0.9 / self._dist
-        # This is purposely using the 2D Axes's set_xlim and set_ylim,
-        # because we are trying to place our viewing pane.
-        super().set_xlim(-xdwl, xdw, auto=None)
-        super().set_ylim(-ydwl, ydw, auto=None)
+        # Set the viewing pane.
+        self.viewLim.intervalx = (-xdwl, xdw)
+        self.viewLim.intervaly = (-ydwl, ydw)
+        self.stale = True
 
     def _init_axis(self):
         """Init 3D axes; overrides creation of regular X/Y axes."""
@@ -281,7 +281,7 @@ class Axes3D(Axes):
         Set the aspect ratios.
 
         Axes 3D does not current support any aspect but 'auto' which fills
-        the axes with the data limits.
+        the Axes with the data limits.
 
         To simulate having equal aspect in data space, set the ratio
         of your data limits to match the value of `.get_box_aspect`.
@@ -339,7 +339,7 @@ class Axes3D(Axes):
 
     def set_box_aspect(self, aspect, *, zoom=1):
         """
-        Set the axes box aspect.
+        Set the Axes box aspect.
 
         The box aspect is the ratio of height to width in display
         units for each face of the box when viewed perpendicular to
@@ -405,7 +405,7 @@ class Axes3D(Axes):
         # this is duplicated from `axes._base._AxesBase.draw`
         # but must be called before any of the artist are drawn as
         # it adjusts the view limits and the size of the bounding box
-        # of the axes
+        # of the Axes
         locator = self.get_axes_locator()
         if locator:
             pos = locator(self, renderer)
@@ -510,41 +510,11 @@ class Axes3D(Axes):
 
     def margins(self, *margins, x=None, y=None, z=None, tight=True):
         """
-        Convenience method to set or retrieve autoscaling margins.
+        Set or retrieve autoscaling margins.
 
-        Call signatures::
-
-            margins()
-
-        returns xmargin, ymargin, zmargin
-
-        ::
-
-            margins(margin)
-
-            margins(xmargin, ymargin, zmargin)
-
-            margins(x=xmargin, y=ymargin, z=zmargin)
-
-            margins(..., tight=False)
-
-        All forms above set the xmargin, ymargin and zmargin
-        parameters. All keyword parameters are optional.  A single
-        positional argument specifies xmargin, ymargin and zmargin.
-        Passing both positional and keyword arguments for xmargin,
-        ymargin, and/or zmargin is invalid.
-
-        The *tight* parameter
-        is passed to :meth:`autoscale_view`, which is executed after
-        a margin is changed; the default here is *True*, on the
-        assumption that when margins are specified, no additional
-        padding to match tick marks is usually desired.  Setting
-        *tight* to *None* will preserve the previous setting.
-
-        Specifying any margin changes only the autoscaling; for example,
-        if *xmargin* is not None, then *xmargin* times the X data
-        interval will be added to each end of that interval before
-        it is used in autoscaling.
+        See `.Axes.margins` for full documentation.  Because this function
+        applies to 3D Axes, it also takes a *z* argument, and returns
+        ``(xmargin, ymargin, zmargin)``.
         """
         if margins and x is not None and y is not None and z is not None:
             raise TypeError('Cannot pass both positional and keyword '
@@ -577,10 +547,10 @@ class Axes3D(Axes):
     def autoscale(self, enable=True, axis='both', tight=None):
         """
         Convenience method for simple axis view autoscaling.
-        See :meth:`matplotlib.axes.Axes.autoscale` for full explanation.
-        Note that this function behaves the same, but for all
-        three axes.  Therefore, 'z' can be passed for *axis*,
-        and 'both' applies to all three axes.
+
+        See `.Axes.autoscale` for full documentation.  Because this function
+        applies to 3D Axes, *axis* can also be set to 'z', and setting *axis*
+        to 'both' autoscales all three axes.
         """
         if enable is None:
             scalex = True
@@ -624,9 +594,9 @@ class Axes3D(Axes):
                        scalez=True):
         """
         Autoscale the view limits using the data limits.
-        See :meth:`matplotlib.axes.Axes.autoscale_view` for documentation.
-        Note that this function applies to the 3D axes, and as such
-        adds the *scalez* to the function arguments.
+
+        See `.Axes.autoscale_view` for full documentation.  Because this
+        function applies to 3D Axes, it also takes a *scalez* argument.
         """
         # This method looks at the rectangular volume (see above)
         # of data and decides how to scale the view portal to fit it.
@@ -689,188 +659,39 @@ class Axes3D(Axes):
         minz, maxz = self.get_zlim3d()
         return minx, maxx, miny, maxy, minz, maxz
 
-    def set_xlim3d(self, left=None, right=None, emit=True, auto=False,
-                   *, xmin=None, xmax=None):
-        """
-        Set 3D x limits.
-
-        See :meth:`matplotlib.axes.Axes.set_xlim` for full documentation.
-        """
-        if right is None and np.iterable(left):
-            left, right = left
-        if xmin is not None:
-            if left is not None:
-                raise TypeError('Cannot pass both `xmin` and `left`')
-            left = xmin
-        if xmax is not None:
-            if right is not None:
-                raise TypeError('Cannot pass both `xmax` and `right`')
-            right = xmax
-
-        self._process_unit_info([("x", (left, right))], convert=False)
-        left = self._validate_converted_limits(left, self.convert_xunits)
-        right = self._validate_converted_limits(right, self.convert_xunits)
-
-        old_left, old_right = self.get_xlim()
-        if left is None:
-            left = old_left
-        if right is None:
-            right = old_right
-
-        if left == right:
-            _api.warn_external(
-                f"Attempting to set identical left == right == {left} results "
-                f"in singular transformations; automatically expanding.")
-        reverse = left > right
-        left, right = self.xaxis.get_major_locator().nonsingular(left, right)
-        left, right = self.xaxis.limit_range_for_scale(left, right)
-        # cast to bool to avoid bad interaction between python 3.8 and np.bool_
-        left, right = sorted([left, right], reverse=bool(reverse))
-        self.xy_viewLim.intervalx = (left, right)
-
-        # Mark viewlims as no longer stale without triggering an autoscale.
-        for ax in self._shared_axes["x"].get_siblings(self):
-            ax._stale_viewlims["x"] = False
-        if auto is not None:
-            self._autoscaleXon = bool(auto)
-
-        if emit:
-            self.callbacks.process('xlim_changed', self)
-            # Call all of the other x-axes that are shared with this one
-            for other in self._shared_axes["x"].get_siblings(self):
-                if other is not self:
-                    other.set_xlim(self.xy_viewLim.intervalx,
-                                   emit=False, auto=auto)
-                    if other.figure != self.figure:
-                        other.figure.canvas.draw_idle()
-        self.stale = True
-        return left, right
-
-    def set_ylim3d(self, bottom=None, top=None, emit=True, auto=False,
-                   *, ymin=None, ymax=None):
-        """
-        Set 3D y limits.
-
-        See :meth:`matplotlib.axes.Axes.set_ylim` for full documentation.
-        """
-        if top is None and np.iterable(bottom):
-            bottom, top = bottom
-        if ymin is not None:
-            if bottom is not None:
-                raise TypeError('Cannot pass both `ymin` and `bottom`')
-            bottom = ymin
-        if ymax is not None:
-            if top is not None:
-                raise TypeError('Cannot pass both `ymax` and `top`')
-            top = ymax
-
-        self._process_unit_info([("y", (bottom, top))], convert=False)
-        bottom = self._validate_converted_limits(bottom, self.convert_yunits)
-        top = self._validate_converted_limits(top, self.convert_yunits)
-
-        old_bottom, old_top = self.get_ylim()
-        if bottom is None:
-            bottom = old_bottom
-        if top is None:
-            top = old_top
-
-        if bottom == top:
-            _api.warn_external(
-                f"Attempting to set identical bottom == top == {bottom} "
-                f"results in singular transformations; automatically "
-                f"expanding.")
-        swapped = bottom > top
-        bottom, top = self.yaxis.get_major_locator().nonsingular(bottom, top)
-        bottom, top = self.yaxis.limit_range_for_scale(bottom, top)
-        if swapped:
-            bottom, top = top, bottom
-        self.xy_viewLim.intervaly = (bottom, top)
-
-        # Mark viewlims as no longer stale without triggering an autoscale.
-        for ax in self._shared_axes["y"].get_siblings(self):
-            ax._stale_viewlims["y"] = False
-        if auto is not None:
-            self._autoscaleYon = bool(auto)
-
-        if emit:
-            self.callbacks.process('ylim_changed', self)
-            # Call all of the other y-axes that are shared with this one
-            for other in self._shared_axes["y"].get_siblings(self):
-                if other is not self:
-                    other.set_ylim(self.xy_viewLim.intervaly,
-                                   emit=False, auto=auto)
-                    if other.figure != self.figure:
-                        other.figure.canvas.draw_idle()
-        self.stale = True
-        return bottom, top
-
-    def set_zlim3d(self, bottom=None, top=None, emit=True, auto=False,
-                   *, zmin=None, zmax=None):
+    # set_xlim, set_ylim are directly inherited from base Axes.
+    def set_zlim(self, bottom=None, top=None, emit=True, auto=False,
+                 *, zmin=None, zmax=None):
         """
         Set 3D z limits.
 
-        See :meth:`matplotlib.axes.Axes.set_ylim` for full documentation
+        See `.Axes.set_ylim` for full documentation
         """
         if top is None and np.iterable(bottom):
             bottom, top = bottom
         if zmin is not None:
             if bottom is not None:
-                raise TypeError('Cannot pass both `zmin` and `bottom`')
+                raise TypeError("Cannot pass both 'bottom' and 'zmin'")
             bottom = zmin
         if zmax is not None:
             if top is not None:
-                raise TypeError('Cannot pass both `zmax` and `top`')
+                raise TypeError("Cannot pass both 'top' and 'zmax'")
             top = zmax
+        return self.zaxis._set_lim(bottom, top, emit=emit, auto=auto)
 
-        self._process_unit_info([("z", (bottom, top))], convert=False)
-        bottom = self._validate_converted_limits(bottom, self.convert_zunits)
-        top = self._validate_converted_limits(top, self.convert_zunits)
+    set_xlim3d = maxes.Axes.set_xlim
+    set_ylim3d = maxes.Axes.set_ylim
+    set_zlim3d = set_zlim
 
-        old_bottom, old_top = self.get_zlim()
-        if bottom is None:
-            bottom = old_bottom
-        if top is None:
-            top = old_top
-
-        if bottom == top:
-            _api.warn_external(
-                f"Attempting to set identical bottom == top == {bottom} "
-                f"results in singular transformations; automatically "
-                f"expanding.")
-        swapped = bottom > top
-        bottom, top = self.zaxis.get_major_locator().nonsingular(bottom, top)
-        bottom, top = self.zaxis.limit_range_for_scale(bottom, top)
-        if swapped:
-            bottom, top = top, bottom
-        self.zz_viewLim.intervalx = (bottom, top)
-
-        # Mark viewlims as no longer stale without triggering an autoscale.
-        for ax in self._shared_axes["z"].get_siblings(self):
-            ax._stale_viewlims["z"] = False
-        if auto is not None:
-            self._autoscaleZon = bool(auto)
-
-        if emit:
-            self.callbacks.process('zlim_changed', self)
-            # Call all of the other y-axes that are shared with this one
-            for other in self._shared_axes["z"].get_siblings(self):
-                if other is not self:
-                    other.set_zlim(self.zz_viewLim.intervalx,
-                                   emit=False, auto=auto)
-                    if other.figure != self.figure:
-                        other.figure.canvas.draw_idle()
-        self.stale = True
-        return bottom, top
-
-    def get_xlim3d(self):
+    def get_xlim(self):
+        # docstring inherited
         return tuple(self.xy_viewLim.intervalx)
-    get_xlim3d.__doc__ = maxes.Axes.get_xlim.__doc__
 
-    def get_ylim3d(self):
+    def get_ylim(self):
+        # docstring inherited
         return tuple(self.xy_viewLim.intervaly)
-    get_ylim3d.__doc__ = maxes.Axes.get_ylim.__doc__
 
-    def get_zlim3d(self):
+    def get_zlim(self):
         """Get 3D z limits."""
         return tuple(self.zz_viewLim.intervalx)
 
@@ -1121,17 +942,17 @@ class Axes3D(Axes):
 
     def can_zoom(self):
         """
-        Return whether this axes supports the zoom box button functionality.
+        Return whether this Axes supports the zoom box button functionality.
 
-        3D axes objects do not use the zoom box button.
+        Axes3D objects do not use the zoom box button.
         """
         return False
 
     def can_pan(self):
         """
-        Return whether this axes supports the pan/zoom button functionality.
+        Return whether this Axes supports the pan/zoom button functionality.
 
-        3D axes objects do not use the pan/zoom button.
+        Axes3d objects do not use the pan/zoom button.
         """
         return False
 
@@ -1358,8 +1179,8 @@ class Axes3D(Axes):
         .. note::
 
             Currently, this function does not behave the same as
-            :meth:`matplotlib.axes.Axes.grid`, but it is intended to
-            eventually support that behavior.
+            `.axes.Axes.grid`, but it is intended to eventually support that
+            behavior.
         """
         # TODO: Operate on each axes separately
         if len(kwargs):
@@ -1372,13 +1193,9 @@ class Axes3D(Axes):
         Convenience method for changing the appearance of ticks and
         tick labels.
 
-        See :meth:`matplotlib.axes.Axes.tick_params` for more complete
-        documentation.
-
-        The only difference is that setting *axis* to 'both' will
-        mean that the settings are applied to all three axes. Also,
-        the *axis* parameter also accepts a value of 'z', which
-        would mean to apply to only the z-axis.
+        See `.Axes.tick_params` for full documentation.  Because this function
+        applies to 3D Axes, *axis* can also be set to 'z', and setting *axis*
+        to 'both' autoscales all three axes.
 
         Also, because of how Axes3D objects are drawn very differently
         from regular 2D axes, some of these settings may have
@@ -2104,8 +1921,7 @@ class Axes3D(Axes):
         Parameters
         ----------
         X, Y, Z : array-like,
-            Input data. See `~matplotlib.axes.Axes.contour` for acceptable
-            data shapes.
+            Input data. See `.Axes.contour` for supported data shapes.
         extend3d : bool, default: False
             Whether to extend contour in 3D.
         stride : int
@@ -2149,8 +1965,7 @@ class Axes3D(Axes):
         Parameters
         ----------
         X, Y, Z : array-like
-            Input data. See `~matplotlib.axes.Axes.tricontour` for acceptable
-            data shapes.
+            Input data. See `.Axes.tricontour` for supported data shapes.
         extend3d : bool, default: False
             Whether to extend contour in 3D.
         stride : int
@@ -2208,8 +2023,7 @@ class Axes3D(Axes):
         Parameters
         ----------
         X, Y, Z : array-like
-            Input data. See `~matplotlib.axes.Axes.contourf` for acceptable
-            data shapes.
+            Input data. See `.Axes.contourf` for supported data shapes.
         zdir : {'x', 'y', 'z'}, default: 'z'
             The direction to use.
         offset : float, optional
@@ -2247,8 +2061,7 @@ class Axes3D(Axes):
         Parameters
         ----------
         X, Y, Z : array-like
-            Input data. See `~matplotlib.axes.Axes.tricontourf` for acceptable
-            data shapes.
+            Input data. See `.Axes.tricontourf` for supported data shapes.
         zdir : {'x', 'y', 'z'}, default: 'z'
             The direction to use.
         offset : float, optional
@@ -3056,7 +2869,7 @@ pivot='tail', normalize=False, **kwargs)
             this. *lims*-arguments may be scalars, or array-likes of the same
             length as the errors. To use limits with inverted axes,
             `~.Axes.set_xlim` or `~.Axes.set_ylim` must be called before
-            :meth:`errorbar`. Note the tricky parameter names: setting e.g.
+            `errorbar`. Note the tricky parameter names: setting e.g.
             *ylolims* to True means that the y-value is a *lower* limit of the
             True value, so, only an *upward*-pointing arrow will be drawn!
 

@@ -22,7 +22,7 @@ from .qt_compat import (
 
 backend_version = __version__
 
-# SPECIAL_KEYS are Qt::Key that do *not* return their unicode name
+# SPECIAL_KEYS are Qt::Key that do *not* return their Unicode name
 # instead they have manually specified names.
 SPECIAL_KEYS = {
     _to_int(getattr(_enum("QtCore.Qt.Key"), k)): v for k, v in [
@@ -374,12 +374,12 @@ class FigureCanvasQT(QtWidgets.QWidget, FigureCanvasBase):
                 if event_key != key and event_mods & mod]
         try:
             # for certain keys (enter, left, backspace, etc) use a word for the
-            # key, rather than unicode
+            # key, rather than Unicode
             key = SPECIAL_KEYS[event_key]
         except KeyError:
-            # unicode defines code points up to 0x10ffff (sys.maxunicode)
+            # Unicode defines code points up to 0x10ffff (sys.maxunicode)
             # QT will use Key_Codes larger than that for keyboard keys that are
-            # are not unicode characters (like multimedia keys)
+            # are not Unicode characters (like multimedia keys)
             # skip these
             # if you really want them, you should add them to SPECIAL_KEYS
             if event_key > sys.maxunicode:
@@ -529,13 +529,6 @@ class FigureManagerQT(FigureManagerBase):
 
         self.window._destroying = False
 
-        self.toolbar = self._get_toolbar(self.canvas, self.window)
-
-        if self.toolmanager:
-            backend_tools.add_tools_to_manager(self.toolmanager)
-            if self.toolbar:
-                backend_tools.add_tools_to_container(self.toolbar)
-
         if self.toolbar:
             self.window.addToolBar(self.toolbar)
             tbs_height = self.toolbar.sizeHint().height()
@@ -581,17 +574,6 @@ class FigureManagerQT(FigureManagerBase):
             # It seems that when the python session is killed,
             # Gcf can get destroyed before the Gcf.destroy
             # line is run, leading to a useless AttributeError.
-
-    def _get_toolbar(self, canvas, parent):
-        # must be inited after the window, drawingArea and figure
-        # attrs are set
-        if mpl.rcParams['toolbar'] == 'toolbar2':
-            toolbar = NavigationToolbar2QT(canvas)
-        elif mpl.rcParams['toolbar'] == 'toolmanager':
-            toolbar = ToolbarQt(self.toolmanager)
-        else:
-            toolbar = None
-        return toolbar
 
     def resize(self, width, height):
         # The Qt methods return sizes in 'virtual' pixels so we do need to
@@ -1020,6 +1002,10 @@ class ToolCopyToClipboardQT(backend_tools.ToolCopyToClipboardBase):
     def trigger(self, *args, **kwargs):
         pixmap = self.canvas.grab()
         qApp.clipboard().setPixmap(pixmap)
+
+
+FigureManagerQT._toolbar2_class = NavigationToolbar2QT
+FigureManagerQT._toolmanager_toolbar_class = ToolbarQt
 
 
 @_Backend.export
