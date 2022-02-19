@@ -343,12 +343,10 @@ FT2Font::get_path()
 
 FT2Font::FT2Font(FT_Open_Args &open_args,
                  long hinting_factor_,
-                 std::vector<FT2Font *> &fallback_list,
-                 PyFT2Font *py_pointer)
+                 std::vector<FT2Font *> &fallback_list)
     : image(), face(NULL)
 {
     clear();
-    py_font = py_pointer;
 
     FT_Error error = FT_Open_Face(_ft2Library, &open_args, 0, &face);
     if (error) {

@@ -410,7 +410,7 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
     Py_CLEAR(data);
 
     CALL_CPP_FULL(
-        "FT2Font", (self->x = new FT2Font(open_args, hinting_factor, self->fallbacks, self)),
+        "FT2Font", (self->x = new FT2Font(open_args, hinting_factor, self->fallbacks)),
         Py_CLEAR(self->py_file), -1);
 
     CALL_CPP_INIT("FT2Font->set_kerning_factor", (self->x->set_kerning_factor(kerning_factor)));
