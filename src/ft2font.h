@@ -81,8 +81,6 @@ class FT2Font
     void select_charmap(unsigned long i);
     void set_text(
         size_t N, uint32_t *codepoints, double angle, FT_Int32 flags, std::vector<double> &xys);
-    void fill_glyphs(
-        size_t N, uint32_t *codepoints, double angle, FT_Int32 flags, bool warn);
     int get_kerning(FT_UInt left, FT_UInt right, FT_UInt mode, bool fallback);
     int get_kerning(FT_UInt left, FT_UInt right, FT_UInt mode, FT_Vector &delta);
     void set_kerning_factor(int factor);

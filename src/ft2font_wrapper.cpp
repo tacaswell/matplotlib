@@ -593,79 +593,6 @@ static PyObject *PyFT2Font_set_text(PyFT2Font *self, PyObject *args, PyObject *k
     return convert_xys_to_array(xys);
 }
 
-const char *PyFT2Font_fill_glyphs__doc__ =
-    "fill_glyphs(string, angle, flags=32)\n"
-    "--\n\n"
-    "Fill (and cache) a text *string* and *angle*.\n"
-    "*flags* can be a bitwise-or of the LOAD_XXX constants;\n"
-    "the default value is LOAD_FORCE_AUTOHINT.\n"
-    "A mapping of character to FT2Font object is returned.\n";
-
-static PyObject *PyFT2Font_fill_glyphs(PyFT2Font *self, PyObject *args, PyObject *kwds)
-{
-    PyObject *textobj;
-    double angle = 0.0;
-    bool warn = false;
-    FT_Int32 flags = FT_LOAD_FORCE_AUTOHINT;
-    const char *names[] = { "string", "angle", "flags", NULL };
-
-    if (!PyArg_ParseTupleAndKeywords(
-             args, kwds, "O|di:fill_glyphs", (char **)names, &textobj, &angle, &flags)) {
-        return NULL;
-    }
-
-    std::vector<uint32_t> codepoints;
-    size_t size;
-
-    if (PyUnicode_Check(textobj)) {
-        size = PyUnicode_GET_LENGTH(textobj);
-        codepoints.resize(size);
-#if defined(PYPY_VERSION) && (PYPY_VERSION_NUM < 0x07040000)
-        // PyUnicode_ReadChar is available from PyPy 7.3.2, but wheels do not
-        // specify the micro-release version, so put the version bound at 7.4
-        // to prevent generating wheels unusable on PyPy 7.3.{0,1}.
-        Py_UNICODE *unistr = PyUnicode_AsUnicode(textobj);
-        for (size_t i = 0; i < size; ++i) {
-            codepoints[i] = unistr[i];
-        }
-#else
-        for (size_t i = 0; i < size; ++i) {
-            codepoints[i] = PyUnicode_ReadChar(textobj, i);
-        }
-#endif
-    } else {
-        PyErr_SetString(PyExc_TypeError, "String must be str");
-        return NULL;
-    }
-
-    uint32_t* codepoints_array = NULL;
-    if (size > 0) {
-        codepoints_array = &codepoints[0];
-    }
-    CALL_CPP("fill_glyphs", self->x->fill_glyphs(size, codepoints_array, angle, flags, warn));
-
-    PyObject *char_to_font;
-    if (!(char_to_font = PyDict_New())) {
-        return NULL;
-    }
-    std::unordered_map<long, FT2Font *> from_ft = self->x->get_char_to_font();
-
-    for (std::pair<const long, FT2Font *> &itr : from_ft) {
-        PyObject *key = NULL, *val = NULL;
-        bool error = (!(key = PyLong_FromLong(itr.first))
-                      || !(val = reinterpret_cast<PyObject *>(itr.second->get_pyfont()))
-                      || (PyDict_SetItem(char_to_font, key, val) == -1));
-        Py_XDECREF(key);
-        // do not decref value here, it's a PyFT2Font pointer
-
-        if (error) {
-            Py_DECREF(char_to_font);
-            return NULL;
-        }
-    }
-    return char_to_font;
-}
-
 const char *PyFT2Font_get_num_glyphs__doc__ =
     "get_num_glyphs(self)\n"
     "--\n\n"
@@ -1625,7 +1552,6 @@ static PyTypeObject *PyFT2Font_init_type()
         {"select_charmap", (PyCFunction)PyFT2Font_select_charmap, METH_VARARGS, PyFT2Font_select_charmap__doc__},
         {"get_kerning", (PyCFunction)PyFT2Font_get_kerning, METH_VARARGS, PyFT2Font_get_kerning__doc__},
         {"set_text", (PyCFunction)PyFT2Font_set_text, METH_VARARGS|METH_KEYWORDS, PyFT2Font_set_text__doc__},
-        {"fill_glyphs", (PyCFunction)PyFT2Font_fill_glyphs, METH_VARARGS|METH_KEYWORDS, PyFT2Font_fill_glyphs__doc__},
         {"get_num_glyphs", (PyCFunction)PyFT2Font_get_num_glyphs, METH_NOARGS, PyFT2Font_get_num_glyphs__doc__},
         {"get_char_to_font", (PyCFunction)PyFT2Font_get_char_to_font, METH_NOARGS, PyFT2Font_get_char_to_font__doc__},
         {"get_glyph_to_font", (PyCFunction)PyFT2Font_get_glyph_to_font, METH_NOARGS, PyFT2Font_get_glyph_to_font__doc__},
