@@ -373,7 +373,11 @@ FT2Font::FT2Font(FT_Open_Args &open_args,
     FT_Set_Transform(face, &transform, 0);
 
     // Set fallbacks
-    set_fallbacks(fallback_list);
+    for (FT2Font* f : fallback_list)
+    {
+        fallbacks.push_back(f);
+
+    }
 }
 
 FT2Font::~FT2Font()
@@ -418,11 +422,6 @@ void FT2Font::set_size(double ptsize, double dpi)
     for (size_t i = 0; i < fallbacks.size(); i++) {
         fallbacks[i]->set_size(ptsize, dpi);
     }
-}
-
-void FT2Font::set_fallbacks(std::vector<FT2Font *> &fallback_list)
-{
-    fallbacks.assign(fallback_list.begin(), fallback_list.end());
 }
 
 

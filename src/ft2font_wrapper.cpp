@@ -249,7 +249,7 @@ struct PyFT2Font
     Py_ssize_t shape[2];
     Py_ssize_t strides[2];
     Py_ssize_t suboffsets[2];
-    std::vector<FT2Font *> fallbacks;
+    std::vector<PyObject *> fallbacks;
 };
 
 static PyTypeObject PyFT2FontType;
@@ -356,7 +356,7 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
     const char *names[] = {
         "filename", "hinting_factor", "_fallback_list", "_kerning_factor", NULL
     };
-
+    std::vector<FT2Font *> fallback_fonts;
     if (!PyArg_ParseTupleAndKeywords(
              args, kwds, "O|l$Oi:FT2Font", (char **)names, &filename,
              &hinting_factor, &fallback_list, &kerning_factor)) {
@@ -379,11 +379,13 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
             // this returns a borrowed reference
             PyObject* item = PyList_GetItem(fallback_list, i);
             // Increase the ref count, we will undo this in dealloc
+            // this makes sure things do not get gc'd under us!
             Py_INCREF(item);
-
+            self->fallbacks.push_back(item);
             // TODO: check whether item is actually an FT2Font
             FT2Font *fback = reinterpret_cast<PyFT2Font *>(item)->x;
-            self->fallbacks.push_back(fback);
+            // Also (locally) cache the underlying FT2Font objects
+            fallback_fonts.push_back(fback);
         }
 
     }
@@ -409,7 +411,7 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
     Py_CLEAR(data);
 
     CALL_CPP_FULL(
-        "FT2Font", (self->x = new FT2Font(open_args, hinting_factor, self->fallbacks)),
+        "FT2Font", (self->x = new FT2Font(open_args, hinting_factor, fallback_fonts)),
         Py_CLEAR(self->py_file), -1);
 
     CALL_CPP_INIT("FT2Font->set_kerning_factor", (self->x->set_kerning_factor(kerning_factor)));
