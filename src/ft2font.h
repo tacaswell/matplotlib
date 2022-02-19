@@ -2,7 +2,6 @@
 
 /* A python interface to FreeType */
 #pragma once
-#include "forward.h"
 #ifndef MPL_FT2FONT_H
 #define MPL_FT2FONT_H
 #include <vector>

@@ -1,4 +1,3 @@
-#include "forward.h"
 #include "mplutils.h"
 #include "ft2font.h"
 #include "py_converters.h"
