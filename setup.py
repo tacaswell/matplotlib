@@ -183,6 +183,7 @@ class BuildExtraLibraries(setuptools.command.build_ext.build_ext):
         # build directories to store object files for each extension.
         orig_build_temp = self.build_temp
         self.build_temp = os.path.join(self.build_temp, ext.name)
+        self.compiler.verbose = True
         try:
             super().build_extension(ext)
         finally:
