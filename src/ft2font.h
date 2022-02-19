@@ -121,17 +121,6 @@ class FT2Font
     {
         return py_font;
     }
-
-    std::unordered_map<FT_UInt, FT2Font *> &get_glyph_to_font()
-    {
-        return glyph_to_font;
-    }
-
-    std::unordered_map<long, FT2Font *> &get_char_to_font()
-    {
-        return char_to_font;
-    }
-
     FT2Image &get_image()
     {
         return image;

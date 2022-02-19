@@ -603,64 +603,6 @@ static PyObject *PyFT2Font_get_num_glyphs(PyFT2Font *self, PyObject *args)
     return PyLong_FromSize_t(self->x->get_num_glyphs());
 }
 
-const char *PyFT2Font_get_char_to_font__doc__ =
-    "get_char_to_font()\n"
-    "--\n\n"
-    "Return a cache of characters mapped to FT2Font objects.\n";
-
-static PyObject *PyFT2Font_get_char_to_font(PyFT2Font *self, PyObject *args, PyObject *kwds)
-{
-    PyObject *char_to_font;
-    if (!(char_to_font = PyDict_New())) {
-        return NULL;
-    }
-    std::unordered_map<long, FT2Font *> from_ft = self->x->get_char_to_font();
-
-    for (std::pair<const long, FT2Font *> &itr : from_ft) {
-        PyObject *key = NULL, *val = NULL;
-        bool error = (!(key = PyLong_FromLong(itr.first))
-                      || !(val = reinterpret_cast<PyObject *>(itr.second->get_pyfont()))
-                      || (PyDict_SetItem(char_to_font, key, val) == -1));
-        Py_XDECREF(key);
-        // do not decref value here, it's a PyFT2Font pointer
-
-        if (error) {
-            Py_DECREF(char_to_font);
-            return NULL;
-        }
-    }
-    return char_to_font;
-}
-
-const char *PyFT2Font_get_glyph_to_font__doc__ =
-    "get_glyph_to_font()\n"
-    "--\n\n"
-    "Return a cache of glyph indexes mapped to FT2Font objects.\n";
-
-static PyObject *PyFT2Font_get_glyph_to_font(PyFT2Font *self, PyObject *args, PyObject *kwds)
-{
-    PyObject *glyph_to_font;
-    if (!(glyph_to_font = PyDict_New())) {
-        return NULL;
-    }
-    std::unordered_map<FT_UInt, FT2Font *> from_ft = self->x->get_glyph_to_font();
-
-    for (std::pair<const FT_UInt, FT2Font *> &itr : from_ft) {
-        PyObject *key = NULL, *val = NULL;
-        bool error = (!(key = PyLong_FromLong(itr.first))
-                      || !(val = reinterpret_cast<PyObject *>(itr.second->get_pyfont()))
-                      || (PyDict_SetItem(glyph_to_font, key, val) == -1));
-        Py_XDECREF(key);
-        // do not decref value here, it's a PyFT2Font pointer
-
-        if (error) {
-            Py_DECREF(glyph_to_font);
-            return NULL;
-        }
-    }
-    return glyph_to_font;
-}
-
 const char *PyFT2Font_load_char__doc__ =
     "load_char(self, charcode, fallback=False, flags=32)\n"
     "--\n\n"
@@ -1553,8 +1495,6 @@ static PyTypeObject *PyFT2Font_init_type()
         {"get_kerning", (PyCFunction)PyFT2Font_get_kerning, METH_VARARGS, PyFT2Font_get_kerning__doc__},
         {"set_text", (PyCFunction)PyFT2Font_set_text, METH_VARARGS|METH_KEYWORDS, PyFT2Font_set_text__doc__},
         {"get_num_glyphs", (PyCFunction)PyFT2Font_get_num_glyphs, METH_NOARGS, PyFT2Font_get_num_glyphs__doc__},
-        {"get_char_to_font", (PyCFunction)PyFT2Font_get_char_to_font, METH_NOARGS, PyFT2Font_get_char_to_font__doc__},
-        {"get_glyph_to_font", (PyCFunction)PyFT2Font_get_glyph_to_font, METH_NOARGS, PyFT2Font_get_glyph_to_font__doc__},
         {"load_char", (PyCFunction)PyFT2Font_load_char, METH_VARARGS|METH_KEYWORDS, PyFT2Font_load_char__doc__},
         {"load_glyph", (PyCFunction)PyFT2Font_load_glyph, METH_VARARGS|METH_KEYWORDS, PyFT2Font_load_glyph__doc__},
         {"get_width_height", (PyCFunction)PyFT2Font_get_width_height, METH_NOARGS, PyFT2Font_get_width_height__doc__},
