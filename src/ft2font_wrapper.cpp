@@ -377,14 +377,16 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
         Py_ssize_t size = PyList_Size(fallback_list);
 
         for (Py_ssize_t i = 0; i < size; ++i) {
+            // this returns a borrowed reference
             PyObject* item = PyList_GetItem(fallback_list, i);
+            // Increase the ref count, we will undo this in dealloc
+            Py_INCREF(item);
 
             // TODO: check whether item is actually an FT2Font
             FT2Font *fback = reinterpret_cast<PyFT2Font *>(item)->x;
             self->fallbacks.push_back(fback);
         }
 
-        Py_INCREF(fallback_list);
     }
 
     if (PyBytes_Check(filename) || PyUnicode_Check(filename)) {
@@ -420,6 +422,10 @@ exit:
 static void PyFT2Font_dealloc(PyFT2Font *self)
 {
     delete self->x;
+    for (size_t i = 0; i < self->fallbacks.size(); i++) {
+      Py_DECREF(self->fallbacks[i]);
+    }
+
     Py_XDECREF(self->py_file);
     Py_TYPE(self)->tp_free((PyObject *)self);
 }
