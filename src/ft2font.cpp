@@ -385,10 +385,6 @@ FT2Font::~FT2Font()
     if (face) {
         FT_Done_Face(face);
     }
-
-    for (size_t i = 0; i < fallbacks.size(); i++) {
-        Py_DECREF(fallbacks[i]->get_pyfont());
-    }
 }
 
 void FT2Font::clear()

@@ -117,10 +117,6 @@ class FT2Font
         return face;
     }
 
-    PyFT2Font *get_pyfont()
-    {
-        return py_font;
-    }
     FT2Image &get_image()
     {
         return image;
@@ -150,7 +146,6 @@ class FT2Font
     std::vector<FT2Font *> fallbacks;
     std::unordered_map<FT_UInt, FT2Font *> glyph_to_font;
     std::unordered_map<long, FT2Font *> char_to_font;
-    PyFT2Font *py_font;
     FT_BBox bbox;
     FT_Pos advance;
     long hinting_factor;
