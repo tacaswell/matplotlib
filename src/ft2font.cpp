@@ -373,11 +373,7 @@ FT2Font::FT2Font(FT_Open_Args &open_args,
     FT_Set_Transform(face, &transform, 0);
 
     // Set fallbacks
-    for (FT2Font* f : fallback_list)
-    {
-        fallbacks.push_back(f);
-
-    }
+    std::copy(fallback_list.begin(), fallback_list.end(), std::back_inserter(fallbacks));
 }
 
 FT2Font::~FT2Font()
