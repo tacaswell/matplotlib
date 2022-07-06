@@ -25,7 +25,6 @@ Future versions may implement the Level 2 or 2.1 specifications.
 
 from base64 import b64encode
 import copy
-from collections import OrderedDict
 import dataclasses
 from functools import lru_cache
 from io import BytesIO
@@ -1358,7 +1357,7 @@ class FontManager:
     def find_fonts_by_props(self, prop, fontext='ttf', directory=None,
                             fallback_to_default=True, rebuild_if_missing=True):
         """
-        Find font families that most closely matches the given properties.
+        Find font families that most closely match the given properties.
 
         Parameters
         ----------
@@ -1387,14 +1386,16 @@ class FontManager:
 
         Returns
         -------
-        OrderedDict
-            key, value pair of families and their corresponding filepaths.
+        dict
+            Key, value pair of families and their corresponding filepaths.
+
+            We depend on the Python dictionary being implicitly ordered.
 
         Notes
         -----
         This is an extension/wrapper of the original findfont API, which only
         returns a single font for given font properties. Instead, this API
-        returns an OrderedDict containing multiple fonts and their filepaths
+        returns an dict containing multiple fonts and their filepaths
         which closely match the given font properties.  Since this internally
         uses the original API, there's no change to the logic of performing the
         nearest neighbor search.  See `findfont` for more details.
@@ -1407,7 +1408,7 @@ class FontManager:
 
         prop = FontProperties._from_any(prop)
 
-        fpaths = OrderedDict()
+        fpaths = {}
         for family in prop.get_family():
             cprop = prop.copy()
 
@@ -1573,7 +1574,7 @@ if hasattr(os, "register_at_fork"):
 def get_font(filename, hinting_factor=None):
     # Resolving the path avoids embedding the font twice in pdf/ps output if a
     # single font is selected using two different relative paths.
-    if isinstance(filename, OrderedDict):
+    if isinstance(filename, dict):
         paths = tuple(_cached_realpath(fname) for fname in filename.values())
     else:
         paths = (_cached_realpath(filename),)
