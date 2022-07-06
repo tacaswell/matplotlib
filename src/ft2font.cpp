@@ -419,7 +419,6 @@ void FT2Font::set_size(double ptsize, double dpi)
     }
 }
 
-
 void FT2Font::set_charmap(int i)
 {
     if (i >= face->num_charmaps) {
@@ -561,7 +560,6 @@ void FT2Font::set_text(
     }
 }
 
-
 void FT2Font::load_char(long charcode, FT_Int32 flags, FT2Font *&ft_object, bool fallback = false)
 {
     // if this is parent FT2Font, cache will be filled in 2 ways:
@@ -569,7 +567,7 @@ void FT2Font::load_char(long charcode, FT_Int32 flags, FT2Font *&ft_object, bool
     // 2. set_text was not called and fallback was enabled
     if (fallback && char_to_font.find(charcode) != char_to_font.end()) {
         ft_object = char_to_font[charcode];
-        // since it will be assigned to this object anyway
+        // since it will be assigned to ft_object anyway
         FT2Font *throwaway = NULL;
         ft_object->load_char(charcode, flags, throwaway, false);
     } else if (fallback) {
@@ -580,8 +578,12 @@ void FT2Font::load_char(long charcode, FT_Int32 flags, FT2Font *&ft_object, bool
                                 glyph_to_font, charcode, flags, charcode_error, glyph_error, true);
         if (!was_found) {
             ft_glyph_warn(charcode);
-            if (charcode_error) throw_ft_error("Could not load charcode", charcode_error);
-            else if (glyph_error) throw_ft_error("Could not load charcode", glyph_error);
+            if (charcode_error) {
+                throw_ft_error("Could not load charcode", charcode_error);
+            }
+            else if (glyph_error) {
+                throw_ft_error("Could not load charcode", glyph_error);
+            }
         }
         ft_object = ft_object_with_glyph;
     } else {
