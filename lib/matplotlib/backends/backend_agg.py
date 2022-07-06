@@ -30,8 +30,7 @@ import numpy as np
 import matplotlib as mpl
 from matplotlib import _api, cbook
 from matplotlib.backend_bases import (
-    _Backend, FigureCanvasBase, FigureManagerBase,
-    RendererBase)
+    _Backend, FigureCanvasBase, FigureManagerBase, RendererBase)
 from matplotlib.font_manager import find_fonts_by_props, get_font
 from matplotlib.ft2font import (LOAD_FORCE_AUTOHINT, LOAD_NO_HINTING,
                                 LOAD_DEFAULT, LOAD_NO_AUTOHINT)
