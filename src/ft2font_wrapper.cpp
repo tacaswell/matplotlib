@@ -605,7 +605,7 @@ static PyObject *PyFT2Font_get_num_glyphs(PyFT2Font *self, PyObject *args)
 }
 
 const char *PyFT2Font_load_char__doc__ =
-    "load_char(self, charcode, fallback=False, flags=32)\n"
+    "load_char(self, charcode, flags=32)\n"
     "--\n\n"
     "Load character with *charcode* in current fontfile and set glyph.\n"
     "*flags* can be a bitwise-or of the LOAD_XXX constants;\n"
@@ -864,7 +864,7 @@ static PyObject *PyFT2Font_get_charmap(PyFT2Font *self, PyObject *args)
 
 
 const char *PyFT2Font_get_char_index__doc__ =
-    "get_char_index(self, codepoint, fallback=True)\n"
+    "get_char_index(self, codepoint)\n"
     "--\n\n"
     "Return the glyph index corresponding to a character *codepoint*.\n";
 
