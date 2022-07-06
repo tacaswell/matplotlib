@@ -240,7 +240,7 @@ static PyTypeObject *PyGlyph_init_type()
  * FT2Font
  * */
 
-struct PyFT2Font
+typedef struct PyFT2Font
 {
     PyObject_HEAD
     FT2Font *x;
