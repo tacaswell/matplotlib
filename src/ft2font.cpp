@@ -183,7 +183,7 @@ FT2Image::draw_rect_filled(unsigned long x0, unsigned long y0, unsigned long x1,
     m_dirty = true;
 }
 
-static FT_UInt ft_glyph_warn(FT_ULong charcode)
+static void ft_glyph_warn(FT_ULong charcode)
 {
     PyObject *text_helpers = NULL, *tmp = NULL;
     if (!(text_helpers = PyImport_ImportModule("matplotlib._text_helpers")) ||
@@ -196,7 +196,6 @@ exit:
     if (PyErr_Occurred()) {
         throw py::exception();
     }
-    return 0;
 }
 
 static FT_UInt
@@ -207,7 +206,7 @@ ft_get_char_index_or_warn(FT_Face face, FT_ULong charcode, bool warn = true)
         return glyph_index;
     }
     if (warn) {
-        return ft_glyph_warn(charcode);
+        ft_glyph_warn(charcode);
     }
     return 0;
 }
