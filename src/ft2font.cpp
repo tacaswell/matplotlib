@@ -6,6 +6,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <iterator>
 
 #include "ft2font.h"
 #include "mplutils.h"
