@@ -200,7 +200,7 @@ FontName currentdict end definefont pop
     return preamble + "\n".join(entries) + postamble
 
 
-def _font_to_ps_type42(font_path, chars, fh):
+def _font_to_ps_type42(font_path, chars, fh, index):
     """
     Subset *chars* from the font at *font_path* into a Type 42 font at *fh*.
 
@@ -216,7 +216,9 @@ def _font_to_ps_type42(font_path, chars, fh):
     subset_str = ''.join(chr(c) for c in chars)
     _log.debug("SUBSET %s characters: %s", font_path, subset_str)
     try:
-        fontdata = _backend_pdf_ps.get_glyphs_subset(font_path, subset_str)
+        fontdata = _backend_pdf_ps.get_glyphs_subset(
+            font_path, subset_str, index
+        )
         _log.debug("SUBSET %s %d -> %d", font_path, os.stat(font_path).st_size,
                    fontdata.getbuffer().nbytes)
 
@@ -966,7 +968,7 @@ class FigureCanvasPS(FigureCanvasBase):
                     if fonttype == 3:
                         fh.write(_font_to_ps_type3(font_path, chars))
                     else:  # Type 42 only.
-                        _font_to_ps_type42(font_path, chars, fh)
+                        _font_to_ps_type42(font_path, chars, fh, 0)
             print("end", file=fh)
             print("%%EndProlog", file=fh)
 

@@ -927,7 +927,7 @@ class PdfFile:
         """
 
         if isinstance(fontprop, str):
-            filenames = [fontprop]
+            filenames = [(fontprop, 0)]
         elif mpl.rcParams['pdf.use14corefonts']:
             filenames = _fontManager._find_fonts_by_props(
                 fontprop, fontext='afm', directory=RendererPdf._afm_font_dir
@@ -986,9 +986,10 @@ class PdfFile:
             Fx = info.pdfname
             _log.debug('Embedding Type-1 font %s from dvi.', dviname)
             fonts[Fx] = self._embedTeXFont(info)
-        for filename in sorted(self.fontNames):
-            Fx = self.fontNames[filename]
-            _log.debug('Embedding font %s.', filename)
+        for cache_key in sorted(self.fontNames):
+            Fx = self.fontNames[cache_key]
+            filename, index = cache_key
+            _log.debug('Embedding font %s (%d).', filename, index)
             if filename.endswith('.afm'):
                 # from pdf.use14corefonts
                 _log.debug('Writing AFM font.')
@@ -998,7 +999,7 @@ class PdfFile:
                 _log.debug('Writing TrueType font.')
                 chars = self._character_tracker.used.get(filename)
                 if chars:
-                    fonts[Fx] = self.embedTTF(filename, chars)
+                    fonts[Fx] = self.embedTTF(filename, chars, index)
         self.writeObject(self.fontObject, fonts)
 
     def _write_afm_font(self, filename):
@@ -1162,7 +1163,7 @@ CMapName currentdict /CMap defineresource pop
 end
 end"""
 
-    def embedTTF(self, filename, characters):
+    def embedTTF(self, filename, characters, index):
         """Embed the TTF font from the named file into the document."""
 
         font = get_font(filename)
@@ -1297,7 +1298,9 @@ end"""
 
             subset_str = "".join(chr(c) for c in characters)
             _log.debug("SUBSET %s characters: %s", filename, subset_str)
-            fontdata = _backend_pdf_ps.get_glyphs_subset(filename, subset_str)
+            fontdata = _backend_pdf_ps.get_glyphs_subset(
+                filename, subset_str, index
+            )
             _log.debug(
                 "SUBSET %s %d -> %d", filename,
                 os.stat(filename).st_size, fontdata.getbuffer().nbytes

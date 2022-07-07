@@ -368,13 +368,15 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
     FT_Open_Args open_args;
     long hinting_factor = 8;
     int kerning_factor = 0;
+    int index = 0;
+
     const char *names[] = {
-        "filename", "hinting_factor", "_fallback_list", "_kerning_factor", NULL
+      "filename", "hinting_factor", "_fallback_list", "_kerning_factor", "index", NULL
     };
     std::vector<FT2Font *> fallback_fonts;
     if (!PyArg_ParseTupleAndKeywords(
-             args, kwds, "O|l$Oi:FT2Font", (char **)names, &filename,
-             &hinting_factor, &fallback_list, &kerning_factor)) {
+             args, kwds, "O|l$Oii:FT2Font", (char **)names, &filename,
+             &hinting_factor, &fallback_list, &kerning_factor, &index)) {
         return -1;
     }
     if (hinting_factor <= 0) {
@@ -444,7 +446,7 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
     Py_CLEAR(data);
 
     CALL_CPP_FULL(
-        "FT2Font", (self->x = new FT2Font(open_args, hinting_factor, fallback_fonts)),
+       "FT2Font", (self->x = new FT2Font(open_args, hinting_factor, fallback_fonts, index)),
         Py_CLEAR(self->py_file), -1);
 
     CALL_CPP_INIT("FT2Font->set_kerning_factor", (self->x->set_kerning_factor(kerning_factor)));
@@ -1445,6 +1447,11 @@ static PyObject *PyFT2Font_family_name(PyFT2Font *self, void *closure)
     return PyUnicode_FromString(name);
 }
 
+static PyObject *PyFT2Font_face_index(PyFT2Font *self, void *closure)
+{
+   return PyLong_FromLong(self->x->get_face()->face_index);
+}
+
 static PyObject *PyFT2Font_style_name(PyFT2Font *self, void *closure)
 {
     const char *name = self->x->get_face()->style_name;
@@ -1575,6 +1582,7 @@ static PyTypeObject *PyFT2Font_init_type()
         {(char *)"postscript_name", (getter)PyFT2Font_postscript_name, NULL, NULL, NULL},
         {(char *)"num_faces", (getter)PyFT2Font_num_faces, NULL, NULL, NULL},
         {(char *)"family_name", (getter)PyFT2Font_family_name, NULL, NULL, NULL},
+        {(char *)"face_index", (getter)PyFT2Font_face_index, NULL, NULL, NULL},
         {(char *)"style_name", (getter)PyFT2Font_style_name, NULL, NULL, NULL},
         {(char *)"face_flags", (getter)PyFT2Font_face_flags, NULL, NULL, NULL},
         {(char *)"style_flags", (getter)PyFT2Font_style_flags, NULL, NULL, NULL},

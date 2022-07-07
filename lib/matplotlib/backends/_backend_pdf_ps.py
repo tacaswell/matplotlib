@@ -19,7 +19,7 @@ def _cached_get_afm_from_fname(fname):
         return AFM(fh)
 
 
-def get_glyphs_subset(fontfile, characters):
+def get_glyphs_subset(fontfile, characters, index):
     """
     Subset a TTF font
 
@@ -41,7 +41,7 @@ def get_glyphs_subset(fontfile, characters):
 
     # if fontfile is a ttc, specify font number
     if fontfile.endswith(".ttc"):
-        options.font_number = 0
+        options.font_number = index
 
     with subset.load_font(fontfile, options) as font:
         subsetter = subset.Subsetter(options=options)
@@ -130,7 +130,7 @@ class RendererPDFPSBase(RendererBase):
             return w, h, d
 
     def _get_font_afm(self, prop):
-        fname = font_manager.findfont(
+        fname, index = font_manager.findfont(
             prop, fontext="afm", directory=self._afm_font_dir)
         return _cached_get_afm_from_fname(fname)
 

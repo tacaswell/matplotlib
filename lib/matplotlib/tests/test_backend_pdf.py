@@ -48,7 +48,7 @@ and containing some French characters and the euro symbol:
 ])
 @pytest.mark.parametrize('fonttype', [3, 42])
 def test_embed_fonts(fontname, fontfile, fonttype):
-    if Path(findfont(FontProperties(family=[fontname]))).name != fontfile:
+    if Path(findfont(FontProperties(family=[fontname]))[0]).name != fontfile:
         pytest.skip(f'Font {fontname!r} may be missing')
 
     rcParams['pdf.fonttype'] = fonttype
@@ -365,13 +365,12 @@ def test_kerning():
 def test_glyphs_subset():
     fpath = str(_get_data_path("fonts/ttf/DejaVuSerif.ttf"))
     chars = "these should be subsetted! 1234567890"
-
     # non-subsetted FT2Font
-    nosubfont = FT2Font(fpath)
+    nosubfont = FT2Font(fpath, index=0)
     nosubfont.set_text(chars)
 
     # subsetted FT2Font
-    subfont = FT2Font(get_glyphs_subset(fpath, chars))
+    subfont = FT2Font(get_glyphs_subset(fpath, chars, 0), index=0)
     subfont.set_text(chars)
 
     nosubcmap = nosubfont.get_charmap()

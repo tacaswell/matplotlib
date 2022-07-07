@@ -32,11 +32,11 @@ def test_ft2font_positive_hinting_factor():
 
 def test_fallback_smoke():
     fp = fm.FontProperties(family=["WenQuanYi Zen Hei"])
-    if Path(fm.findfont(fp)).name != "wqy-zenhei.ttc":
+    if Path(fm.findfont(fp)[0]).name != "wqy-zenhei.ttc":
         pytest.skip("Font wqy-zenhei.ttc may be missing")
 
     fp = fm.FontProperties(family=["Noto Sans CJK JP"])
-    if Path(fm.findfont(fp)).name != "NotoSansCJK-Regular.ttc":
+    if Path(fm.findfont(fp)[0]).name != "NotoSansCJK-Regular.ttc":
         pytest.skip("Noto Sans CJK JP font may be missing.")
 
     plt.rcParams['font.size'] = 20
@@ -62,7 +62,7 @@ def test_fallback_smoke():
 @check_figures_equal(extensions=["png", "pdf", "eps"])
 def test_font_fallback_chinese(fig_test, fig_ref, family_name, file_name):
     fp = fm.FontProperties(family=[family_name])
-    if Path(fm.findfont(fp)).name != file_name:
+    if Path(fm.findfont(fp)[0]).name != file_name:
         pytest.skip(f"Font {family_name} ({file_name}) is missing")
 
     text = ["There are", "几个汉字", "in between!"]

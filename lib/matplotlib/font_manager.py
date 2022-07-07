@@ -403,6 +403,7 @@ FontEntry = dataclasses.make_dataclass(
         ('weight', str, dataclasses.field(default='normal')),
         ('stretch', str, dataclasses.field(default='normal')),
         ('size', str, dataclasses.field(default='medium')),
+        ('index', int, dataclasses.field(default=0)),
     ],
     namespace={
         '__doc__': """
@@ -540,7 +541,7 @@ def ttfFontProperty(font):
         raise NotImplementedError("Non-scalable fonts are not supported")
     size = 'scalable'
 
-    return FontEntry(font.fname, name, style, variant, weight, stretch, size)
+    return FontEntry(font.fname, name, style, variant, weight, stretch, size, font.face_index)
 
 
 def afmFontProperty(fontpath, font):
@@ -608,7 +609,7 @@ def afmFontProperty(fontpath, font):
 
     size = 'scalable'
 
-    return FontEntry(fontpath, name, style, variant, weight, stretch, size)
+    return FontEntry(fontpath, name, style, variant, weight, stretch, size, 0)
 
 
 class FontProperties:
@@ -677,7 +678,8 @@ class FontProperties:
     def __init__(self, family=None, style=None, variant=None, weight=None,
                  stretch=None, size=None,
                  fname=None,  # if set, it's a hardcoded filename to use
-                 math_fontfamily=None):
+                 math_fontfamily=None,
+                 index=None):
         self.set_family(family)
         self.set_style(style)
         self.set_variant(variant)
@@ -686,6 +688,7 @@ class FontProperties:
         self.set_file(fname)
         self.set_size(size)
         self.set_math_fontfamily(math_fontfamily)
+        self.set_index(index)
         # Treat family as a fontconfig pattern if it is the only parameter
         # provided.  Even in that case, call the other setters first to set
         # attributes not specified by the pattern to the rcParams defaults.
@@ -930,6 +933,12 @@ class FontProperties:
         """
         self._file = os.fspath(file) if file is not None else None
 
+    def set_index(self, index):
+        self._index = int(index) if index is not None else 0
+
+    def get_index(self):
+        return self._index
+
     def set_fontconfig_pattern(self, pattern):
         """
         Set the properties by parsing a fontconfig_ *pattern*.
@@ -1073,7 +1082,7 @@ class FontManager:
     # Increment this version number whenever the font cache data
     # format or behavior has changed and requires a existing font
     # cache files to be rebuilt.
-    __version__ = 330
+    __version__ = 360
 
     def __init__(self, size=None, weight='normal'):
         self._version = self.__version__
@@ -1128,6 +1137,12 @@ class FontManager:
                 font = _afm.AFM(fh)
             prop = afmFontProperty(path, font)
             self.afmlist.append(prop)
+        elif Path(path).suffix.lower() == ".ttc":
+            font = ft2font.FT2Font(path)
+            for j in range(font.num_faces):
+                font = ft2font.FT2Font(path, index=j)
+                prop = ttfFontProperty(font)
+                self.ttflist.append(prop)
         else:
             font = ft2font.FT2Font(path)
             prop = ttfFontProperty(font)
@@ -1464,7 +1479,7 @@ class FontManager:
 
         fname = prop.get_file()
         if fname is not None:
-            return fname
+            return _cached_realpath(fname)
 
         if fontext == 'afm':
             fontlist = self.afmlist
@@ -1514,9 +1529,9 @@ class FontManager:
         else:
             _log.debug('findfont: Matching %s to %s (%r) with score of %f.',
                        prop, best_font.name, best_font.fname, best_score)
-            result = best_font.fname
+            result = (best_font.fname, best_font.index)
 
-        if not os.path.isfile(result):
+        if not os.path.isfile(result[0]):
             if rebuild_if_missing:
                 _log.info(
                     'findfont: Found a missing font file.  Rebuilding cache.')
@@ -1550,17 +1565,19 @@ def is_opentype_cff_font(filename):
 
 @lru_cache(64)
 def _get_font(font_filepaths, hinting_factor, *, _kerning_factor, thread_id):
-    first_fontpath, *rest = font_filepaths
+    (first_fontpath, first_index), *rest = font_filepaths
     return ft2font.FT2Font(
         first_fontpath, hinting_factor,
         _fallback_list=[
             ft2font.FT2Font(
                 fpath, hinting_factor,
-                _kerning_factor=_kerning_factor
+                _kerning_factor=_kerning_factor,
+                index=index,
             )
-            for fpath in rest
+            for (fpath, index) in rest
         ],
-        _kerning_factor=_kerning_factor
+        _kerning_factor=_kerning_factor,
+        index=first_index,
     )
 
 
@@ -1573,11 +1590,12 @@ if hasattr(os, "register_at_fork"):
     os.register_at_fork(after_in_child=_get_font.cache_clear)
 
 
-@lru_cache(64)
+@lru_cache(1024)
 def _cached_realpath(path):
-    # Resolving the path avoids embedding the font twice in pdf/ps output if a
-    # single font is selected using two different relative paths.
-    return os.path.realpath(path)
+    if isinstance(path, (str, Path, bytes)):
+        path = (path, 0)
+    fpath, index = path
+    return (os.path.realpath(fpath), index)
 
 
 @_api.rename_parameter('3.6', "filepath", "font_filepaths")
@@ -1602,7 +1620,7 @@ def get_font(font_filepaths, hinting_factor=None):
     `.ft2font.FT2Font`
 
     """
-    if isinstance(font_filepaths, (str, Path, bytes)):
+    if isinstance(font_filepaths, (str, Path, bytes, tuple)):
         paths = (_cached_realpath(font_filepaths),)
     else:
         paths = tuple(_cached_realpath(fname) for fname in font_filepaths)

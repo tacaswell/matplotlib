@@ -343,12 +343,13 @@ FT2Font::get_path()
 
 FT2Font::FT2Font(FT_Open_Args &open_args,
                  long hinting_factor_,
-                 std::vector<FT2Font *> &fallback_list)
+                 std::vector<FT2Font *> &fallback_list,
+                 FT_Long index)
     : image(), face(NULL)
 {
     clear();
 
-    FT_Error error = FT_Open_Face(_ft2Library, &open_args, 0, &face);
+    FT_Error error = FT_Open_Face(_ft2Library, &open_args, index, &face);
     if (error) {
         throw_ft_error("Can not load face", error);
     }

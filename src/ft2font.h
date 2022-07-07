@@ -71,7 +71,8 @@ class FT2Font
 {
 
   public:
-    FT2Font(FT_Open_Args &open_args, long hinting_factor, std::vector<FT2Font *> &fallback_list);
+    FT2Font(FT_Open_Args &open_args, long hinting_factor, std::vector<FT2Font *> &fallback_list,
+            FT_Long index);
     virtual ~FT2Font();
     void clear();
     void set_size(double ptsize, double dpi);

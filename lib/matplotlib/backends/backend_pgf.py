@@ -67,7 +67,8 @@ def _get_preamble():
             for family, command in zip(families, commands):
                 # 1) Forward slashes also work on Windows, so don't mess with
                 # backslashes.  2) The dirname needs to include a separator.
-                path = pathlib.Path(fm.findfont(family))
+                fname, index = fm.findfont(family)
+                path = pathlib.Path(fname)
                 preamble.append(r"\%s{%s}[Path=\detokenize{%s/}]" % (
                     command, path.name, path.parent.as_posix()))
     preamble.append(mpl.texmanager._usepackage_if_not_loaded(
