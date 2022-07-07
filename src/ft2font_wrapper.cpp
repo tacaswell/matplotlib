@@ -170,9 +170,6 @@ static PyTypeObject PyGlyphType;
 
 static PyObject *PyGlyph_from_FT2Font(FT2Font *font, FT2Font *parent_ft_object)
 {
-    const FT_Face &face = font->get_face();
-    const FT_Glyph &glyph = font->get_last_glyph();
-    size_t ind = font->get_last_glyph_index();
     const long hinting_factor = font->get_hinting_factor();
 
     PyGlyph *self;
@@ -240,7 +237,7 @@ static PyTypeObject *PyGlyph_init_type()
  * FT2Font
  * */
 
-typedef struct PyFT2Font
+struct PyFT2Font
 {
     PyObject_HEAD
     FT2Font *x;
