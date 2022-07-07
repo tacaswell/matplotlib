@@ -168,7 +168,7 @@ typedef struct
 
 static PyTypeObject PyGlyphType;
 
-static PyObject *PyGlyph_from_FT2Font(FT2Font *font, FT2Font *parent_ft_object)
+static PyObject *PyGlyph_from_FT2Font(const FT2Font *font)
 {
     const FT_Face &face = font->get_face();
     const long hinting_factor = font->get_hinting_factor();
@@ -655,7 +655,7 @@ static PyObject *PyFT2Font_load_char(PyFT2Font *self, PyObject *args, PyObject *
     FT2Font *ft_object = NULL;
     CALL_CPP("load_char", (self->x->load_char(charcode, flags, ft_object, (bool)fallback)));
 
-    return PyGlyph_from_FT2Font(self->x, ft_object);
+    return PyGlyph_from_FT2Font(ft_object);
 }
 
 const char *PyFT2Font_load_glyph__doc__ =
@@ -693,7 +693,7 @@ static PyObject *PyFT2Font_load_glyph(PyFT2Font *self, PyObject *args, PyObject 
     FT2Font *ft_object = NULL;
     CALL_CPP("load_glyph", (self->x->load_glyph(glyph_index, flags, ft_object, (bool)fallback)));
 
-    return PyGlyph_from_FT2Font(self->x, ft_object);
+    return PyGlyph_from_FT2Font(ft_object);
 }
 
 const char *PyFT2Font_get_width_height__doc__ =
