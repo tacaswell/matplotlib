@@ -143,13 +143,13 @@ def test_fallback_smoke():
 
     plt.rcParams['font.size'] = 20
     fig = plt.figure(figsize=(4.75, 1.85))
-    fig.text(0.05, 0.45, "There are 多个汉字 in between!",
+    fig.text(0.05, 0.45, "There are 几个汉字 in between!",
              family=['DejaVu Sans', "Noto Sans CJK JP"])
-    fig.text(0.05, 0.25, "There are 多个汉字 in between!",
+    fig.text(0.05, 0.25, "There are 几个汉字 in between!",
              family=['DejaVu Sans', "WenQuanYi Zen Hei"])
-    fig.text(0.05, 0.65, "There are 多个汉字 in between!",
+    fig.text(0.05, 0.65, "There are 几个汉字 in between!",
              family=["Noto Sans CJK JP"])
-    fig.text(0.05, 0.85, "There are 多个汉字 in between!",
+    fig.text(0.05, 0.85, "There are 几个汉字 in between!",
              family=["WenQuanYi Zen Hei"])
 
     # TODO enable fallback for other backends!
