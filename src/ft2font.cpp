@@ -517,7 +517,8 @@ void FT2Font::set_text(
             ft_glyph_warn((FT_ULong)codepoints[n]);
 
             // render missing glyph tofu
-            // ft_object_with_glyph == this
+            // come back to top-most font
+            ft_object_with_glyph = this;
             char_to_font[codepoints[n]] = ft_object_with_glyph;
             glyph_to_font[glyph_index] = ft_object_with_glyph;
             ft_object_with_glyph->load_glyph(glyph_index, flags, ft_object_with_glyph, false);
