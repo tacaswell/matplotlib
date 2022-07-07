@@ -373,22 +373,21 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
     memset((void *)&open_args, 0, sizeof(FT_Open_Args));
     open_args.flags = FT_OPEN_STREAM;
     open_args.stream = &self->stream;
-
     if (fallback_list) {
-	 if (!PyList_Check(fallback_list)) {
-	      PyErr_SetString(PyExc_TypeError, "Fallback list must be a list");
-	      goto exit;
-	 }
-	 Py_ssize_t size = PyList_Size(fallback_list);
+        if (!PyList_Check(fallback_list)) {
+            PyErr_SetString(PyExc_TypeError, "Fallback list must be a list");
+            goto exit;
+         }
+         Py_ssize_t size = PyList_Size(fallback_list);
 
-	 // go through fallbacks once to make sure the types are right
-	 for (Py_ssize_t i = 0; i < size; ++i) {
-	      // this returns a borrowed reference
-	      PyObject* item = PyList_GetItem(fallback_list, i);
-	      if (!PyObject_IsInstance(item, PyObject_Type(reinterpret_cast<PyObject *>(self)))) {
-		   PyErr_SetString(PyExc_TypeError, "Fallback fonts must be FT2Font objects.");
-		   goto exit;
-	      }
+         // go through fallbacks once to make sure the types are right
+         for (Py_ssize_t i = 0; i < size; ++i) {
+              // this returns a borrowed reference
+              PyObject* item = PyList_GetItem(fallback_list, i);
+              if (!PyObject_IsInstance(item, PyObject_Type(reinterpret_cast<PyObject *>(self)))) {
+                   PyErr_SetString(PyExc_TypeError, "Fallback fonts must be FT2Font objects.");
+                   goto exit;
+              }
         }
         // go through a second time to add them to our lists
         for (Py_ssize_t i = 0; i < size; ++i) {

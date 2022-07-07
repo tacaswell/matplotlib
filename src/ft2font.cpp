@@ -527,7 +527,6 @@ void FT2Font::set_text(
             ft_object_with_glyph->has_kerning() &&           // if the font knows how to kern
             previous && glyph_index                          // and we really have 2 glyphs
             ) {
-
             FT_Vector delta;
             pen.x += ft_object_with_glyph->get_kerning(previous, glyph_index, FT_KERNING_DEFAULT, delta);
         }

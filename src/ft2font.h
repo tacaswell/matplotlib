@@ -95,7 +95,6 @@ class FT2Font
                                  bool override);
     void load_glyph(FT_UInt glyph_index, FT_Int32 flags, FT2Font *&ft_object, bool fallback);
     void load_glyph(FT_UInt glyph_index, FT_Int32 flags);
-    void load_parent_glyph(std::vector<FT_Glyph> &parent_glyphs, long charcode, FT_Int32 flags);
     void get_width_height(long *width, long *height);
     void get_bitmap_offset(long *x, long *y);
     long get_descent();
