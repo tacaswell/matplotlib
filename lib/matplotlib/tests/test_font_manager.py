@@ -132,6 +132,31 @@ def test_find_noto():
         fig.savefig(BytesIO(), format=fmt)
 
 
+def test_fallback_smoke():
+    fp = FontProperties(family=["WenQuanYi Zen Hei"])
+    if Path(findfont(fp)).name != "wqy-zenhei.ttc":
+        pytest.skip("Font wqy-zenhei.ttc may be missing")
+
+    fp = FontProperties(family=["Noto Sans CJK JP"])
+    if Path(findfont(fp)).name != "NotoSansCJK-Regular.ttc":
+        pytest.skip("Noto Sans CJK JP font may be missing.")
+
+    plt.rcParams['font.size'] = 20
+    fig = plt.figure(figsize=(4.75, 1.85))
+    fig.text(0.05, 0.45, "There are 多个汉字 in between!",
+             family=['DejaVu Sans', "Noto Sans CJK JP"])
+    fig.text(0.05, 0.25, "There are 多个汉字 in between!",
+             family=['DejaVu Sans', "WenQuanYi Zen Hei"])
+    fig.text(0.05, 0.65, "There are 多个汉字 in between!",
+             family=["Noto Sans CJK JP"])
+    fig.text(0.05, 0.85, "There are 多个汉字 in between!",
+             family=["WenQuanYi Zen Hei"])
+
+    # TODO enable fallback for other backends!
+    for fmt in ['png', 'raw']:  # ["svg", "pdf", "ps"]:
+        fig.savefig(BytesIO(), format=fmt)
+
+
 def test_find_invalid(tmpdir):
     tmp_path = Path(tmpdir)
 
