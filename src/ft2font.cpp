@@ -496,7 +496,6 @@ void FT2Font::set_text(
     matrix.yx = (FT_Fixed)(sin(angle) * 0x10000L);
     matrix.yy = (FT_Fixed)(cos(angle) * 0x10000L);
 
-    FT_Bool use_kerning = FT_HAS_KERNING(face);
     FT_UInt previous = 0;
 
     clear();
@@ -525,7 +524,7 @@ void FT2Font::set_text(
         }
 
         // retrieve kerning distance and move pen position
-        if (use_kerning && previous && glyph_index) {
+        if (ft_object_with_glyph->has_kerning() && previous && glyph_index) {
             FT_Vector delta;
             ft_object_with_glyph->get_kerning(previous, glyph_index, FT_KERNING_DEFAULT, delta);
             pen.x += delta.x / (hinting_factor << kerning_factor);

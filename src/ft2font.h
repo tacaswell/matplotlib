@@ -135,6 +135,10 @@ class FT2Font
     {
         return hinting_factor;
     }
+    FT_Bool has_kerning() const
+    {
+        return FT_HAS_KERNING(face);
+    }
 
   private:
     FT2Image image;
