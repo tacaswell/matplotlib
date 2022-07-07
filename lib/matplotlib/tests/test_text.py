@@ -22,8 +22,8 @@ def test_font_styles():
 
     def find_matplotlib_font(**kw):
         prop = FontProperties(**kw)
-        path = findfont(prop, directory=mpl.get_data_path())
-        return FontProperties(fname=path)
+        path, index = findfont(prop, directory=mpl.get_data_path())
+        return FontProperties(fname=path, index=index)
 
     from matplotlib.font_manager import FontProperties, findfont
     warnings.filterwarnings(
@@ -198,7 +198,7 @@ def test_antialiasing():
 
 
 def test_afm_kerning():
-    fn = mpl.font_manager.findfont("Helvetica", fontext="afm")
+    fn, index = mpl.font_manager.findfont("Helvetica", fontext="afm")
     with open(fn, 'rb') as fh:
         afm = mpl._afm.AFM(fh)
     assert afm.string_width_height('VAVAVAVAVAVA') == (7174.0, 718)

@@ -192,7 +192,7 @@ class TruetypeFonts(Fonts):
         self._get_info = functools.lru_cache(None)(self._get_info)
         self._fonts = {}
 
-        filename = findfont(default_font_prop)
+        filename, index = findfont(default_font_prop)
         default_font = get_font(filename)
         self._fonts['default'] = default_font
         self._fonts['regular'] = default_font
@@ -203,7 +203,7 @@ class TruetypeFonts(Fonts):
         else:
             basename = font
         cached_font = self._fonts.get(basename)
-        if cached_font is None and os.path.exists(basename):
+        if cached_font is None and os.path.exists(basename[0]):
             cached_font = get_font(basename)
             self._fonts[basename] = cached_font
             self._fonts[cached_font.postscript_name] = cached_font
@@ -300,7 +300,7 @@ class BakomaFonts(TruetypeFonts):
         super().__init__(*args, **kwargs)
         self.fontmap = {}
         for key, val in self._fontmap.items():
-            fullpath = findfont(val)
+            fullpath, index = findfont(val)
             self.fontmap[key] = fullpath
             self.fontmap[val] = fullpath
 
@@ -408,10 +408,10 @@ class UnicodeFonts(TruetypeFonts):
         self.fontmap = {}
         for texfont in "cal rm tt it bf sf".split():
             prop = mpl.rcParams['mathtext.' + texfont]
-            font = findfont(prop)
+            font, index = findfont(prop)
             self.fontmap[texfont] = font
         prop = FontProperties('cmex10')
-        font = findfont(prop)
+        font, index = findfont(prop)
         self.fontmap['ex'] = font
 
         # include STIX sized alternatives for glyphs if fallback is STIX
@@ -425,7 +425,7 @@ class UnicodeFonts(TruetypeFonts):
                  5: 'STIXSizeFiveSym'}
 
             for size, name in stixsizedaltfonts.items():
-                fullpath = findfont(name)
+                fullpath, index = findfont(name)
                 self.fontmap[size] = fullpath
                 self.fontmap[name] = fullpath
 
@@ -524,7 +524,7 @@ class DejaVuFonts(UnicodeFonts):
             5: 'STIXSizeFiveSym',
         })
         for key, name in self._fontmap.items():
-            fullpath = findfont(name)
+            fullpath, index = findfont(name)
             self.fontmap[key] = fullpath
             self.fontmap[name] = fullpath
 
@@ -611,7 +611,7 @@ class StixFonts(UnicodeFonts):
         TruetypeFonts.__init__(self, *args, **kwargs)
         self.fontmap = {}
         for key, name in self._fontmap.items():
-            fullpath = findfont(name)
+            fullpath, index = findfont(name)
             self.fontmap[key] = fullpath
             self.fontmap[name] = fullpath
 

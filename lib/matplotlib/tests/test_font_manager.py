@@ -25,7 +25,7 @@ def test_font_priority():
     with rc_context(rc={
             'font.sans-serif':
             ['cmmi10', 'Bitstream Vera Sans']}):
-        font = findfont(FontProperties(family=["sans-serif"]))
+        font, index = findfont(FontProperties(family=["sans-serif"]))
     assert Path(font).name == 'cmmi10.ttf'
 
     # Smoketest get_charmap, which isn't used internally anymore
@@ -112,7 +112,7 @@ def test_utf16m_sfnt():
 
 def test_find_ttc():
     fp = FontProperties(family=["WenQuanYi Zen Hei"])
-    if Path(findfont(fp)).name != "wqy-zenhei.ttc":
+    if Path(findfont(fp)[0]).name != "wqy-zenhei.ttc":
         pytest.skip("Font wqy-zenhei.ttc may be missing")
     fig, ax = plt.subplots()
     ax.text(.5, .5, "\N{KANGXI RADICAL DRAGON}", fontproperties=fp)
@@ -122,7 +122,7 @@ def test_find_ttc():
 
 def test_find_noto():
     fp = FontProperties(family=["Noto Sans CJK SC", "Noto Sans CJK JP"])
-    name = Path(findfont(fp)).name
+    name = Path(findfont(fp)[0]).name
     if name not in ("NotoSansCJKsc-Regular.otf", "NotoSansCJK-Regular.ttc"):
         pytest.skip(f"Noto Sans CJK SC font may be missing (found {name})")
 
@@ -313,8 +313,10 @@ def test_get_font_names():
     for path in fonts_mpl + fonts_system:
         try:
             font = ft2font.FT2Font(path)
-            prop = ttfFontProperty(font)
-            ttf_fonts.append(prop.name)
+            for j in range(font.num_faces):
+                font = ft2font.FT2Font(path, index=j)
+                prop = ttfFontProperty(font)
+                ttf_fonts.append(prop.name)
         except:
             pass
     available_fonts = sorted(list(set(ttf_fonts)))
