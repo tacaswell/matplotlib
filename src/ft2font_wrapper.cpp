@@ -170,24 +170,25 @@ static PyTypeObject PyGlyphType;
 
 static PyObject *PyGlyph_from_FT2Font(FT2Font *font, FT2Font *parent_ft_object)
 {
+    const FT_Face &face = font->get_face();
     const long hinting_factor = font->get_hinting_factor();
+    const FT_Glyph &glyph = font->get_last_glyph();
 
     PyGlyph *self;
     self = (PyGlyph *)PyGlyphType.tp_alloc(&PyGlyphType, 0);
 
     self->glyphInd = font->get_last_glyph_index();
+    FT_Glyph_Get_CBox(glyph, ft_glyph_bbox_subpixels, &self->bbox);
 
-    font->get_cbox(self->bbox);
-
-    self->width = font->get_face()->glyph->metrics.width / hinting_factor;
-    self->height = font->get_face()->glyph->metrics.height;
-    self->horiBearingX = font->get_face()->glyph->metrics.horiBearingX / hinting_factor;
-    self->horiBearingY = font->get_face()->glyph->metrics.horiBearingY;
-    self->horiAdvance = font->get_face()->glyph->metrics.horiAdvance;
-    self->linearHoriAdvance = font->get_face()->glyph->linearHoriAdvance / hinting_factor;
-    self->vertBearingX = font->get_face()->glyph->metrics.vertBearingX;
-    self->vertBearingY = font->get_face()->glyph->metrics.vertBearingY;
-    self->vertAdvance = font->get_face()->glyph->metrics.vertAdvance;
+    self->width = face->glyph->metrics.width / hinting_factor;
+    self->height = face->glyph->metrics.height;
+    self->horiBearingX = face->glyph->metrics.horiBearingX / hinting_factor;
+    self->horiBearingY = face->glyph->metrics.horiBearingY;
+    self->horiAdvance = face->glyph->metrics.horiAdvance;
+    self->linearHoriAdvance = face->glyph->linearHoriAdvance / hinting_factor;
+    self->vertBearingX = face->glyph->metrics.vertBearingX;
+    self->vertBearingY = face->glyph->metrics.vertBearingY;
+    self->vertAdvance = face->glyph->metrics.vertAdvance;
 
     return (PyObject *)self;
 }
