@@ -526,8 +526,7 @@ void FT2Font::set_text(
         // retrieve kerning distance and move pen position
         if (ft_object_with_glyph->has_kerning() && previous && glyph_index) {
             FT_Vector delta;
-            ft_object_with_glyph->get_kerning(previous, glyph_index, FT_KERNING_DEFAULT, delta);
-            pen.x += delta.x / (hinting_factor << kerning_factor);
+            pen.x += ft_object_with_glyph->get_kerning(previous, glyph_index, FT_KERNING_DEFAULT, delta);
         }
 
         // extract glyph image and store it in our table
