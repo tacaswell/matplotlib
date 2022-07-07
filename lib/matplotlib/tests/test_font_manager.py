@@ -347,3 +347,16 @@ def test_get_font_names():
     assert set(available_fonts) == set(mpl_font_names)
     assert len(available_fonts) == len(mpl_font_names)
     assert available_fonts == mpl_font_names
+
+
+def test_fallback_errors():
+    file_name = findfont('DejaVu Sans')
+
+    with pytest.raises(TypeError, match="Fallback list must be a list"):
+        # failing to be a list will fail before the 0
+        ft2font.FT2Font(file_name, _fallback_list=(0,))
+
+    with pytest.raises(
+            TypeError, match="Fallback fonts must be FT2Font objects."
+    ):
+        ft2font.FT2Font(file_name, _fallback_list=[0])
