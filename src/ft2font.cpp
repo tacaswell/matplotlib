@@ -445,21 +445,17 @@ int FT2Font::get_kerning(FT_UInt left, FT_UInt right, FT_UInt mode, bool fallbac
         FT2Font *left_ft_object = glyph_to_font[left];
         FT2Font *right_ft_object = glyph_to_font[right];
         if (left_ft_object != right_ft_object) {
-            // could potentially do something different?
+            // we do not know how to do kerning between different fonts
+            return 0;
         }
-        // if left_ft_object is not the same the right_ft_object,
+        // if left_ft_object is the same as right_ft_object,
         // do the exact same thing which set_text does.
         return right_ft_object->get_kerning(left, right, mode, false);
     }
-    if (!FT_HAS_KERNING(face)) {
-        return 0;
-    }
-    FT_Vector delta;
-
-    if (!FT_Get_Kerning(face, left, right, mode, &delta)) {
-        return (int)(delta.x) / (hinting_factor << kerning_factor);
-    } else {
-        return 0;
+    else
+    {
+        FT_Vector delta;
+        return get_kerning(left, right, mode, delta);
     }
 }
 
@@ -497,12 +493,13 @@ void FT2Font::set_text(
     matrix.yx = (FT_Fixed)(sin(angle) * 0x10000L);
     matrix.yy = (FT_Fixed)(cos(angle) * 0x10000L);
 
-    FT_UInt previous = 0;
-
     clear();
 
     bbox.xMin = bbox.yMin = 32000;
     bbox.xMax = bbox.yMax = -32000;
+
+    FT_UInt previous = 0;
+    FT2Font *previous_ft_object = NULL;
 
     for (size_t n = 0; n < N; n++) {
         FT_UInt glyph_index = 0;
@@ -526,7 +523,11 @@ void FT2Font::set_text(
         }
 
         // retrieve kerning distance and move pen position
-        if (ft_object_with_glyph->has_kerning() && previous && glyph_index) {
+        if ((ft_object_with_glyph == previous_ft_object) &&  // if both fonts are the same
+            ft_object_with_glyph->has_kerning() &&           // if the font knows how to kern
+            previous && glyph_index                          // and we really have 2 glyphs
+            ) {
+
             FT_Vector delta;
             pen.x += ft_object_with_glyph->get_kerning(previous, glyph_index, FT_KERNING_DEFAULT, delta);
         }
@@ -550,6 +551,8 @@ void FT2Font::set_text(
         pen.x += last_advance;
 
         previous = glyph_index;
+        previous_ft_object = ft_object_with_glyph;
+
     }
 
     FT_Vector_Transform(&pen, &matrix);
