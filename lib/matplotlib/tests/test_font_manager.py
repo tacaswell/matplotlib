@@ -360,3 +360,11 @@ def test_fallback_errors():
             TypeError, match="Fallback fonts must be FT2Font objects."
     ):
         ft2font.FT2Font(file_name, _fallback_list=[0])
+
+
+def test_ft2font_positive_hinting_factor():
+    file_name = findfont('DejaVu Sans')
+    with pytest.raises(
+            ValueError, match="hinting_factor must be greater than 0"
+    ):
+        ft2font.FT2Font(file_name, 0)

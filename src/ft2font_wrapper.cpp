@@ -362,6 +362,11 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
              &hinting_factor, &fallback_list, &kerning_factor)) {
         return -1;
     }
+    if (hinting_factor <= 0) {
+      PyErr_SetString(PyExc_ValueError,
+                      "hinting_factor must be greater than 0");
+      goto exit;
+    }
 
     self->stream.base = NULL;
     self->stream.size = 0x7fffffff;  // Unknown size.
