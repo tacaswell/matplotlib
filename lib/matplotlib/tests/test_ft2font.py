@@ -1,5 +1,6 @@
 from pathlib import Path
 import io
+
 import pytest
 
 from matplotlib import ft2font
@@ -54,13 +55,12 @@ def test_fallback_smoke():
         fig.savefig(io.BytesIO(), format=fmt)
 
 
-@pytest.mark.parametrize('ch_font',
+@pytest.mark.parametrize('family_name, file_name',
                          [("WenQuanYi Zen Hei",  "wqy-zenhei.ttc"),
                           ("Noto Sans CJK JP", "NotoSansCJK-Regular.ttc")]
                          )
 @check_figures_equal(extensions=["png"])
-def test_font_fallback_chinese(fig_test, fig_ref, ch_font):
-    family_name, file_name = ch_font
+def test_font_fallback_chinese(fig_test, fig_ref, family_name, file_name):
     fp = fm.FontProperties(family=[family_name])
     if Path(fm.findfont(fp)).name != file_name:
         pytest.skip(f"Font {family_name} ({file_name}) is missing")
