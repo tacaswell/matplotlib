@@ -2,7 +2,7 @@ Font Fallback in Agg
 --------------------
 
 It is now possible to specify a list of fonts families and the Agg renderer
-well try them in order to locate a required glyph.
+will try them in order to locate a required glyph.
 
 .. plot::
    :caption: Demonstration of mixed English and Chinese text with font fallback.
@@ -24,4 +24,4 @@ well try them in order to locate a required glyph.
 
 
 This currently only works with the Agg backend, but support for the vector
-backends is planned for mpl3.7.
+backends is planned for Matplotlib 3.7.
