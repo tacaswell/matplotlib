@@ -1349,8 +1349,8 @@ class FontManager:
         """Return the list of available fonts."""
         return list(set([font.name for font in self.ttflist]))
 
-    def find_fonts_by_props(self, prop, fontext='ttf', directory=None,
-                            fallback_to_default=True, rebuild_if_missing=True):
+    def _find_fonts_by_props(self, prop, fontext='ttf', directory=None,
+                             fallback_to_default=True, rebuild_if_missing=True):
         """
         Find font families that most closely match the given properties.
 
@@ -1637,4 +1637,3 @@ def _load_fontmanager(*, try_read_cache=True):
 fontManager = _load_fontmanager()
 findfont = fontManager.findfont
 get_font_names = fontManager.get_font_names
-find_fonts_by_props = fontManager.find_fonts_by_props
