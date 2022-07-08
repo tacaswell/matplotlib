@@ -378,17 +378,17 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
         if (!PyList_Check(fallback_list)) {
             PyErr_SetString(PyExc_TypeError, "Fallback list must be a list");
             goto exit;
-         }
-         Py_ssize_t size = PyList_Size(fallback_list);
+        }
+        Py_ssize_t size = PyList_Size(fallback_list);
 
-         // go through fallbacks once to make sure the types are right
-         for (Py_ssize_t i = 0; i < size; ++i) {
-              // this returns a borrowed reference
-              PyObject* item = PyList_GetItem(fallback_list, i);
-              if (!PyObject_IsInstance(item, PyObject_Type(reinterpret_cast<PyObject *>(self)))) {
-                   PyErr_SetString(PyExc_TypeError, "Fallback fonts must be FT2Font objects.");
-                   goto exit;
-              }
+        // go through fallbacks once to make sure the types are right
+        for (Py_ssize_t i = 0; i < size; ++i) {
+            // this returns a borrowed reference
+            PyObject* item = PyList_GetItem(fallback_list, i);
+            if (!PyObject_IsInstance(item, PyObject_Type(reinterpret_cast<PyObject *>(self)))) {
+                PyErr_SetString(PyExc_TypeError, "Fallback fonts must be FT2Font objects.");
+                goto exit;
+            }
         }
         // go through a second time to add them to our lists
         for (Py_ssize_t i = 0; i < size; ++i) {
@@ -403,7 +403,6 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
             FT2Font *fback = reinterpret_cast<PyFT2Font *>(item)->x;
             fallback_fonts.push_back(fback);
         }
-
     }
 
     if (PyBytes_Check(filename) || PyUnicode_Check(filename)) {
@@ -440,7 +439,7 @@ static void PyFT2Font_dealloc(PyFT2Font *self)
 {
     delete self->x;
     for (size_t i = 0; i < self->fallbacks.size(); i++) {
-      Py_DECREF(self->fallbacks[i]);
+        Py_DECREF(self->fallbacks[i]);
     }
 
     Py_XDECREF(self->py_file);
