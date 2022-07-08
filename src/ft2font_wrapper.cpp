@@ -374,6 +374,7 @@ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
     memset((void *)&open_args, 0, sizeof(FT_Open_Args));
     open_args.flags = FT_OPEN_STREAM;
     open_args.stream = &self->stream;
+
     if (fallback_list) {
         if (!PyList_Check(fallback_list)) {
             PyErr_SetString(PyExc_TypeError, "Fallback list must be a list");
