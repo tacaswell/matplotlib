@@ -167,11 +167,6 @@ OSXFontDirectories = [
 ]
 
 
-@lru_cache(64)
-def _cached_realpath(path):
-    return os.path.realpath(path)
-
-
 def get_fontext_synonyms(fontext):
     """
     Return a list of file extensions that are synonyms for
@@ -1386,10 +1381,8 @@ class FontManager:
 
         Returns
         -------
-        dict
-            Key, value pair of families and their corresponding filepaths.
-
-            We depend on the Python dictionary being implicitly ordered.
+        list[str]
+            The paths of the fonts found
 
         Notes
         -----
@@ -1408,7 +1401,7 @@ class FontManager:
 
         prop = FontProperties._from_any(prop)
 
-        fpaths = {}
+        fpaths = []
         for family in prop.get_family():
             cprop = prop.copy()
 
@@ -1417,14 +1410,16 @@ class FontManager:
 
             # do not fall back to default font
             try:
-                fpaths[family] = self._findfont_cached(
-                    cprop, fontext, directory,
-                    fallback_to_default=False,
-                    rebuild_if_missing=rebuild_if_missing,
-                    rc_params=rc_params,
+                fpaths.append(
+                    self._findfont_cached(
+                        cprop, fontext, directory,
+                        fallback_to_default=False,
+                        rebuild_if_missing=rebuild_if_missing,
+                        rc_params=rc_params,
+                    )
                 )
             except ValueError:
-                if family.lower() in font_family_aliases:
+                if family in font_family_aliases:
                     _log.warning(
                         "findfont: Generic family %r not found because "
                         "none of the following families were found: %s",
@@ -1443,11 +1438,13 @@ class FontManager:
                 dfamily = self.defaultFamily[fontext]
                 cprop = prop.copy()
                 cprop.set_family(dfamily)
-                fpaths[dfamily] = self._findfont_cached(
-                    cprop, fontext, directory,
-                    fallback_to_default=True,
-                    rebuild_if_missing=rebuild_if_missing,
-                    rc_params=rc_params,
+                fpaths.append(
+                    self._findfont_cached(
+                        cprop, fontext, directory,
+                        fallback_to_default=True,
+                        rebuild_if_missing=rebuild_if_missing,
+                        rc_params=rc_params,
+                    )
                 )
             else:
                 raise ValueError("Failed to find any font, and fallback "
@@ -1548,15 +1545,16 @@ def is_opentype_cff_font(filename):
 
 
 @lru_cache(64)
-def _get_font(fpaths, hinting_factor, *, _kerning_factor, thread_id):
+def _get_font(font_filepaths, hinting_factor, *, _kerning_factor, thread_id):
+    first_fontpath, *rest = font_filepaths
     return ft2font.FT2Font(
-        fpaths[0], hinting_factor,
+        first_fontpath, hinting_factor,
         _fallback_list=[
             ft2font.FT2Font(
                 fpath, hinting_factor,
                 _kerning_factor=_kerning_factor
             )
-            for fpath in fpaths[1:]
+            for fpath in rest
         ],
         _kerning_factor=_kerning_factor
     )
@@ -1571,19 +1569,51 @@ if hasattr(os, "register_at_fork"):
     os.register_at_fork(after_in_child=_get_font.cache_clear)
 
 
-def get_font(filename, hinting_factor=None):
+@lru_cache(64)
+def _cached_realpath(path):
     # Resolving the path avoids embedding the font twice in pdf/ps output if a
     # single font is selected using two different relative paths.
-    if isinstance(filename, dict):
-        paths = tuple(_cached_realpath(fname) for fname in filename.values())
+    return os.path.realpath(path)
+
+
+@_api.rename_parameter('3.6', "filepath", "font_filepaths")
+def get_font(font_filepaths, hinting_factor=None):
+    """
+    Get an `ft2font.FT2Font` object given a list of file paths
+
+    Parameters
+    ----------
+    font_filepaths : Iterable[str|Path|byhen] | str | Path | bytes
+        Relative or absolute paths to
+
+        If a single string, bytes, or `pathlib.Path` will be treated as a
+        length 1 list that entry.
+
+        If more than one filepath is passed the FT2Font object returned
+        will fallback through the fonts, in the order given, to find a given
+        glyph.
+
+    Returns
+    -------
+    ft2font.FT2Font
+
+    """
+    if isinstance(font_filepaths, (str, Path, bytes)):
+        paths = (_cached_realpath(font_filepaths),)
     else:
-        paths = (_cached_realpath(filename),)
+        paths = tuple(_cached_realpath(fname) for fname in font_filepaths)
+
     if hinting_factor is None:
         hinting_factor = rcParams['text.hinting_factor']
-    # also key on the thread ID to prevent segfaults with multi-threading
-    return _get_font(paths, hinting_factor,
-                     _kerning_factor=rcParams['text.kerning_factor'],
-                     thread_id=threading.get_ident())
+
+    return _get_font(
+        # must be a tuple to be cached
+        paths,
+        hinting_factor,
+        _kerning_factor=rcParams['text.kerning_factor'],
+        # also key on the thread ID to prevent segfaults with multi-threading
+        thread_id=threading.get_ident()
+    )
 
 
 def _load_fontmanager(*, try_read_cache=True):
