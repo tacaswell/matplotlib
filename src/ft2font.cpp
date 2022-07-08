@@ -3,10 +3,10 @@
 #define NO_IMPORT_ARRAY
 
 #include <algorithm>
+#include <iterator>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <iterator>
 
 #include "ft2font.h"
 #include "mplutils.h"
