@@ -1579,12 +1579,12 @@ def _cached_realpath(path):
 @_api.rename_parameter('3.6', "filepath", "font_filepaths")
 def get_font(font_filepaths, hinting_factor=None):
     """
-    Get an `ft2font.FT2Font` object given a list of file paths
+    Get an `ft2font.FT2Font` object given a list of file paths.
 
     Parameters
     ----------
     font_filepaths : Iterable[str, Path, bytes], str, Path, bytes
-        Relative or absolute paths to
+        Relative or absolute paths to the font files to be used.
 
         If a single string, bytes, or `pathlib.Path`, then it will be treated
         as a list with that entry only.
