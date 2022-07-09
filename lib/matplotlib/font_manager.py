@@ -1583,14 +1583,14 @@ def get_font(font_filepaths, hinting_factor=None):
 
     Parameters
     ----------
-    font_filepaths : Iterable[str|Path|byhen] | str | Path | bytes
+    font_filepaths : Iterable[str|Path|bytes] | str | Path | bytes
         Relative or absolute paths to
 
-        If a single string, bytes, or `pathlib.Path` will be treated as a
-        length 1 list that entry.
+        If a single string, bytes, or `pathlib.Path`, then it will be treated as a
+        list with that entry only.
 
-        If more than one filepath is passed the FT2Font object returned
-        will fallback through the fonts, in the order given, to find a given
+        If more than one filepath is passed, then the returned FT2Font object
+        will fall back through the fonts, in the order given, to find a needed
         glyph.
 
     Returns
