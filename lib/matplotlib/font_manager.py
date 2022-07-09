@@ -1597,7 +1597,7 @@ def _cached_realpath(path):
 @_api.rename_parameter('3.6', "filepath", "font_filepaths")
 def get_font(font_filepaths, hinting_factor=None):
     """
-    Get an `ft2font.FT2Font` object given a list of file paths.
+    Get an ``ft2font.FT2Font`` object given a list of file paths.
 
     Parameters
     ----------
@@ -1613,7 +1613,7 @@ def get_font(font_filepaths, hinting_factor=None):
 
     Returns
     -------
-    ft2font.FT2Font
+    ``ft2font.FT2Font``
 
     """
     if isinstance(font_filepaths, (str, Path, bytes, tuple)):
