@@ -596,14 +596,11 @@ static PyObject *PyFT2Font_get_fontmap(PyFT2Font *self, PyObject *args, PyObject
     if (!(char_to_font = PyDict_New())) {
         return NULL;
     }
-
-    std::for_each(codepoints.cbegin(), codepoints.cend(), [char_to_font, self](uint32_t x) {
+    for (auto it = codepoints.begin(); it != codepoints.end(); ++it) {
+      auto x = *it;
       PyObject* target_font;
-      bool was_found;
       int index;
-      // TODO Handle recursion!
-      was_found = self->x->index_with_glyph(x, index);
-      if (was_found) {
+      if (self->x->index_with_glyph(x, index)) {
         if (index >=0)
         {
           target_font = self->fallbacks[index];
@@ -622,11 +619,11 @@ static PyObject *PyFT2Font_get_fontmap(PyFT2Font *self, PyObject *args, PyObject
                     || (PyDict_SetItem(char_to_font, key, target_font) == -1));
       Py_XDECREF(key);
       if (error) {
-        // TODO sort out how to exit here!
         Py_DECREF(char_to_font);
         PyErr_SetString(PyExc_ValueError, "Something went very wrong");
+        return NULL;
       }
-    });
+    }
     return char_to_font;
 
 }

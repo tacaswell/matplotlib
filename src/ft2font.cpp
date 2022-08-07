@@ -620,12 +620,8 @@ bool FT2Font::index_with_glyph(long charcode, int& index) const
             if (was_found){
                 index = i;
                 return true;
-
             }
-
-
         }
-
     }
     return false;
 }
