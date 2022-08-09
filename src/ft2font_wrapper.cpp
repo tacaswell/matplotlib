@@ -568,7 +568,7 @@ static PyObject *PyFT2Font_get_fontmap(PyFT2Font *self, PyObject *args, PyObject
     const char *names[] = { "string", NULL };
 
     if (!PyArg_ParseTupleAndKeywords(
-             args, kwds, "O:get_fontmap", (char **)names, &textobj)) {
+            args, kwds, "O:get_fontmap", (char **)names, &textobj)) {
         return NULL;
     }
 
@@ -599,35 +599,31 @@ static PyObject *PyFT2Font_get_fontmap(PyFT2Font *self, PyObject *args, PyObject
         return NULL;
     }
     for (auto it = codepoints.begin(); it != codepoints.end(); ++it) {
-      auto x = *it;
-      PyObject* target_font;
-      int index;
-      if (self->x->index_with_glyph(x, index)) {
-        if (index >=0)
-        {
-          target_font = self->fallbacks[index];
-        } else
-        {
-          target_font = (PyObject *)self;
+        auto x = *it;
+        PyObject* target_font;
+        int index;
+        if (self->x->index_with_glyph(x, index)) {
+            if (index >=0) {
+                target_font = self->fallbacks[index];
+            } else {
+                target_font = (PyObject *)self;
+            }
+        } else {
+            // TODO Handle recursion!
+            target_font = (PyObject *)self;
         }
-      } else
-      {
-        // TODO Handle recursion!
-        target_font = (PyObject *)self;
-      }
 
-      PyObject *key = NULL;
-      bool error = (!(key = PyUnicode_FromFormat("%c", x))
-                    || (PyDict_SetItem(char_to_font, key, target_font) == -1));
-      Py_XDECREF(key);
-      if (error) {
-        Py_DECREF(char_to_font);
-        PyErr_SetString(PyExc_ValueError, "Something went very wrong");
-        return NULL;
-      }
+        PyObject *key = NULL;
+        bool error = (!(key = PyUnicode_FromFormat("%c", x))
+                      || (PyDict_SetItem(char_to_font, key, target_font) == -1));
+        Py_XDECREF(key);
+        if (error) {
+            Py_DECREF(char_to_font);
+            PyErr_SetString(PyExc_ValueError, "Something went very wrong");
+            return NULL;
+        }
     }
     return char_to_font;
-
 }
 
 

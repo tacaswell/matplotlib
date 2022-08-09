@@ -604,10 +604,11 @@ void FT2Font::load_char(long charcode, FT_Int32 flags, FT2Font *&ft_object, bool
     }
 }
 
+
 bool FT2Font::index_with_glyph(long charcode, int& index) const
 {
     FT_UInt glyph_index = FT_Get_Char_Index(face, charcode);
-    if (glyph_index){
+    if (glyph_index) {
         index = -1;
         return true;
     } else {
@@ -615,10 +616,8 @@ bool FT2Font::index_with_glyph(long charcode, int& index) const
         bool was_found;
 
         for (size_t i = 0; i < fallbacks.size(); ++i) {
-            was_found = fallbacks[i]->index_with_glyph(
-                charcode, inner_index
-            );
-            if (was_found){
+            was_found = fallbacks[i]->index_with_glyph(charcode, inner_index);
+            if (was_found) {
                 index = i;
                 return true;
             }
