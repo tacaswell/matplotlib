@@ -1405,26 +1405,47 @@ class FontManager:
 
         fpaths = []
         for family in prop.get_family():
-            cprop = prop.copy()
-            cprop.set_family(family)  # set current prop's family
+            if family in font_family_aliases:
+                # deal with the sans/san-serif/sans serif issue
+                generic_family = {
+                    'sans': 'sans-serif',
+                    'sans serif': 'sans-serif'
+                }.get(family, family)
 
-            try:
-                fpaths.append(
-                    self.findfont(
-                        cprop, fontext, directory,
-                        fallback_to_default=False,  # don't fallback to default
-                        rebuild_if_missing=rebuild_if_missing,
+                for fam in filter(
+                        lambda _: _ not in font_family_aliases,
+                        mpl.rcParams[f'font.{generic_family}']
+                ):
+                    cprop = prop.copy()
+                    cprop.set_family(fam)
+                    try:
+                        # for each of the fonts in the fallback chain look it up
+                        fpaths.append(
+                            self.findfont(
+                                cprop, fontext, directory,
+                                fallback_to_default=False,  # don't fallback to default
+                                rebuild_if_missing=rebuild_if_missing,
+                            )
+                        )
+
+                    except ValueError:
+                        # but do not worry if one is missing
+                        ...
+            else:
+                cprop = prop.copy()
+                cprop.set_family(family)  # set current prop's family
+
+                try:
+                    fpaths.append(
+                        self.findfont(
+                            cprop, fontext, directory,
+                            fallback_to_default=False,  # don't fallback to default
+                            rebuild_if_missing=rebuild_if_missing,
+                        )
                     )
-                )
-            except ValueError:
-                if family in font_family_aliases:
-                    _log.warning(
-                        "findfont: Generic family %r not found because "
-                        "none of the following families were found: %s",
-                        family, ", ".join(self._expand_aliases(family))
-                    )
-                else:
+                except ValueError:
                     _log.warning("findfont: Font family %r not found.", family)
+
 
         # only add default family if no other font was found and
         # fallback_to_default is enabled

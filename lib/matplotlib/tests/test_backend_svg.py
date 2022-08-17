@@ -535,11 +535,10 @@ def test_svg_escape():
     "'Arial', 'WenQuanYi Zen Hei', cursive",
     "'Impact', 'WenQuanYi Zen Hei', fantasy",
     "'DejaVu Sans Mono', 'WenQuanYi Zen Hei', 'Courier New', monospace",
-    # # These do not work because the logic to get the font metrics will not
-    # # find WenQuanYi as the fallback logic steps with the first fallback font
-    # "'DejaVu Sans Mono', 'Courier New', 'WenQuanYi Zen Hei', monospace",
-    # "'DejaVu Sans', 'Arial', 'WenQuanYi Zen Hei', sans-serif",
-    # "'DejaVu Serif', 'Times New Roman', 'WenQuanYi Zen Hei',  serif",
+    # These test that generic fallbacks will go through many
+    "'DejaVu Sans Mono', 'Courier New', 'WenQuanYi Zen Hei', monospace",
+    "'DejaVu Sans', 'Arial', 'WenQuanYi Zen Hei', sans-serif",
+    "'DejaVu Serif', 'Times New Roman', 'WenQuanYi Zen Hei', serif",
 ])
 @pytest.mark.parametrize("include_generic", [True, False])
 def test_svg_font_string(font_str, include_generic):
