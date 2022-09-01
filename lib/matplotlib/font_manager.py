@@ -1404,48 +1404,32 @@ class FontManager:
         prop = FontProperties._from_any(prop)
 
         fpaths = []
-        for family in prop.get_family():
-            if family in font_family_aliases:
-                # deal with the sans/san-serif/sans serif issue
-                generic_family = {
-                    'sans': 'sans-serif',
-                    'sans serif': 'sans-serif'
-                }.get(family, family)
 
-                for fam in filter(
-                        lambda _: _ not in font_family_aliases,
-                        mpl.rcParams[f'font.{generic_family}']
-                ):
-                    cprop = prop.copy()
-                    cprop.set_family(fam)
-                    try:
-                        # for each of the fonts in the fallback chain look it up
-                        fpaths.append(
-                            self.findfont(
-                                cprop, fontext, directory,
-                                fallback_to_default=False,  # don't fallback to default
-                                rebuild_if_missing=rebuild_if_missing,
-                            )
-                        )
+        def _family_iter(prop):
+            for family in prop.get_family():
+                if family in font_family_aliases:
+                    for fam in self._expand_aliases(family):
+                        if fam in font_family_aliases:
+                            continue
+                        yield (fam, False)
+                else:
+                    yield (family, True)
 
-                    except ValueError:
-                        # but do not worry if one is missing
-                        ...
-            else:
-                cprop = prop.copy()
-                cprop.set_family(family)  # set current prop's family
-
-                try:
-                    fpaths.append(
-                        self.findfont(
-                            cprop, fontext, directory,
-                            fallback_to_default=False,  # don't fallback to default
-                            rebuild_if_missing=rebuild_if_missing,
-                        )
+        for fam, should_warn in _family_iter(prop):
+            # for each of the fonts in the fallback chain look it up
+            cprop = prop.copy()
+            cprop.set_family(fam)
+            try:
+                fpaths.append(
+                    self.findfont(
+                        cprop, fontext, directory,
+                        fallback_to_default=False,  # don't fallback to default
+                        rebuild_if_missing=rebuild_if_missing,
                     )
-                except ValueError:
-                    _log.warning("findfont: Font family %r not found.", family)
-
+                )
+            except ValueError:
+                if should_warn:
+                    _log.warning("findfont: Font family %r not found.", fam)
 
         # only add default family if no other font was found and
         # fallback_to_default is enabled
@@ -1465,7 +1449,7 @@ class FontManager:
                 raise ValueError("Failed to find any font, and fallback "
                                  "to the default font was disabled")
 
-        return fpaths
+        return tuple(*dict.fromkeys(fpaths))
 
     @lru_cache(1024)
     def _findfont_cached(self, prop, fontext, directory, fallback_to_default,
