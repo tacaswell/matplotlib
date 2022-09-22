@@ -190,6 +190,16 @@ class Artist:
         d['stale_callback'] = None
         return d
 
+    def __getattr__(self, name):
+        msg = f'{type(self).__name__!r} object has no attribute {name!r}'
+        if (
+                not name.startswith('get') and
+                not name.startswith('set') and
+                hasattr(self, f'set_{name}')
+        ):
+            msg = f"{msg}.  Did you mean to call 'set_{name}' or 'get_{name}'?"
+        raise AttributeError(msg)
+
     def remove(self):
         """
         Remove the artist from the figure if possible.
