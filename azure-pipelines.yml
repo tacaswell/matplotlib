@@ -69,6 +69,9 @@ stages:
           Windows_py311:
             vmImage: 'windows-latest'
             python.version: '3.11'
+          Windows_pre:
+            vmImage: 'windows-latest'
+            python.version: 'Pre'
         maxParallel: 4
       pool:
         vmImage: '$(vmImage)'
