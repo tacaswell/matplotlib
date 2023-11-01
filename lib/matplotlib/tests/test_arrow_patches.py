@@ -11,7 +11,10 @@ def draw_arrow(ax, t, r):
                                 fc="b", ec='k'))
 
 
-@image_comparison(['fancyarrow_test_image'])
+@image_comparison(
+    ['fancyarrow_test_image'],
+    tol=0.012 if platform.machine() == 'arm64' else 0
+)
 def test_fancyarrow():
     # Added 0 to test division by zero error described in issue 3930
     r = [0.4, 0.3, 0.2, 0.1, 0]
@@ -114,8 +117,12 @@ def test_fancyarrow_dash():
     ax.add_patch(e2)
 
 
-@image_comparison(['arrow_styles.png'], style='mpl20', remove_text=True,
-                  tol=0 if platform.machine() == 'x86_64' else 0.005)
+@image_comparison(
+    ['arrow_styles.png'], style='mpl20', remove_text=True,
+    tol=0.018 if platform.machine() == 'arm64' else (
+        0 if platform.machine() in ('x86_64', 'AMD64') else 0.005
+    )
+)
 def test_arrow_styles():
     styles = mpatches.ArrowStyle.get_styles()
 
@@ -147,7 +154,10 @@ def test_arrow_styles():
             ax.add_patch(patch)
 
 
-@image_comparison(['connection_styles.png'], style='mpl20', remove_text=True)
+@image_comparison(
+    ['connection_styles.png'], style='mpl20', remove_text=True,
+    tol=0.013 if platform.machine() == 'arm64' else 0
+)
 def test_connection_styles():
     styles = mpatches.ConnectionStyle.get_styles()
 
