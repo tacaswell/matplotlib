@@ -106,6 +106,12 @@ class _StrongRef:
     def __hash__(self):
         return hash(self._obj)
 
+    def __repr__(self):
+        return f'<_StrongRef of {repr(self._obj)}>'
+
+    def __str__(self):
+        return f'<_StrongRef of {str(self._obj)}>'
+
 
 def _weak_or_strong_ref(func, callback):
     """
