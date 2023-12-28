@@ -745,7 +745,7 @@ def test_svganim_frames_param_type(monkeypatch, frames, save_count):
         plt.ylim(0, 1)
         index = 0
 
-        def update_line(ununsed):
+        def update_line(unused):
             nonlocal index
             l.set_data(range(index + 1), data[: index + 1])
             index += 1
@@ -786,7 +786,7 @@ def test_svganim_requires_blit():
 def test_svganim_unrecognized_artist():
     fig = plt.figure()
 
-    def update_line(ununsed):
+    def update_line(unused):
         return plt.plot([], [], "r-")
 
     with pytest.raises(ValueError, match="Artist .* not recognized.*"):
