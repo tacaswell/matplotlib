@@ -4708,7 +4708,7 @@ class Axes(_AxesBase):
                       label_namer="y")
     @_docstring.interpd
     def scatter(self, x, y, s=None, c=None, marker=None, cmap=None, norm=None,
-                vmin=None, vmax=None, alpha=None, linewidths=None, *,
+                vmin=None, vmax=None, colorizer=None, alpha=None, linewidths=None, *,
                 edgecolors=None, plotnonfinite=False, **kwargs):
         """
         A scatter plot of *y* vs. *x* with varying marker size and/or color.
@@ -4774,6 +4774,10 @@ class Axes(_AxesBase):
             This parameter is ignored if *c* is RGB(A).
 
         %(vmin_vmax_doc)s
+
+            This parameter is ignored if *c* is RGB(A).
+
+        %(colorizer_doc)s
 
             This parameter is ignored if *c* is RGB(A).
 
@@ -4950,9 +4954,13 @@ class Axes(_AxesBase):
         )
         collection.set_transform(mtransforms.IdentityTransform())
         if colors is None:
+            if colorizer:
+                collection._set_colorizer_check_keywords(colorizer, cmap, norm,
+                                                         vmin, vmax)
+            else:
+                collection.set_cmap(cmap)
+                collection.set_norm(norm)
             collection.set_array(c)
-            collection.set_cmap(cmap)
-            collection.set_norm(norm)
             collection._scale_norm(norm, vmin, vmax)
         else:
             extra_kwargs = {
@@ -4987,7 +4995,7 @@ class Axes(_AxesBase):
     @_docstring.dedent_interpd
     def hexbin(self, x, y, C=None, gridsize=100, bins=None,
                xscale='linear', yscale='linear', extent=None,
-               cmap=None, norm=None, vmin=None, vmax=None,
+               cmap=None, norm=None, vmin=None, vmax=None, colorizer=None,
                alpha=None, linewidths=None, edgecolors='face',
                reduce_C_function=np.mean, mincnt=None, marginals=False,
                **kwargs):
@@ -5100,6 +5108,8 @@ class Axes(_AxesBase):
         %(norm_doc)s
 
         %(vmin_vmax_doc)s
+
+        %(colorizer_doc)s
 
         alpha : float between 0 and 1, optional
             The alpha blending value, between 0 (transparent) and 1 (opaque).
@@ -5303,9 +5313,12 @@ class Axes(_AxesBase):
             bins = np.sort(bins)
             accum = bins.searchsorted(accum)
 
+        if colorizer:
+            collection._set_colorizer_check_keywords(colorizer, cmap, norm, vmin, vmax)
+        else:
+            collection.set_cmap(cmap)
+            collection.set_norm(norm)
         collection.set_array(accum)
-        collection.set_cmap(cmap)
-        collection.set_norm(norm)
         collection.set_alpha(alpha)
         collection._internal_update(kwargs)
         collection._scale_norm(norm, vmin, vmax)
@@ -5740,7 +5753,7 @@ class Axes(_AxesBase):
     @_docstring.interpd
     def imshow(self, X, cmap=None, norm=None, *, aspect=None,
                interpolation=None, alpha=None,
-               vmin=None, vmax=None, origin=None, extent=None,
+               vmin=None, vmax=None, colorizer=None, origin=None, extent=None,
                interpolation_stage=None, filternorm=True, filterrad=4.0,
                resample=None, url=None, **kwargs):
         """
@@ -5785,6 +5798,10 @@ class Axes(_AxesBase):
             This parameter is ignored if *X* is RGB(A).
 
         %(vmin_vmax_doc)s
+
+            This parameter is ignored if *X* is RGB(A).
+
+        %(colorizer_doc)s
 
             This parameter is ignored if *X* is RGB(A).
 
@@ -5950,7 +5967,7 @@ class Axes(_AxesBase):
         `~matplotlib.pyplot.imshow` expects RGB images adopting the straight
         (unassociated) alpha representation.
         """
-        im = mimage.AxesImage(self, cmap=cmap, norm=norm,
+        im = mimage.AxesImage(self, cmap=cmap, norm=norm, colorizer=colorizer,
                               interpolation=interpolation, origin=origin,
                               extent=extent, filternorm=filternorm,
                               filterrad=filterrad, resample=resample,
@@ -6094,7 +6111,7 @@ class Axes(_AxesBase):
     @_preprocess_data()
     @_docstring.dedent_interpd
     def pcolor(self, *args, shading=None, alpha=None, norm=None, cmap=None,
-               vmin=None, vmax=None, **kwargs):
+               vmin=None, vmax=None, colorizer=None, **kwargs):
         r"""
         Create a pseudocolor plot with a non-regular rectangular grid.
 
@@ -6171,6 +6188,8 @@ class Axes(_AxesBase):
         %(norm_doc)s
 
         %(vmin_vmax_doc)s
+
+        %(colorizer_doc)s
 
         edgecolors : {'none', None, 'face', color, color sequence}, optional
             The color of the edges. Defaults to 'none'. Possible values:
@@ -6279,7 +6298,8 @@ class Axes(_AxesBase):
         coords = stack([X, Y], axis=-1)
 
         collection = mcoll.PolyQuadMesh(
-            coords, array=C, cmap=cmap, norm=norm, alpha=alpha, **kwargs)
+            coords, array=C, cmap=cmap, norm=norm, colorizer=colorizer,
+            alpha=alpha, **kwargs)
         collection._scale_norm(norm, vmin, vmax)
 
         # Transform from native to data coordinates?
@@ -6311,7 +6331,8 @@ class Axes(_AxesBase):
     @_preprocess_data()
     @_docstring.dedent_interpd
     def pcolormesh(self, *args, alpha=None, norm=None, cmap=None, vmin=None,
-                   vmax=None, shading=None, antialiased=False, **kwargs):
+                   vmax=None, colorizer=None, shading=None, antialiased=False,
+                   **kwargs):
         """
         Create a pseudocolor plot with a non-regular rectangular grid.
 
@@ -6379,6 +6400,8 @@ class Axes(_AxesBase):
         %(norm_doc)s
 
         %(vmin_vmax_doc)s
+
+        %(colorizer_doc)s
 
         edgecolors : {'none', None, 'face', color, color sequence}, optional
             The color of the edges. Defaults to 'none'. Possible values:
@@ -6509,7 +6532,7 @@ class Axes(_AxesBase):
 
         collection = mcoll.QuadMesh(
             coords, antialiased=antialiased, shading=shading,
-            array=C, cmap=cmap, norm=norm, alpha=alpha, **kwargs)
+            array=C, cmap=cmap, norm=norm, colorizer=colorizer, alpha=alpha, **kwargs)
         collection._scale_norm(norm, vmin, vmax)
 
         coords = coords.reshape(-1, 2)  # flatten the grid structure; keep x, y
@@ -6538,7 +6561,7 @@ class Axes(_AxesBase):
     @_preprocess_data()
     @_docstring.dedent_interpd
     def pcolorfast(self, *args, alpha=None, norm=None, cmap=None, vmin=None,
-                   vmax=None, **kwargs):
+                   vmax=None, colorizer=None, **kwargs):
         """
         Create a pseudocolor plot with a non-regular rectangular grid.
 
@@ -6624,6 +6647,10 @@ class Axes(_AxesBase):
 
             This parameter is ignored if *C* is RGB(A).
 
+        %(colorizer_doc)s
+
+            This parameter is ignored if *C* is RGB(A).
+
         alpha : float, default: None
             The alpha blending value, between 0 (transparent) and 1 (opaque).
 
@@ -6687,7 +6714,7 @@ class Axes(_AxesBase):
                 raise ValueError("C must be 2D or 3D")
             collection = mcoll.QuadMesh(
                 coords, array=C,
-                alpha=alpha, cmap=cmap, norm=norm,
+                alpha=alpha, cmap=cmap, norm=norm, colorizer=colorizer,
                 antialiased=False, edgecolors="none")
             self.add_collection(collection, autolim=False)
             xl, xr, yb, yt = x.min(), x.max(), y.min(), y.max()
@@ -6697,15 +6724,15 @@ class Axes(_AxesBase):
             extent = xl, xr, yb, yt = x[0], x[-1], y[0], y[-1]
             if style == "image":
                 im = mimage.AxesImage(
-                    self, cmap=cmap, norm=norm,
+                    self, cmap=cmap, norm=norm, colorizer=colorizer,
                     data=C, alpha=alpha, extent=extent,
                     interpolation='nearest', origin='lower',
                     **kwargs)
             elif style == "pcolorimage":
                 im = mimage.PcolorImage(
                     self, x, y, C,
-                    cmap=cmap, norm=norm, alpha=alpha, extent=extent,
-                    **kwargs)
+                    cmap=cmap, norm=norm, colorizer=colorizer, alpha=alpha,
+                    extent=extent, **kwargs)
             self.add_image(im)
             ret = im
 
@@ -7437,6 +7464,8 @@ such objects
         %(norm_doc)s
 
         %(vmin_vmax_doc)s
+
+        %(colorizer_doc)s
 
         alpha : ``0 <= scalar <= 1`` or ``None``, optional
             The alpha blending value.
