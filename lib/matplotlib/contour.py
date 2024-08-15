@@ -716,8 +716,8 @@ class ContourSet(ContourLabeler, mcoll.Collection):
                  levels=None, filled=False, linewidths=None, linestyles=None,
                  hatches=(None,), alpha=None, origin=None, extent=None,
                  cmap=None, colors=None, norm=None, vmin=None, vmax=None,
-                 extend='neither', antialiased=None, nchunk=0, locator=None,
-                 transform=None, negative_linestyles=None, clip_path=None,
+                 colorizer=None, extend='neither', antialiased=None, nchunk=0,
+                 locator=None, transform=None, negative_linestyles=None, clip_path=None,
                  **kwargs):
         """
         Draw contour lines or filled regions, depending on
@@ -773,6 +773,7 @@ class ContourSet(ContourLabeler, mcoll.Collection):
             alpha=alpha,
             clip_path=clip_path,
             transform=transform,
+            colorizer=colorizer,
         )
         self.axes = ax
         self.levels = levels
@@ -785,6 +786,13 @@ class ContourSet(ContourLabeler, mcoll.Collection):
 
         self.nchunk = nchunk
         self.locator = locator
+
+        if colorizer:
+            self._set_colorizer_check_keywords(colorizer, cmap=cmap,
+                                                     norm=norm, vmin=vmin,
+                                                     vmax=vmax, colors=colors)
+            norm = colorizer.norm
+            cmap = colorizer.cmap
         if (isinstance(norm, mcolors.LogNorm)
                 or isinstance(self.locator, ticker.LogLocator)):
             self.logscale = True
@@ -1683,6 +1691,10 @@ alpha : float, default: 1
 
     If *vmin* or *vmax* are not given, the default color scaling is based on
     *levels*.
+
+    This parameter is ignored if *colors* is set.
+
+%(colorizer_doc)s
 
     This parameter is ignored if *colors* is set.
 

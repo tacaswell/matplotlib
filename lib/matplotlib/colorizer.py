@@ -315,9 +315,8 @@ def _get_colorizer(cmap, norm, colorizer):
     Passes or creates a Colorizer object.
     """
     if colorizer and isinstance(colorizer, Colorizer):
-        if cmap or norm:
-            raise ValueError("Providing a `cm.Colorizer` while at the same time "
-                             "providing a `norm` or `cmap` is not supported.")
+        ColorizingArtist._check_exclusionary_keywords(Colorizer,
+                                                      cmap=cmap, norm=norm)
         return colorizer
     return Colorizer(cmap, norm)
 
@@ -578,17 +577,25 @@ class ColorizingArtist(artist.Artist, _ColorizerInterface):
             raise ValueError("colorizer must be a `Colorizer` object, not "
                              f" {type(cl)}.")
 
-    def _set_colorizer_check_keywords(self, colorizer, cmap=None, norm=None,
-                                      vmin=None, vmax=None):
+    @staticmethod
+    def _check_exclusionary_keywords(colorizer, **kwargs):
         """
-        Raises a ValueError on incompatible keyword combinations
+        Raises a ValueError if any kwarg is not None while colorizer is not None
         """
         if colorizer is not None:
-            if cmap is None and norm is None and vmin is None and vmin is None:
-                self.colorizer = colorizer
-            else:
+            if any([val is not None for val in kwargs.values()]):
                 raise ValueError("The `colorizer` keyword cannot be used simultaneously"
-                                 " with `cmap`, `norm`, `vmin` or `vmax`.")
+                                 " with any of the following keywords: "
+                                 + ", ".join(f'`{key}`' for key in kwargs.keys()))
+
+    def _set_colorizer_check_keywords(self, colorizer, **kwargs):
+        """
+        Raises a ValueError if any kwarg is not None while colorizer is not None
+
+        Then sets the colorizer.
+        """
+        self._check_exclusionary_keywords(colorizer, **kwargs)
+        self.colorizer = colorizer
 
 
 def _auto_norm_from_scale(scale_cls):

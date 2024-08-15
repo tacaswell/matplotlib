@@ -15,6 +15,7 @@ from matplotlib.backend_bases import (
 )
 from matplotlib.colors import Colormap, Normalize
 from matplotlib.colorbar import Colorbar
+from matplotlib.colorizer import ColorizingArtist, Colorizer
 from matplotlib.cm import ScalarMappable
 from matplotlib.gridspec import GridSpec, SubplotSpec, SubplotParams as SubplotParams
 from matplotlib.image import _ImageBase, FigureImage
@@ -158,7 +159,7 @@ class FigureBase(Artist):
     ) -> Text: ...
     def colorbar(
         self,
-        mappable: ScalarMappable,
+        mappable: ScalarMappable | ColorizingArtist,
         cax: Axes | None = ...,
         ax: Axes | Iterable[Axes] | None = ...,
         use_gridspec: bool = ...,
@@ -205,7 +206,7 @@ class FigureBase(Artist):
     def add_subfigure(self, subplotspec: SubplotSpec, **kwargs) -> SubFigure: ...
     def sca(self, a: Axes) -> Axes: ...
     def gca(self) -> Axes: ...
-    def _gci(self) -> ScalarMappable | None: ...
+    def _gci(self) -> ColorizingArtist | None: ...
     def _process_projection_requirements(
         self, *, axes_class=None, polar=False, projection=None, **kwargs
     ) -> tuple[type[Axes], dict[str, Any]]: ...
@@ -361,6 +362,7 @@ class Figure(FigureBase):
         cmap: str | Colormap | None = ...,
         vmin: float | None = ...,
         vmax: float | None = ...,
+        colorizer: Colorizer | None = ...,
         origin: Literal["upper", "lower"] | None = ...,
         resize: bool = ...,
         **kwargs

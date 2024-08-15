@@ -11,6 +11,7 @@ from matplotlib.collections import (
     EventCollection,
     QuadMesh,
 )
+from matplotlib.colorizer import Colorizer
 from matplotlib.colors import Colormap, Normalize
 from matplotlib.container import BarContainer, ErrorbarContainer, StemContainer
 from matplotlib.contour import ContourSet, QuadContourSet
@@ -415,6 +416,7 @@ class Axes(_AxesBase):
         norm: str | Normalize | None = ...,
         vmin: float | None = ...,
         vmax: float | None = ...,
+        colorizer: Colorizer | None = ...,
         alpha: float | None = ...,
         linewidths: float | Sequence[float] | None = ...,
         edgecolors: Literal["face", "none"] | ColorType | Sequence[ColorType] | None = ...,
@@ -437,6 +439,7 @@ class Axes(_AxesBase):
         norm: str | Normalize | None = ...,
         vmin: float | None = ...,
         vmax: float | None = ...,
+        colorizer: Colorizer | None = ...,
         alpha: float | None = ...,
         linewidths: float | None = ...,
         edgecolors: Literal["face", "none"] | ColorType = ...,
@@ -490,6 +493,7 @@ class Axes(_AxesBase):
         alpha: float | ArrayLike | None = ...,
         vmin: float | None = ...,
         vmax: float | None = ...,
+        colorizer: Colorizer | None = ...,
         origin: Literal["upper", "lower"] | None = ...,
         extent: tuple[float, float, float, float] | None = ...,
         interpolation_stage: Literal["data", "rgba", "auto"] | None = ...,
@@ -509,6 +513,7 @@ class Axes(_AxesBase):
         cmap: str | Colormap | None = ...,
         vmin: float | None = ...,
         vmax: float | None = ...,
+        colorizer: Colorizer | None = ...,
         data=...,
         **kwargs
     ) -> Collection: ...
@@ -520,6 +525,7 @@ class Axes(_AxesBase):
         cmap: str | Colormap | None = ...,
         vmin: float | None = ...,
         vmax: float | None = ...,
+        colorizer: Colorizer | None = ...,
         shading: Literal["flat", "nearest", "gouraud", "auto"] | None = ...,
         antialiased: bool = ...,
         data=...,
@@ -533,6 +539,7 @@ class Axes(_AxesBase):
         cmap: str | Colormap | None = ...,
         vmin: float | None = ...,
         vmax: float | None = ...,
+        colorizer: Colorizer | None = ...,
         data=...,
         **kwargs
     ) -> AxesImage | PcolorImage | QuadMesh: ...

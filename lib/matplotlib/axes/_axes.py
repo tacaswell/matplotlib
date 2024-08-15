@@ -12,6 +12,7 @@ import matplotlib as mpl
 import matplotlib.category  # Register category unit converter as side effect.
 import matplotlib.cbook as cbook
 import matplotlib.collections as mcoll
+import matplotlib.colorizer as mcolorizer
 import matplotlib.colors as mcolors
 import matplotlib.contour as mcontour
 import matplotlib.dates  # noqa: F401, Register date unit converter as side effect.
@@ -4955,8 +4956,9 @@ class Axes(_AxesBase):
         collection.set_transform(mtransforms.IdentityTransform())
         if colors is None:
             if colorizer:
-                collection._set_colorizer_check_keywords(colorizer, cmap, norm,
-                                                         vmin, vmax)
+                collection._set_colorizer_check_keywords(colorizer, cmap=cmap,
+                                                         norm=norm, vmin=vmin,
+                                                         vmax=vmax)
             else:
                 collection.set_cmap(cmap)
                 collection.set_norm(norm)
@@ -5314,7 +5316,9 @@ class Axes(_AxesBase):
             accum = bins.searchsorted(accum)
 
         if colorizer:
-            collection._set_colorizer_check_keywords(colorizer, cmap, norm, vmin, vmax)
+            collection._set_colorizer_check_keywords(colorizer, cmap=cmap,
+                                                     norm=norm, vmin=vmin,
+                                                     vmax=vmax)
         else:
             collection.set_cmap(cmap)
             collection.set_norm(norm)
@@ -5986,6 +5990,7 @@ class Axes(_AxesBase):
         if im.get_clip_path() is None:
             # image does not already have clipping set, clip to Axes patch
             im.set_clip_path(self.patch)
+        im._check_exclusionary_keywords(colorizer, vmin=vmin, vmax=vmax)
         im._scale_norm(norm, vmin, vmax)
         im.set_url(url)
 
@@ -6300,6 +6305,7 @@ class Axes(_AxesBase):
         collection = mcoll.PolyQuadMesh(
             coords, array=C, cmap=cmap, norm=norm, colorizer=colorizer,
             alpha=alpha, **kwargs)
+        collection._check_exclusionary_keywords(colorizer, vmin=vmin, vmax=vmax)
         collection._scale_norm(norm, vmin, vmax)
 
         # Transform from native to data coordinates?
@@ -6533,6 +6539,7 @@ class Axes(_AxesBase):
         collection = mcoll.QuadMesh(
             coords, antialiased=antialiased, shading=shading,
             array=C, cmap=cmap, norm=norm, colorizer=colorizer, alpha=alpha, **kwargs)
+        collection._check_exclusionary_keywords(colorizer, vmin=vmin, vmax=vmax)
         collection._scale_norm(norm, vmin, vmax)
 
         coords = coords.reshape(-1, 2)  # flatten the grid structure; keep x, y
@@ -6707,6 +6714,8 @@ class Axes(_AxesBase):
         else:
             raise _api.nargs_error('pcolorfast', '1 or 3', len(args))
 
+        mcolorizer.ColorizingArtist._check_exclusionary_keywords(colorizer, vmin=vmin,
+                                                                 vmax=vmax)
         if style == "quadmesh":
             # data point in each cell is value at lower left corner
             coords = np.stack([x, y], axis=-1)
