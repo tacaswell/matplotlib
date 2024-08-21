@@ -1,0 +1,7 @@
+ScalarMappable changed to ColorizingArtist
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Classes that used to inherit from `cm.ScalarMappable` now inherit from 
+`colorizer.ColorizingArtist` instead. All the existing attributes on 
+`cm.ScalarMappable` are available on the equivalent `colorizer.ColorizingArtist`
+but type checks for `cm.ScalarMappable` will fail.

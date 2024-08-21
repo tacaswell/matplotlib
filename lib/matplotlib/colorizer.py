@@ -2,6 +2,11 @@
 The Colorizer class which handles the data to color pipeline via a
 normalization and a colormap.
 
+.. admonition:: Provisional status of colorizer
+
+    The ``colorizer`` module and classes in this file are considered provisional and may change
+    at any time without a deprecation period.
+
 .. seealso::
 
   :doc:`/gallery/color/colormap_reference` for a list of builtin colormaps.
