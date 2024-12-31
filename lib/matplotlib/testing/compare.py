@@ -392,7 +392,7 @@ def _load_image(path):
     return np.asarray(img)
 
 
-def compare_images(expected, actual, tol, in_decorator=False):
+def compare_images(expected, actual, tol, in_decorator=False, *, deadband=0):
     """
     Compare two "image" files checking differences within a tolerance.
 
@@ -469,9 +469,14 @@ def compare_images(expected, actual, tol, in_decorator=False):
         if np.array_equal(expected_image, actual_image):
             return None
 
-    rms, abs_diff = _image.calculate_rms_and_diff(expected_image, actual_image)
+    rms, abs_diff, max_difference = _image.calculate_rms_and_diff(
+        expected_image, actual_image
+    )
 
     if rms <= tol:
+        return None
+
+    if max_difference <= deadband:
         return None
 
     Image.fromarray(abs_diff).save(diff_image, format="png")

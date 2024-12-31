@@ -249,6 +249,7 @@ calculate_rms_and_diff(py::array_t<unsigned char> expected_image,
     py::array_t<unsigned char> diff_image(diff_dims);
     auto diff = diff_image.mutable_unchecked<3>();
 
+    auto max_difference = 0;
     double total = 0.0;
     for (auto i = 0; i < height; i++) {
         for (auto j = 0; j < width; j++) {
@@ -257,7 +258,7 @@ calculate_rms_and_diff(py::array_t<unsigned char> expected_image,
                                   static_cast<double>(actual(i, j, k));
 
                 total += pixel_diff*pixel_diff;
-
+                max_difference = max_difference < abs(pixel_diff) ? abs(pixel_diff) : max_difference;
                 if (k != 3) { // Hard-code a fully solid alpha channel by omitting it.
                     diff(i, j, k) = static_cast<unsigned char>(std::clamp(
                         abs(pixel_diff) * 10, // Expand differences in luminance domain.
@@ -268,7 +269,7 @@ calculate_rms_and_diff(py::array_t<unsigned char> expected_image,
     }
     total = total / (width * height * depth);
 
-    return py::make_tuple(sqrt(total), diff_image);
+    return py::make_tuple(sqrt(total), diff_image, max_difference);
 }
 
 

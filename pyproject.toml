@@ -234,7 +234,8 @@ exclude = [
   "lib/matplotlib/tests/",
   # tinypages is used for testing the sphinx ext,
   # stubtest will import and run, opening a figure if not excluded
-  ".*/tinypages"
+  ".*/tinypages",
+  "lib/matplotlib/pylab.py"
 ]
 files = [
   "lib/matplotlib",

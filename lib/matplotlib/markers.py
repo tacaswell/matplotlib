@@ -261,7 +261,8 @@ class MarkerStyle:
         # set to 'none'. The marker function will override this for unfilled
         # markers.
         self._filled = self._fillstyle != 'none'
-        self._marker_function()
+        func = getattr(self, self._marker_function)
+        func()
 
     def __bool__(self):
         return bool(len(self._path.vertices))
@@ -308,23 +309,23 @@ class MarkerStyle:
               `matplotlib.markers`.
         """
         if isinstance(marker, str) and cbook.is_math_text(marker):
-            self._marker_function = self._set_mathtext_path
+            self._marker_function = '_set_mathtext_path'
         elif isinstance(marker, (int, str)) and marker in self.markers:
-            self._marker_function = getattr(self, '_set_' + self.markers[marker])
+            self._marker_function = f'_set_{self.markers[marker]}'
         elif (isinstance(marker, np.ndarray) and marker.ndim == 2 and
                 marker.shape[1] == 2):
-            self._marker_function = self._set_vertices
+            self._marker_function = '_set_vertices'
         elif isinstance(marker, Path):
-            self._marker_function = self._set_path_marker
+            self._marker_function = '_set_path_marker'
         elif (isinstance(marker, Sized) and len(marker) in (2, 3) and
                 marker[1] in (0, 1, 2)):
-            self._marker_function = self._set_tuple_marker
+            self._marker_function = '_set_tuple_marker'
         elif isinstance(marker, MarkerStyle):
-            self.__dict__ = copy.deepcopy(marker.__dict__)
+            self.__dict__.update(copy.deepcopy(marker.__dict__))
         else:
             try:
                 Path(marker)
-                self._marker_function = self._set_vertices
+                self._marker_function = '_set_vertices'
             except ValueError as err:
                 raise ValueError(
                     f'Unrecognized marker style {marker!r}') from err
