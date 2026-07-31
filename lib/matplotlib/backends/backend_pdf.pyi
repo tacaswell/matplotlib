@@ -1,5 +1,5 @@
 import os
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from datetime import datetime
 from enum import Enum
 from functools import total_ordering
@@ -62,9 +62,11 @@ type _SupportsPdfReprExt = (
     | BboxBase
 )
 
-type _MetadataDict = dict[str, str | datetime | Name]
+type _MetadataValue = str | datetime | Name
+type _Metadata = Mapping[str, _MetadataValue | None]
+type _MetadataDict = dict[str, _MetadataValue]
 
-def _create_pdf_info_dict(backend: str, metadata: _MetadataDict) -> dict[str, Any]: ...
+def _create_pdf_info_dict(backend: str, metadata: _Metadata) -> _MetadataDict: ...
 def _datetime_to_pdf(d: datetime) -> str: ...
 def pdfRepr(obj: _SupportsPdfReprExt) -> bytes: ...
 
@@ -149,7 +151,7 @@ class PdfFile:
     def __init__(
         self,
         filename: str | os.PathLike | IO[Any],
-        metadata: _MetadataDict | None = None,
+        metadata: _Metadata | None = None,
     ) -> None: ...
     def newPage(self, width: float, height: float) -> None: ...
     def newTextnote(
@@ -314,7 +316,7 @@ class PdfPages:
         self,
         filename: str | os.PathLike | IO[Any],
         keep_empty: None = None,
-        metadata: _MetadataDict | None = None,
+        metadata: _Metadata | None = None,
     ) -> None: ...
     def __enter__(self) -> Self: ...
     def __exit__(
@@ -323,7 +325,7 @@ class PdfPages:
     def close(self) -> None: ...
     def infodict(self) -> _MetadataDict: ...
     def savefig(
-        self, figure: Figure | int | None = None, **kwargs: dict[str, Any]
+        self, figure: Figure | int | None = None, **kwargs: Any
     ) -> None: ...
     def get_pagecount(self) -> int: ...
     def attach_note(
@@ -341,13 +343,14 @@ class FigureCanvasPdf(FigureCanvasBase[NavigationToolbar2, FigureManagerBase]):
         filename: PdfPages | str | os.PathLike | IO[Any],
         *,
         bbox_inches_restore: _RectangleType | None = None,
-        metadata: _MetadataDict | None = None,
+        metadata: _Metadata | None = None,
     ) -> None: ...
 
 # Names injected into the module namespace by ``@_Backend.export``.
 backend_version: str
+FigureManagerPdf = FigureManagerBase
 FigureCanvas = FigureCanvasPdf
-FigureManager = FigureManagerBase
+FigureManager = FigureManagerPdf
 
 def new_figure_manager(
     num: int | str, *args: Any, **kwargs: Any
