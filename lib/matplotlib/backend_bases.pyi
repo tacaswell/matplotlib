@@ -61,9 +61,13 @@ GCT = TypeVar("GCT", bound="GraphicsContextBase", default="GraphicsContextBase")
 TimerT = TypeVar("TimerT", bound="TimerBase", default="TimerBase")
 
 def register_backend(
-    format: str, backend: str | type[FigureCanvasBase], description: str | None = ...
+    format: str,
+    backend: str | type[FigureCanvasBase[Any, Any, Any]],
+    description: str | None = ...,
 ) -> None: ...
-def get_registered_canvas_class(format: str) -> type[FigureCanvasBase]: ...
+def get_registered_canvas_class(
+    format: str,
+) -> type[FigureCanvasBase[Any, Any, Any]]: ...
 
 class RendererBase(Generic[GCT]):
     _text2path: TextToPath
@@ -239,22 +243,27 @@ class TimerBase:
 
 class Event:
     name: str
-    canvas: FigureCanvasBase
+    canvas: FigureCanvasBase[Any, Any, Any]
     guiEvent: Any
     def __init__(
-        self, name: str, canvas: FigureCanvasBase, guiEvent: Any | None = ...
+        self, name: str, canvas: FigureCanvasBase[Any, Any, Any], guiEvent: Any | None = ...
     ) -> None: ...
 
 class DrawEvent(Event):
     renderer: RendererBase[Any]
     def __init__(
-        self, name: str, canvas: FigureCanvasBase, renderer: RendererBase[Any]
+        self,
+        name: str,
+        canvas: FigureCanvasBase[Any, Any, Any],
+        renderer: RendererBase[Any],
     ) -> None: ...
 
 class ResizeEvent(Event):
     width: int
     height: int
-    def __init__(self, name: str, canvas: FigureCanvasBase) -> None: ...
+    def __init__(
+        self, name: str, canvas: FigureCanvasBase[Any, Any, Any]
+    ) -> None: ...
 
 class CloseEvent(Event): ...
 
@@ -268,7 +277,7 @@ class LocationEvent(Event):
     def __init__(
         self,
         name: str,
-        canvas: FigureCanvasBase,
+        canvas: FigureCanvasBase[Any, Any, Any],
         x: int,
         y: int,
         guiEvent: Any | None = ...,
@@ -291,7 +300,7 @@ class MouseEvent(LocationEvent):
     def __init__(
         self,
         name: str,
-        canvas: FigureCanvasBase,
+        canvas: FigureCanvasBase[Any, Any, Any],
         x: int,
         y: int,
         button: MouseButton | Literal["up", "down"] | None = ...,
@@ -310,7 +319,7 @@ class PickEvent(Event):
     def __init__(
         self,
         name: str,
-        canvas: FigureCanvasBase,
+        canvas: FigureCanvasBase[Any, Any, Any],
         mouseevent: MouseEvent,
         artist: Artist,
         guiEvent: Any | None = ...,
@@ -322,7 +331,7 @@ class KeyEvent(LocationEvent):
     def __init__(
         self,
         name: str,
-        canvas: FigureCanvasBase,
+        canvas: FigureCanvasBase[Any, Any, Any],
         key: str | None,
         x: int = ...,
         y: int = ...,
@@ -428,17 +437,17 @@ class FigureCanvasBase(Generic[ToolbarT, ManagerT, TimerT]):
 
 def key_press_handler(
     event: KeyEvent,
-    canvas: FigureCanvasBase | None = ...,
+    canvas: FigureCanvasBase[Any, Any, Any] | None = ...,
     toolbar: NavigationToolbar2 | None = ...,
 ) -> None: ...
 def button_press_handler(
     event: MouseEvent,
-    canvas: FigureCanvasBase | None = ...,
+    canvas: FigureCanvasBase[Any, Any, Any] | None = ...,
     toolbar: NavigationToolbar2 | None = ...,
 ) -> None: ...
 def scroll_handler(
     event: MouseEvent,
-    canvas: FigureCanvasBase | None = ...,
+    canvas: FigureCanvasBase[Any, Any, Any] | None = ...,
     toolbar: NavigationToolbar2 | None = ...,
 ) -> None: ...
 
