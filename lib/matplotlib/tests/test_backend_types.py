@@ -12,6 +12,16 @@ point of view of
 * a third-party backend author who subclasses the base classes (including the
   "mixin + toolkit" diamond pattern).
 
+The simulated third-party backend is modelled on a real thin-client backend:
+its classes have method bodies that use each other through ``self.canvas`` /
+``self.toolbar`` / ``self.manager``, because that is where a backend author
+meets the typing model.  Empty class bodies only check the class statements.
+
+The simulated backend carries no ``# type: ignore`` and no
+``# pyright: ignore``, and redeclares no attribute: everything a backend
+author needs is expressed by specializing the generic classes.  The only
+suppressions in this module mark the *negative* checks.
+
 Negative checks use ``# type: ignore[<code>]`` together with the
 ``warn_unused_ignores`` override for this module in ``pyproject.toml``: if a
 declaration ever stops rejecting an invalid call, the now-unused ignore is
@@ -24,9 +34,10 @@ import datetime
 import io
 import tkinter as tk
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, assert_type
+from typing import TYPE_CHECKING, Any, assert_type, get_origin
 
 import matplotlib.backend_bases as backend_bases
+from matplotlib import _api
 from matplotlib.artist import Artist
 from matplotlib.backend_bases import (
     CloseEvent,
@@ -115,6 +126,12 @@ if TYPE_CHECKING:
     )
     from matplotlib.backends.backend_gtk4agg import FigureCanvasGTK4Agg
     from matplotlib.backends.backend_gtk4cairo import FigureCanvasGTK4Cairo
+    from matplotlib.backends.backend_macosx import (
+        FigureCanvasMac,
+        FigureManagerMac,
+        NavigationToolbar2Mac,
+        TimerMac,
+    )
     from matplotlib.backends.backend_nbagg import (
         FigureCanvasNbAgg,
         FigureManagerNbAgg,
@@ -123,6 +140,7 @@ if TYPE_CHECKING:
     from matplotlib.backends.backend_qt import (
         FigureCanvasQT,
         FigureManagerQT,
+        MainWindow,
         NavigationToolbar2QT,
         TimerQT,
     )
@@ -141,6 +159,7 @@ if TYPE_CHECKING:
         TimerAsyncio,
     )
     from matplotlib.backends.backend_wx import (
+        FigureCanvasWx,
         FigureManagerWx,
         NavigationToolbar2Wx,
         TimerWx,
@@ -177,10 +196,16 @@ class SpecializedFigureManager(FigureManagerBase[Any, Any]):
 
 # ---------------------------------------------------------------------------
 # A simulated third-party backend: the pattern from a downstream project that
-# subclasses the four cooperating base classes and then mixes the result into
-# the stock Qt and Tk backends.  Defined at module level so that mypy checks
-# the class statements themselves (invariant attribute overrides, diamond
-# base compatibility), not just expressions.
+# writes a toolkit-agnostic canvas and toolbar, uses them on their own, and
+# also mixes them into the stock GUI toolkit classes.  Defined at module
+# level so that the checkers see the class statements themselves (diamond
+# base compatibility, attribute types), not just expressions.
+#
+# The toolkit-agnostic classes are generic, exactly like the
+# ``backend_bases`` classes they derive from, because they are *mixins*: each
+# toolkit layer below specializes them with its own toolbar, manager and
+# timer.  A class is never used bare here; every use names its type
+# arguments, ``[Any, ...]`` where any specialization is acceptable.
 # ---------------------------------------------------------------------------
 
 
@@ -206,10 +231,34 @@ class RemoteRenderer(RendererBase[RemoteGraphicsContext]):
         pass
 
 
-class FigureCanvasRemote(
-    FigureCanvasBase["NavigationToolbar2Remote", "FigureManagerRemote", RemoteTimer]
-):
-    _timer_cls = RemoteTimer
+class RemoteCanvasMixin[
+    ToolbarT: RemoteToolbarMixin[Any],
+    ManagerT: FigureManagerBase[Any, Any],
+    TimerT: TimerBase,
+](FigureCanvasBase[ToolbarT, ManagerT, TimerT]):
+    """Toolkit-agnostic canvas of a thin client: forwards to a server."""
+
+    def __init__(self, figure: Figure | None = None, **kwargs: Any) -> None:
+        # Toolkit keyword arguments (``master=`` for Tk) pass through the MRO
+        # to the toolkit canvas this class is mixed with.
+        super().__init__(figure, **kwargs)
+        self.sent: list[dict[str, Any]] = []
+
+    def send(self, message: dict[str, Any]) -> None:
+        """Stand-in for the wire transport of a real thin client."""
+        self.sent.append(message)
+
+    def on_server_message(self, message: dict[str, Any]) -> None:
+        """Update the toolbar from a message pushed by the server."""
+        # The canvas reaches its toolbar through the cross-reference.  The
+        # bound of ``ToolbarT`` is what makes the ``_on_*`` hooks available:
+        # they only exist on the remote toolbar, not on ``NavigationToolbar2``.
+        if self.toolbar is None:
+            return
+        if message["type"] == "navigate_mode":
+            self.toolbar._on_navigate_mode(message["mode"])
+        elif message["type"] == "message":
+            self.toolbar.set_message(message["text"])
 
     def _use_backend_authoring_api(self) -> None:  # pragma: no cover
         assert_type(self._set_device_pixel_ratio(2.0), bool)
@@ -217,7 +266,49 @@ class FigureCanvasRemote(
         MouseEvent("button_press_event", self, 1, 2)._process()
 
 
-class NavigationToolbar2Remote(NavigationToolbar2[FigureCanvasRemote]):
+class RemoteToolbarMixin[
+    CanvasT: RemoteCanvasMixin[Any, Any, Any],
+](NavigationToolbar2[CanvasT]):
+    """Toolkit-agnostic toolbar of a thin client."""
+
+    def __init__(self, canvas: CanvasT, *args: Any, **kwargs: Any) -> None:
+        self.server_mode = ""
+        super().__init__(canvas, *args, **kwargs)
+
+    # The toolbar forwards its buttons through its canvas.  The bound of
+    # ``CanvasT`` is what makes ``send`` available: it only exists on the
+    # remote canvas, not on ``FigureCanvasBase``.
+    def home(self, *args: Any) -> None:
+        self.canvas.send({"type": "toolbar_button", "name": "home"})
+
+    def pan(self, *args: Any) -> None:
+        self.canvas.send({"type": "toolbar_button", "name": "pan"})
+
+    def set_history_buttons(self) -> None:
+        pass
+
+    def _on_navigate_mode(self, mode: str) -> None:
+        self.server_mode = mode
+
+
+# The mixins used on their own, without a GUI toolkit: each class is a
+# specialization that names the other two.
+class FigureCanvasRemote(
+    RemoteCanvasMixin["NavigationToolbar2Remote", "FigureManagerRemote", RemoteTimer]
+):
+    _timer_cls = RemoteTimer
+
+    # ``FigureCanvasBase.manager_class`` is a ``classproperty`` so that it can
+    # be read from the class; a backend points it at its own manager.  The
+    # forward reference is why this is a property and not an assignment, and
+    # ``cls`` is annotated ``Any`` because a ``classproperty`` is generic over
+    # its owner, which a subclass cannot narrow.
+    @_api.classproperty
+    def manager_class(cls: Any) -> type[FigureManagerRemote]:
+        return FigureManagerRemote
+
+
+class NavigationToolbar2Remote(RemoteToolbarMixin[FigureCanvasRemote]):
     pass
 
 
@@ -226,6 +317,14 @@ class FigureManagerRemote(
 ):
     _toolbar2_class = NavigationToolbar2Remote
 
+    def announce(self) -> None:
+        """Use the canvas and the toolbar through the manager's references."""
+        self.canvas.send({"type": "title", "title": self.get_window_title()})
+        # ``toolbar`` may also be a toolmanager container, which has no
+        # navigation methods; narrow before using the remote toolbar's API.
+        if isinstance(self.toolbar, NavigationToolbar2Remote):
+            self.toolbar.home()
+
 
 class _BackendRemote(_Backend[type[FigureCanvasRemote]]):
     FigureCanvas = FigureCanvasRemote
@@ -233,31 +332,216 @@ class _BackendRemote(_Backend[type[FigureCanvasRemote]]):
 
 
 if TYPE_CHECKING:
-    # Diamond: remote mixin first, stock toolkit class second, for both Qt
-    # and Tk (whose toolbar has an incompatible ``message`` attribute type at
-    # runtime).  A thin client has no local renderer, so it pairs with the
-    # bare toolkit canvas (``FigureCanvasQT``, not ``FigureCanvasQTAgg``) in
-    # the same way the in-tree ``FigureCanvasAgg`` does.  mypy accepts these;
-    # pyright reports the two parameterizations of the shared generic base as
-    # "mutually incompatible" by design, so the class statements carry a
-    # pyright-only suppression.
+    # Diamond: remote mixin first, stock toolkit class second.  A thin client
+    # has no local renderer, so it pairs with the bare toolkit canvas
+    # (``FigureCanvasQT``, not ``FigureCanvasQTAgg``).
+    #
+    # Both bases of each class derive from the same ``backend_bases`` class,
+    # so they are given the *same* type arguments.  That is all it takes: the
+    # shared base is specialized consistently, and ``self.toolbar`` /
+    # ``self.canvas`` have the concrete downstream type on the mixin side and
+    # on the toolkit side alike.  Nothing is redeclared and nothing is
+    # suppressed.
 
-    class FigureCanvasQTRemote(FigureCanvasRemote, FigureCanvasQT):  # pyright: ignore[reportGeneralTypeIssues]
+    # --- Qt ----------------------------------------------------------------
+    # The window manager of this thin client is a plain class (below), not a
+    # ``FigureManagerBase``, so the canvas' manager parameter is specialized
+    # with the stock Qt manager: ``canvas.manager`` is simply never set.
+
+    class FigureCanvasQTRemote(
+        RemoteCanvasMixin[
+            "NavigationToolbar2QTRemote", FigureManagerQT[Any, Any], TimerQT
+        ],
+        FigureCanvasQT[
+            "NavigationToolbar2QTRemote", FigureManagerQT[Any, Any], TimerQT
+        ],
+    ):
+        def resizeEvent(self, event: Any) -> None:
+            # Toolkit members and remote-mixin members on the same object.
+            width = event.size().width() * self.devicePixelRatioF()
+            self.send({"type": "resize", "width": width})
+            if self.toolbar is not None:
+                self.toolbar.locLabel.setText("resizing")
+                self.toolbar._on_navigate_mode("")
+
+    class NavigationToolbar2QTRemote(
+        RemoteToolbarMixin[FigureCanvasQTRemote],
+        NavigationToolbar2QT[FigureCanvasQTRemote],
+    ):
+        def draw_rubberband(
+            self, event: Event, x0: float, y0: float, x1: float, y1: float
+        ) -> None:
+            # Qt-only canvas members reached through ``self.canvas``.
+            height = self.canvas.height() * self.canvas.devicePixelRatioF()
+            self.canvas.drawRectangle([x0, height - y0, x1 - x0, y0 - y1])
+
+        def remove_rubberband(self) -> None:
+            self.canvas.drawRectangle(None)
+            self.canvas.send({"type": "rubberband", "visible": False})
+
+        def _on_navigate_mode(self, mode: str) -> None:
+            super()._on_navigate_mode(mode)
+            self._actions["pan"].setChecked(mode == "PAN")
+
+    # The window managers of a thin client are *not* ``FigureManagerBase``
+    # subclasses.  ``FigureManagerBase.__init__`` connects the default key,
+    # button and scroll handlers to the canvas, and a thin client forwards
+    # those events to a server that applies the bindings itself; a local copy
+    # would act on each navigation key a second time.  The managers below
+    # only have the *methods* of a figure manager.
+    class FigureManagerQTRemote:
+        def __init__(self, canvas: FigureCanvasQTRemote, num: int | str) -> None:
+            self.canvas = canvas
+            self.window = MainWindow()
+            self.toolbar = NavigationToolbar2QTRemote(canvas, self.window)
+
+        def show(self) -> None:
+            self.window.show()
+
+        def resize(self, width: int, height: int) -> None:
+            ratio = self.canvas.devicePixelRatioF()
+            self.canvas.send({"type": "resize", "width": width / ratio})
+            self.window.resize(int(width / ratio), int(height / ratio))
+
+        def destroy(self) -> None:
+            self.toolbar.destroy()
+            self.toolbar.home()
+            self.window.close()
+
+    # --- Tk (whose toolbar ``message`` is a ``tk.StringVar`` at runtime) ----
+
+    class FigureCanvasTkRemote(
+        RemoteCanvasMixin[
+            "NavigationToolbar2TkRemote", FigureManagerTk[Any, Any], TimerTk
+        ],
+        FigureCanvasTk[
+            "NavigationToolbar2TkRemote", FigureManagerTk[Any, Any], TimerTk
+        ],
+    ):
+        def __init__(self, figure: Figure, master: tk.Misc) -> None:
+            super().__init__(figure, master=master)
+            self._tkcanvas.bind("<Configure>", lambda event: None)
+
+    class NavigationToolbar2TkRemote(
+        RemoteToolbarMixin[FigureCanvasTkRemote],
+        NavigationToolbar2Tk[FigureCanvasTkRemote],
+    ):
+        def draw_rubberband(
+            self, event: Event, x0: float, y0: float, x1: float, y1: float
+        ) -> None:
+            # Tk-only canvas members reached through ``self.canvas``.
+            height = self.canvas._tkcanvas.winfo_height()
+            self.canvas._tkcanvas.create_rectangle(x0, height - y0, x1, height - y1)
+
+        def set_message(self, s: str) -> None:
+            # ``NavigationToolbar2Tk.message`` is a ``tk.StringVar``.
+            self.message.set(s)
+
+    class FigureManagerTkRemote:
+        def __init__(
+            self, canvas: FigureCanvasTkRemote, num: int | str, window: tk.Tk
+        ) -> None:
+            self.canvas = canvas
+            self.window = window
+            self.toolbar = NavigationToolbar2TkRemote(canvas, window)
+
+        def show(self) -> None:
+            self.window.deiconify()
+
+        def resize(self, width: int, height: int) -> None:
+            extra = self.window.winfo_width() - self.canvas._tkcanvas.winfo_width()
+            self.canvas.send({"type": "resize", "width": width})
+            self.window.geometry(f"{width + extra}x{height}")
+
+        def destroy(self) -> None:
+            self.window.destroy()
+
+    # --- GTK3, GTK4, wx, macOS ---------------------------------------------
+    # The same diamond on every other GUI toolkit, here with a manager that
+    # *does* derive from the toolkit's manager: a specialization of the
+    # generic toolkit manager, again with nothing redeclared.  (GTK has no
+    # timer parameter: every GTK version uses ``TimerGTK``.)
+
+    class FigureCanvasGTK3Remote(
+        RemoteCanvasMixin[
+            "NavigationToolbar2GTK3Remote", "FigureManagerGTK3Remote", TimerGTK
+        ],
+        FigureCanvasGTK3["NavigationToolbar2GTK3Remote", "FigureManagerGTK3Remote"],
+    ):
         pass
 
-    class NavigationToolbar2QTRemote(NavigationToolbar2Remote, NavigationToolbar2QT):  # pyright: ignore[reportGeneralTypeIssues]
+    class NavigationToolbar2GTK3Remote(
+        RemoteToolbarMixin[FigureCanvasGTK3Remote],
+        NavigationToolbar2GTK3[FigureCanvasGTK3Remote],
+    ):
         pass
 
-    class FigureManagerQTRemote(FigureManagerRemote, FigureManagerQT):  # pyright: ignore[reportGeneralTypeIssues]
+    class FigureManagerGTK3Remote(
+        FigureManagerGTK3[FigureCanvasGTK3Remote, NavigationToolbar2GTK3Remote]
+    ):
+        def announce(self) -> None:
+            self.canvas.send({"type": "title"})
+            self.canvas.queue_draw()
+            if isinstance(self.toolbar, NavigationToolbar2GTK3Remote):
+                self.toolbar.home()
+
+    class FigureCanvasGTK4Remote(
+        RemoteCanvasMixin[
+            "NavigationToolbar2GTK4Remote", "FigureManagerGTK4Remote", TimerGTK
+        ],
+        FigureCanvasGTK4["NavigationToolbar2GTK4Remote", "FigureManagerGTK4Remote"],
+    ):
         pass
 
-    class FigureCanvasTkRemote(FigureCanvasRemote, FigureCanvasTk):  # pyright: ignore[reportGeneralTypeIssues]
+    class NavigationToolbar2GTK4Remote(
+        RemoteToolbarMixin[FigureCanvasGTK4Remote],
+        NavigationToolbar2GTK4[FigureCanvasGTK4Remote],
+    ):
         pass
 
-    class NavigationToolbar2TkRemote(NavigationToolbar2Remote, NavigationToolbar2Tk):  # pyright: ignore[reportGeneralTypeIssues]
+    class FigureManagerGTK4Remote(
+        FigureManagerGTK4[FigureCanvasGTK4Remote, NavigationToolbar2GTK4Remote]
+    ):
         pass
 
-    class FigureManagerTkRemote(FigureManagerRemote, FigureManagerTk):  # pyright: ignore[reportGeneralTypeIssues]
+    class FigureCanvasWxRemote(
+        RemoteCanvasMixin[
+            "NavigationToolbar2WxRemote", "FigureManagerWxRemote", TimerWx
+        ],
+        FigureCanvasWx["NavigationToolbar2WxRemote", "FigureManagerWxRemote", TimerWx],
+    ):
+        pass
+
+    class NavigationToolbar2WxRemote(
+        RemoteToolbarMixin[FigureCanvasWxRemote],
+        NavigationToolbar2Wx[FigureCanvasWxRemote],
+    ):
+        pass
+
+    class FigureManagerWxRemote(
+        FigureManagerWx[FigureCanvasWxRemote, NavigationToolbar2WxRemote]
+    ):
+        pass
+
+    class FigureCanvasMacRemote(
+        RemoteCanvasMixin[
+            "NavigationToolbar2MacRemote", "FigureManagerMacRemote", TimerMac
+        ],
+        FigureCanvasMac[
+            "NavigationToolbar2MacRemote", "FigureManagerMacRemote", TimerMac
+        ],
+    ):
+        pass
+
+    class NavigationToolbar2MacRemote(
+        RemoteToolbarMixin[FigureCanvasMacRemote],
+        NavigationToolbar2Mac[FigureCanvasMacRemote],
+    ):
+        pass
+
+    class FigureManagerMacRemote(
+        FigureManagerMac[FigureCanvasMacRemote, NavigationToolbar2MacRemote]
+    ):
         pass
 
     # Narrowing a stock toolkit backend further.
@@ -285,6 +569,7 @@ def _check_remote_backend_types(  # pragma: no cover
     manager: FigureManagerRemote,
     figure: Figure,
 ) -> None:
+    # Every cross-reference of the specialized classes is the concrete type.
     assert_type(canvas.toolbar, NavigationToolbar2Remote | None)
     assert_type(canvas.manager, FigureManagerRemote | None)
     assert_type(canvas.new_timer(), RemoteTimer)
@@ -292,6 +577,7 @@ def _check_remote_backend_types(  # pragma: no cover
     assert_type(FigureCanvasRemote.new_manager(figure, 1), FigureManagerRemote)
 
     assert_type(toolbar.canvas, FigureCanvasRemote)
+    assert_type(toolbar.canvas.toolbar, NavigationToolbar2Remote | None)
     assert_type(toolbar.canvas.manager, FigureManagerRemote | None)
 
     assert_type(manager.canvas, FigureCanvasRemote)
@@ -320,19 +606,135 @@ def _check_remote_diamond_types(  # pragma: no cover
     qt_manager: FigureManagerQTRemote,
     tk_canvas: FigureCanvasTkRemote,
     tk_toolbar: NavigationToolbar2TkRemote,
+    tk_manager: FigureManagerTkRemote,
 ) -> None:
-    # The first base wins for the cross-references.
-    assert_type(qt_canvas.toolbar, NavigationToolbar2Remote | None)
-    assert_type(qt_canvas.manager, FigureManagerRemote | None)
-    assert_type(qt_toolbar.canvas, FigureCanvasRemote)
-    assert_type(qt_manager.canvas, FigureCanvasRemote)
-    assert_type(tk_canvas.toolbar, NavigationToolbar2Remote | None)
-    assert_type(tk_toolbar.canvas, FigureCanvasRemote)
+    # Both bases of each diamond were given the same type arguments, so every
+    # cross-reference has the concrete downstream type ...
+    assert_type(qt_canvas.toolbar, NavigationToolbar2QTRemote | None)
+    assert_type(qt_canvas.new_timer(), TimerQT)
+    assert_type(qt_toolbar.canvas, FigureCanvasQTRemote)
+    assert_type(qt_manager.canvas, FigureCanvasQTRemote)
+    assert_type(qt_manager.toolbar, NavigationToolbar2QTRemote)
+    assert_type(tk_canvas.toolbar, NavigationToolbar2TkRemote | None)
+    assert_type(tk_canvas.new_timer(), TimerTk)
+    assert_type(tk_toolbar.canvas, FigureCanvasTkRemote)
+    assert_type(tk_manager.canvas, FigureCanvasTkRemote)
+    assert_type(tk_manager.toolbar, NavigationToolbar2TkRemote)
+    # ... so both the toolkit API and the remote API are usable through them.
+    qt_toolbar.canvas.drawRectangle(None)
+    qt_toolbar.canvas.send({"type": "refresh"})
+    qt_manager.toolbar.home()
+    tk_toolbar.canvas._tkcanvas.delete("all")
+    tk_manager.canvas.send({"type": "refresh"})
+    # The manager parameter was specialized with the stock toolkit manager.
+    assert_type(qt_canvas.manager, FigureManagerQT[Any, Any] | None)
+    assert_type(tk_canvas.manager, FigureManagerTk[Any, Any] | None)
+    assert_type(FigureCanvasQTRemote.manager_class, type[FigureManagerQT[Any, Any]])
+    # The duck-typed window managers are not figure managers to the type
+    # system, so they cannot be stored as ``canvas.manager`` ...
+    qt_canvas.manager = qt_manager  # type: ignore[assignment]
+    tk_canvas.manager = tk_manager  # type: ignore[assignment]
+    # ... and need no ``toolbar`` narrowing: a plain attribute has exactly
+    # the declared type, with no toolmanager container or ``None`` in it.
+    qt_manager.toolbar.locLabel.setText("ready")
+    tk_manager.toolbar.message.set("ready")
     # Toolkit-specific members remain available through the second base.
     qt_canvas.mouseEventCoords()
     tk_canvas.get_tk_widget()
     # ``NavigationToolbar2Tk.message`` is a ``tk.StringVar`` at runtime.
     tk_toolbar.message.set("x")
+
+
+def _check_remote_diamond_all_toolkits(  # pragma: no cover
+    gtk3_canvas: FigureCanvasGTK3Remote,
+    gtk3_toolbar: NavigationToolbar2GTK3Remote,
+    gtk3_manager: FigureManagerGTK3Remote,
+    gtk4_canvas: FigureCanvasGTK4Remote,
+    gtk4_toolbar: NavigationToolbar2GTK4Remote,
+    gtk4_manager: FigureManagerGTK4Remote,
+    wx_canvas: FigureCanvasWxRemote,
+    wx_toolbar: NavigationToolbar2WxRemote,
+    wx_manager: FigureManagerWxRemote,
+    mac_canvas: FigureCanvasMacRemote,
+    mac_toolbar: NavigationToolbar2MacRemote,
+    mac_manager: FigureManagerMacRemote,
+) -> None:
+    # The same diamond on every GUI toolkit, with a manager derived from the
+    # toolkit's manager: all three classes see each other's concrete type.
+    assert_type(gtk3_canvas.toolbar, NavigationToolbar2GTK3Remote | None)
+    assert_type(gtk3_canvas.manager, FigureManagerGTK3Remote | None)
+    assert_type(gtk3_canvas.new_timer(), TimerGTK)
+    assert_type(gtk3_toolbar.canvas, FigureCanvasGTK3Remote)
+    assert_type(gtk3_manager.canvas, FigureCanvasGTK3Remote)
+    assert_type(
+        gtk3_manager.toolbar,
+        NavigationToolbar2GTK3Remote | ToolContainerBase | None,
+    )
+
+    assert_type(gtk4_canvas.toolbar, NavigationToolbar2GTK4Remote | None)
+    assert_type(gtk4_canvas.manager, FigureManagerGTK4Remote | None)
+    assert_type(gtk4_canvas.new_timer(), TimerGTK)
+    assert_type(gtk4_toolbar.canvas, FigureCanvasGTK4Remote)
+    assert_type(gtk4_manager.canvas, FigureCanvasGTK4Remote)
+
+    assert_type(wx_canvas.toolbar, NavigationToolbar2WxRemote | None)
+    assert_type(wx_canvas.manager, FigureManagerWxRemote | None)
+    assert_type(wx_canvas.new_timer(), TimerWx)
+    assert_type(wx_toolbar.canvas, FigureCanvasWxRemote)
+    assert_type(wx_manager.canvas, FigureCanvasWxRemote)
+
+    assert_type(mac_canvas.toolbar, NavigationToolbar2MacRemote | None)
+    assert_type(mac_canvas.manager, FigureManagerMacRemote | None)
+    assert_type(mac_canvas.new_timer(), TimerMac)
+    assert_type(mac_toolbar.canvas, FigureCanvasMacRemote)
+    assert_type(mac_manager.canvas, FigureCanvasMacRemote)
+
+    # Remote-mixin API and toolkit API through the cross-references.
+    for remote_canvas in (gtk3_toolbar.canvas, gtk4_toolbar.canvas,
+                          wx_manager.canvas, mac_manager.canvas):
+        remote_canvas.send({"type": "refresh"})
+    gtk3_toolbar.canvas.queue_draw()
+    wx_toolbar.canvas.Refresh()
+    if gtk4_canvas.toolbar is not None:
+        gtk4_canvas.toolbar._on_navigate_mode("PAN")
+
+
+def _check_explicit_any_specialization(  # pragma: no cover
+    any_canvas: RemoteCanvasMixin[Any, Any, Any],
+    any_toolbar: RemoteToolbarMixin[Any],
+    standalone: FigureCanvasRemote,
+    qt_canvas: FigureCanvasQTRemote,
+    qt_toolbar: NavigationToolbar2QTRemote,
+    tk_canvas: FigureCanvasTkRemote,
+    gtk3_canvas: FigureCanvasGTK3Remote,
+    wx_canvas: FigureCanvasWxRemote,
+    mac_canvas: FigureCanvasMacRemote,
+) -> None:
+    # Code that works with *any* remote canvas says so by naming the type
+    # arguments: ``[Any, Any, Any]`` accepts every specialization.
+    def forward(canvas: RemoteCanvasMixin[Any, Any, Any]) -> None:
+        canvas.send({"type": "refresh"})
+
+    def hook(toolbar: RemoteToolbarMixin[Any]) -> None:
+        toolbar._on_navigate_mode("")
+
+    for canvas in (standalone, qt_canvas, tk_canvas, gtk3_canvas, wx_canvas,
+                   mac_canvas):
+        forward(canvas)
+    hook(qt_toolbar)
+    forward(any_canvas)
+    hook(any_toolbar)
+    # The mixin's own API stays available on an ``Any`` specialization.
+    any_canvas.send({"type": "refresh"})
+    any_toolbar.home()
+    # The same holds for the Matplotlib classes: a concrete backend is
+    # accepted where the parameters are spelled out as ``Any``.
+    def stock_canvas(canvas: FigureCanvasQT[Any, Any, Any]) -> None: ...
+    def base_canvas(canvas: FigureCanvasBase[Any, Any, Any]) -> None: ...
+
+    stock_canvas(qt_canvas)
+    base_canvas(qt_canvas)
+    base_canvas(standalone)
 
 
 def _check_manager_type_propagation(  # pragma: no cover
@@ -398,6 +800,12 @@ def _check_gui_canvas_types(  # pragma: no cover
     wxagg: FigureCanvasWxAgg,
     wxcairo: FigureCanvasWxCairo,
     figure: Figure,
+    qtagg_type: type[FigureCanvasQTAgg],
+    qtcairo_type: type[FigureCanvasQTCairo],
+    tkagg_type: type[FigureCanvasTkAgg],
+    gtk3agg_type: type[FigureCanvasGTK3Agg],
+    gtk4cairo_type: type[FigureCanvasGTK4Cairo],
+    wxagg_type: type[FigureCanvasWxAgg],
 ) -> None:
     # Every combined "rendering + toolkit" canvas must retain the toolkit's
     # concrete manager, toolbar, and timer types even though the rendering
@@ -406,43 +814,67 @@ def _check_gui_canvas_types(  # pragma: no cover
         assert_type(qt_canvas.manager, FigureManagerQT | None)
         assert_type(qt_canvas.toolbar, NavigationToolbar2QT | None)
         assert_type(qt_canvas.new_timer(), TimerQT)
+        # The stock classes are generic too, with the stock classes as their
+        # defaults.  One hop along a cross-reference the default is written
+        # out, so the type is the stock canvas specialized with ``Any``.
         if qt_canvas.manager is not None:
-            assert_type(qt_canvas.manager.canvas, FigureCanvasQT)
+            assert_type(
+                qt_canvas.manager.canvas,
+                FigureCanvasQT[
+                    NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT
+                ],
+            )
             assert_type(
                 qt_canvas.manager.toolbar,
                 NavigationToolbar2QT | ToolContainerBase | None,
             )
+            stock_canvas: FigureCanvasQT = qt_canvas.manager.canvas
+            stock_canvas.mouseEventCoords()
         if qt_canvas.toolbar is not None:
-            assert_type(qt_canvas.toolbar.canvas, FigureCanvasQT)
-    assert_type(FigureCanvasQTAgg.manager_class, type[FigureManagerQT])
+            assert_type(
+                qt_canvas.toolbar.canvas,
+                FigureCanvasQT[
+                    NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT
+                ],
+            )
+    # ``manager_class`` is read from a specialization, like every other use
+    # of a generic class in this module.  (mypy does not apply type-parameter
+    # defaults to a ``classproperty`` read from the *bare* class object.)
+    assert_type(
+        FigureCanvasQTAgg[
+            NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT
+        ].manager_class,
+        type[FigureManagerQT[Any, Any]],
+    )
+    assert_type(qtagg_type.manager_class, type[FigureManagerQT])
+    assert_type(qtcairo_type.manager_class, type[FigureManagerQT])
     assert_type(FigureCanvasQTAgg.new_manager(figure, 1), FigureManagerQT)
-    assert_type(FigureCanvasQTCairo.manager_class, type[FigureManagerQT])
     assert_type(qtagg.copy_from_bbox(figure.bbox), BufferRegion)
 
     for tk_canvas in (tk, tkagg, tkcairo):
         assert_type(tk_canvas.manager, FigureManagerTk | None)
         assert_type(tk_canvas.toolbar, NavigationToolbar2Tk | None)
         assert_type(tk_canvas.new_timer(), TimerTk)
-    assert_type(FigureCanvasTkAgg.manager_class, type[FigureManagerTk])
+    assert_type(tkagg_type.manager_class, type[FigureManagerTk])
     assert_type(FigureCanvasTkCairo.new_manager(figure, 1), FigureManagerTk)
 
     for gtk3_canvas in (gtk3, gtk3agg, gtk3cairo):
         assert_type(gtk3_canvas.manager, FigureManagerGTK3 | None)
         assert_type(gtk3_canvas.toolbar, NavigationToolbar2GTK3 | None)
         assert_type(gtk3_canvas.new_timer(), TimerGTK)
-    assert_type(FigureCanvasGTK3Agg.manager_class, type[FigureManagerGTK3])
+    assert_type(gtk3agg_type.manager_class, type[FigureManagerGTK3])
 
     for gtk4_canvas in (gtk4, gtk4agg, gtk4cairo):
         assert_type(gtk4_canvas.manager, FigureManagerGTK4 | None)
         assert_type(gtk4_canvas.toolbar, NavigationToolbar2GTK4 | None)
         assert_type(gtk4_canvas.new_timer(), TimerGTK)
-    assert_type(FigureCanvasGTK4Cairo.manager_class, type[FigureManagerGTK4])
+    assert_type(gtk4cairo_type.manager_class, type[FigureManagerGTK4])
 
     for wx_canvas in (wx, wxagg, wxcairo):
         assert_type(wx_canvas.manager, FigureManagerWx | None)
         assert_type(wx_canvas.toolbar, NavigationToolbar2Wx | None)
         assert_type(wx_canvas.new_timer(), TimerWx)
-    assert_type(FigureCanvasWxAgg.manager_class, type[FigureManagerWx])
+    assert_type(wxagg_type.manager_class, type[FigureManagerWx])
 
 
 def _check_web_canvas_types(  # pragma: no cover
@@ -536,6 +968,52 @@ def _check_negative_cases(  # pragma: no cover
     FigureCanvasRemote._timer_cls = TimerBase  # type: ignore[assignment]
 
 
+def _check_diamond_negative_cases(  # pragma: no cover
+    any_toolbar: RemoteToolbarMixin[Any],
+    remote_toolbar: NavigationToolbar2Remote,
+    remote_manager: FigureManagerRemote,
+    qt_canvas: FigureCanvasQTRemote,
+    tk_toolbar: NavigationToolbar2TkRemote,
+    stock_qt_toolbar: NavigationToolbar2QT,
+    stock_qt_manager: FigureManagerQT,
+) -> None:
+    # The standalone remote canvas has no toolkit members.
+    remote_toolbar.canvas.drawRectangle(None)  # type: ignore[attr-defined]
+    remote_manager.canvas.devicePixelRatioF()  # type: ignore[attr-defined]
+    # Before narrowing, the manager's toolbar may be a toolmanager container.
+    remote_manager.toolbar.home()  # type: ignore[union-attr]
+    # A specialized cross-reference rejects another toolkit's classes, the
+    # stock toolkit class, and the standalone remote class.
+    qt_canvas.toolbar = tk_toolbar  # type: ignore[assignment]
+    qt_canvas.toolbar = stock_qt_toolbar  # type: ignore[assignment]
+    qt_canvas.toolbar = remote_toolbar  # type: ignore[assignment]
+    # The stock Qt manager's canvas is the stock Qt canvas, not a remote one.
+    # Qt classes stand in for an untyped widget, so an unknown member is
+    # ``Any`` and not an error.
+    assert_type(
+        stock_qt_manager.canvas,
+        FigureCanvasQT[NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT],
+    )
+    assert_type(stock_qt_manager.canvas.send, Any)
+    # A generic class used bare takes its defaults; the mixins have none, so
+    # the parameters of a bare mixin are unknown and nothing is checked
+    # through it.  This module therefore always names them.
+    assert_type(any_toolbar.canvas, Any)
+
+
+if TYPE_CHECKING:
+    # The bounds keep each toolkit family closed: a Tk toolbar is not a valid
+    # type argument for a Qt canvas.
+    class _WrongFamilyCanvas(
+        FigureCanvasQT[
+            "NavigationToolbar2TkRemote",  # type: ignore[type-var]
+            FigureManagerQT[Any, Any],
+            TimerQT,
+        ]
+    ):
+        pass
+
+
 def _check_native_toolkit_members(  # pragma: no cover
     qt_canvas: FigureCanvasQTRemote,
     qt_toolbar: NavigationToolbar2QTRemote,
@@ -554,8 +1032,8 @@ def _check_native_toolkit_members(  # pragma: no cover
     qt_toolbar.sizeHint()
     # Matplotlib-owned members keep their precise types alongside ``Any``.
     assert_type(qt_canvas.figure, Figure)
-    assert_type(qt_canvas.manager, FigureManagerRemote | None)
-    assert_type(qt_toolbar.canvas, FigureCanvasRemote)
+    assert_type(qt_canvas.manager, FigureManagerQT[Any, Any] | None)
+    assert_type(qt_toolbar.canvas, FigureCanvasQTRemote)
 
     assert_type(tk_canvas._tkcanvas, tk.Canvas)
     tk_canvas._tkcanvas.bind("<Configure>", lambda event: None)
@@ -728,9 +1206,34 @@ def test_remote_backend_runtime() -> None:
     assert isinstance(manager.toolbar, NavigationToolbar2Remote)
     assert manager.toolbar.canvas is canvas
     assert isinstance(canvas.new_timer(), RemoteTimer)
-    assert FigureCanvasRemote.manager_class is FigureManagerBase
     assert canvas._set_device_pixel_ratio(2.0)
     assert canvas.device_pixel_ratio == 2.0
+
+    # The static and the runtime answer for ``manager_class`` agree, and
+    # ``new_manager`` builds the manager it names.
+    assert_type(FigureCanvasRemote.manager_class, type[FigureManagerRemote])
+    assert FigureCanvasRemote.manager_class is FigureManagerRemote
+    made = FigureCanvasRemote.new_manager(Figure(), 2)
+    assert_type(made, FigureManagerRemote)
+    assert type(made) is FigureManagerRemote
+    assert made.canvas.manager is made
+
+    # The mixins are generic classes at runtime too: subscripting one gives
+    # an alias of the class, which is what a class statement inherits from.
+    assert get_origin(RemoteCanvasMixin[Any, Any, Any]) is RemoteCanvasMixin
+    assert issubclass(FigureCanvasRemote, RemoteCanvasMixin)
+    assert issubclass(NavigationToolbar2Remote, RemoteToolbarMixin)
+
+    # The classes use each other through the cross-references.
+    manager.toolbar.pan()
+    manager.announce()
+    assert canvas.sent == [
+        {"type": "toolbar_button", "name": "pan"},
+        {"type": "title", "title": manager.get_window_title()},
+        {"type": "toolbar_button", "name": "home"},
+    ]
+    canvas.on_server_message({"type": "navigate_mode", "mode": "PAN"})
+    assert manager.toolbar.server_mode == "PAN"
 
 
 def test_agg_buffer_region_runtime() -> None:

@@ -1,5 +1,6 @@
 import tkinter as tk
 from typing import Any
+from typing_extensions import TypeVar
 
 from matplotlib import backend_tools
 from matplotlib.backend_bases import (
@@ -28,7 +29,38 @@ def blit(
 class TimerTk(TimerBase):
     def __init__(self, parent: tk.Misc, *args: Any, **kwargs: Any) -> None: ...
 
-class FigureCanvasTk(FigureCanvasBase[NavigationToolbar2Tk, FigureManagerTk, TimerTk]):
+# Type parameters of the Tk canvas, toolbar and manager.  See the comment in
+# ``backend_qt.pyi`` for why these classes are generic and how the bounds,
+# defaults and per-class variables are chosen.
+TkToolbarT = TypeVar(
+    "TkToolbarT",
+    bound="NavigationToolbar2Tk[Any]",
+    default="NavigationToolbar2Tk[FigureCanvasTk[NavigationToolbar2Tk[Any], FigureManagerTk[Any, Any], TimerTk]]",
+)
+TkManagerT = TypeVar(
+    "TkManagerT",
+    bound="FigureManagerTk[Any, Any]",
+    default="FigureManagerTk[FigureCanvasTk[NavigationToolbar2Tk[Any], FigureManagerTk[Any, Any], TimerTk], NavigationToolbar2Tk[FigureCanvasTk[NavigationToolbar2Tk[Any], FigureManagerTk[Any, Any], TimerTk]]]",
+)
+TkTimerT = TypeVar("TkTimerT", bound=TimerTk, default=TimerTk)
+# The toolbar's canvas, the manager's canvas and the manager's toolbar.
+_TkToolbarCanvasT = TypeVar(
+    "_TkToolbarCanvasT",
+    bound="FigureCanvasTk[Any, Any, Any]",
+    default="FigureCanvasTk[NavigationToolbar2Tk[Any], FigureManagerTk[Any, Any], TimerTk]",
+)
+_TkManagerCanvasT = TypeVar(
+    "_TkManagerCanvasT",
+    bound="FigureCanvasTk[Any, Any, Any]",
+    default="FigureCanvasTk[NavigationToolbar2Tk[Any], FigureManagerTk[Any, Any], TimerTk]",
+)
+_TkManagerToolbarT = TypeVar(
+    "_TkManagerToolbarT",
+    bound="NavigationToolbar2Tk[Any]",
+    default="NavigationToolbar2Tk[FigureCanvasTk[NavigationToolbar2Tk[Any], FigureManagerTk[Any, Any], TimerTk]]",
+)
+
+class FigureCanvasTk(FigureCanvasBase[TkToolbarT, TkManagerT, TkTimerT]):
     # Backend-authoring API: the ``tk.Canvas`` hosting the figure image and the
     # ``tk.PhotoImage`` it displays.  Subclasses bind events and draw on these.
     _tkcanvas: tk.Canvas
@@ -46,12 +78,12 @@ class FigureCanvasTk(FigureCanvasBase[NavigationToolbar2Tk, FigureManagerTk, Tim
     def scroll_event_windows(self, event: Any) -> None: ...
     def key_press(self, event: Any) -> None: ...
     def key_release(self, event: Any) -> None: ...
-    def new_timer(self, *args: Any, **kwargs: Any) -> TimerTk: ...
+    def new_timer(self, *args: Any, **kwargs: Any) -> TkTimerT: ...
     def start_event_loop(self, timeout: float = ...) -> None: ...
 
-class FigureManagerTk(FigureManagerBase[FigureCanvasTk, NavigationToolbar2Tk]):
+class FigureManagerTk(FigureManagerBase[_TkManagerCanvasT, _TkManagerToolbarT]):
     window: Any
-    def __init__(self, canvas: FigureCanvasTk, num: int | str, window: Any) -> None: ...
+    def __init__(self, canvas: _TkManagerCanvasT, num: int | str, window: Any) -> None: ...
     # Runtime names the parameters ``width, height`` while the base uses
     # ``w, h``; the base only ever calls this positionally.
     def resize(  # pyright: ignore[reportIncompatibleMethodOverride]
@@ -61,14 +93,14 @@ class FigureManagerTk(FigureManagerBase[FigureCanvasTk, NavigationToolbar2Tk]):
 
 def add_tooltip(widget: Any, text: str) -> None: ...
 
-class NavigationToolbar2Tk(NavigationToolbar2[FigureCanvasTk], tk.Frame):
+class NavigationToolbar2Tk(NavigationToolbar2[_TkToolbarCanvasT], tk.Frame):
     window: Any
     # ``message`` is a ``tk.StringVar`` at runtime (unlike the ``str`` on the
     # base class), so it is typed as ``Any`` to avoid a spurious conflict.
     message: Any
     def __init__(
         self,
-        canvas: FigureCanvasTk,
+        canvas: _TkToolbarCanvasT,
         window: Any = ...,
         *,
         pack_toolbar: bool = ...,

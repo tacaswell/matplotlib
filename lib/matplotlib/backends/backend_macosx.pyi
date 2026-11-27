@@ -1,4 +1,5 @@
 from typing import Any
+from typing_extensions import TypeVar
 
 from matplotlib.backend_bases import (
     _Backend,
@@ -20,8 +21,39 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 class TimerMac(_TimerMacOSX, TimerBase): ...
 
+# Type parameters of the Mac canvas, toolbar and manager.  See the comment in
+# ``backend_qt.pyi`` for why these classes are generic and how the bounds,
+# defaults and per-class variables are chosen.
+MacToolbarT = TypeVar(
+    "MacToolbarT",
+    bound="NavigationToolbar2Mac[Any]",
+    default="NavigationToolbar2Mac[FigureCanvasMac[NavigationToolbar2Mac[Any], FigureManagerMac[Any, Any], TimerMac]]",
+)
+MacManagerT = TypeVar(
+    "MacManagerT",
+    bound="FigureManagerMac[Any, Any]",
+    default="FigureManagerMac[FigureCanvasMac[NavigationToolbar2Mac[Any], FigureManagerMac[Any, Any], TimerMac], NavigationToolbar2Mac[FigureCanvasMac[NavigationToolbar2Mac[Any], FigureManagerMac[Any, Any], TimerMac]]]",
+)
+MacTimerT = TypeVar("MacTimerT", bound=TimerMac, default=TimerMac)
+# The toolbar's canvas, the manager's canvas and the manager's toolbar.
+_MacToolbarCanvasT = TypeVar(
+    "_MacToolbarCanvasT",
+    bound="FigureCanvasMac[Any, Any, Any]",
+    default="FigureCanvasMac[NavigationToolbar2Mac[Any], FigureManagerMac[Any, Any], TimerMac]",
+)
+_MacManagerCanvasT = TypeVar(
+    "_MacManagerCanvasT",
+    bound="FigureCanvasMac[Any, Any, Any]",
+    default="FigureCanvasMac[NavigationToolbar2Mac[Any], FigureManagerMac[Any, Any], TimerMac]",
+)
+_MacManagerToolbarT = TypeVar(
+    "_MacManagerToolbarT",
+    bound="NavigationToolbar2Mac[Any]",
+    default="NavigationToolbar2Mac[FigureCanvasMac[NavigationToolbar2Mac[Any], FigureManagerMac[Any, Any], TimerMac]]",
+)
+
 class FigureCanvasMac(
-    FigureCanvasAgg[NavigationToolbar2Mac, FigureManagerMac, TimerMac],
+    FigureCanvasAgg[MacToolbarT, MacManagerT, MacTimerT],
     _FigureCanvasMacOSX,
 ):
     required_interactive_framework: str
@@ -29,7 +61,7 @@ class FigureCanvasMac(
     def resize(self, width: float, height: float) -> None: ...
 
 class NavigationToolbar2Mac(
-    _NavigationToolbar2MacOSX, NavigationToolbar2[FigureCanvasMac]
+    _NavigationToolbar2MacOSX, NavigationToolbar2[_MacToolbarCanvasT]
 ):
     def draw_rubberband(
         self, event: Event, x0: float, y0: float, x1: float, y1: float
@@ -38,7 +70,7 @@ class NavigationToolbar2Mac(
     def save_figure(self, *args: object) -> str | None: ...
 
 class FigureManagerMac(
-    _FigureManagerMacOSX, FigureManagerBase[FigureCanvasMac, NavigationToolbar2Mac]
+    _FigureManagerMacOSX, FigureManagerBase[_MacManagerCanvasT, _MacManagerToolbarT]
 ):
     def destroy(self) -> None: ...
     @classmethod

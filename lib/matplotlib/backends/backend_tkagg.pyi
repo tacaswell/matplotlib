@@ -8,12 +8,16 @@ from matplotlib.backends._backend_tk import (
     FigureCanvasTk,
     FigureManagerTk as FigureManagerTk,
     NavigationToolbar2Tk as NavigationToolbar2Tk,
-    TimerTk,
+    TkManagerT,
+    TkTimerT,
+    TkToolbarT,
     _BackendTk,
 )
 
 class FigureCanvasTkAgg(
-    FigureCanvasAgg[NavigationToolbar2Tk, FigureManagerTk, TimerTk], FigureCanvasTk
+    # Both bases get the same type arguments (see ``FigureCanvasQTAgg``).
+    FigureCanvasAgg[TkToolbarT, TkManagerT, TkTimerT],
+    FigureCanvasTk[TkToolbarT, TkManagerT, TkTimerT],
 ):
     def blit(self, bbox: BboxBase | None = ...) -> None: ...
 

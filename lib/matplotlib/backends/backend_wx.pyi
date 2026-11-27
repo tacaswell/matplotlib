@@ -1,4 +1,5 @@
-from typing import Any
+from typing import Any, Self
+from typing_extensions import TypeVar
 
 from matplotlib import backend_tools
 from matplotlib.backend_bases import (
@@ -46,8 +47,39 @@ class GraphicsContextWx(GraphicsContextBase):
         renderer: RendererWx,  # bitmap: wx.Bitmap
     ) -> None: ...
 
+# Type parameters of the Wx canvas, toolbar and manager.  See the comment in
+# ``backend_qt.pyi`` for why these classes are generic and how the bounds,
+# defaults and per-class variables are chosen.
+WxToolbarT = TypeVar(
+    "WxToolbarT",
+    bound="NavigationToolbar2Wx[Any]",
+    default="NavigationToolbar2Wx[_FigureCanvasWxBase[NavigationToolbar2Wx[Any], FigureManagerWx[Any, Any], TimerWx]]",
+)
+WxManagerT = TypeVar(
+    "WxManagerT",
+    bound="FigureManagerWx[Any, Any]",
+    default="FigureManagerWx[_FigureCanvasWxBase[NavigationToolbar2Wx[Any], FigureManagerWx[Any, Any], TimerWx], NavigationToolbar2Wx[_FigureCanvasWxBase[NavigationToolbar2Wx[Any], FigureManagerWx[Any, Any], TimerWx]]]",
+)
+WxTimerT = TypeVar("WxTimerT", bound=TimerWx, default=TimerWx)
+# The toolbar's canvas, the manager's canvas and the manager's toolbar.
+_WxToolbarCanvasT = TypeVar(
+    "_WxToolbarCanvasT",
+    bound="_FigureCanvasWxBase[Any, Any, Any]",
+    default="_FigureCanvasWxBase[NavigationToolbar2Wx[Any], FigureManagerWx[Any, Any], TimerWx]",
+)
+_WxManagerCanvasT = TypeVar(
+    "_WxManagerCanvasT",
+    bound="_FigureCanvasWxBase[Any, Any, Any]",
+    default="_FigureCanvasWxBase[NavigationToolbar2Wx[Any], FigureManagerWx[Any, Any], TimerWx]",
+)
+_WxManagerToolbarT = TypeVar(
+    "_WxManagerToolbarT",
+    bound="NavigationToolbar2Wx[Any]",
+    default="NavigationToolbar2Wx[_FigureCanvasWxBase[NavigationToolbar2Wx[Any], FigureManagerWx[Any, Any], TimerWx]]",
+)
+
 class _FigureCanvasWxBase(  # wx.Panel
-    FigureCanvasBase["NavigationToolbar2Wx", "FigureManagerWx", TimerWx], _UntypedToolkitWidget
+    FigureCanvasBase[WxToolbarT, WxManagerT, WxTimerT], _UntypedToolkitWidget
 ):
     keyvald: dict[Any, str]
     def __init__(
@@ -62,7 +94,7 @@ class _FigureCanvasWxBase(  # wx.Panel
     ) -> None: ...
     def gui_repaint(self, drawDC: object = ...) -> None: ...
 
-class FigureCanvasWx(_FigureCanvasWxBase):
+class FigureCanvasWx(_FigureCanvasWxBase[WxToolbarT, WxManagerT, WxTimerT]):
     def draw(self, drawDC: object = ...) -> None: ...
     def print_bmp(self, filename: str, **kwargs: Any) -> None: ...
     def print_jpeg(self, filename: str, **kwargs: Any) -> None: ...
@@ -79,16 +111,16 @@ class FigureFrameWx(_UntypedToolkitWidget):  # wx.Frame
         num: int | str,
         fig: Figure,
         *,
-        canvas_class: type[FigureCanvasWx],
+        canvas_class: type[_FigureCanvasWxBase[Any, Any, Any]],
     ) -> None: ...
 
-class FigureManagerWx(FigureManagerBase[_FigureCanvasWxBase, NavigationToolbar2Wx]):
+class FigureManagerWx(FigureManagerBase[_WxManagerCanvasT, _WxManagerToolbarT]):
     frame: Any  # wx.Frame
     window: Any  # wx.Frame (alias of frame)
 
     def __init__(
         self,
-        canvas: _FigureCanvasWxBase,
+        canvas: _WxManagerCanvasT,
         num: int | str,
         frame: Any,  # wx.Frame
     ) -> None: ...
@@ -98,15 +130,15 @@ class FigureManagerWx(FigureManagerBase[_FigureCanvasWxBase, NavigationToolbar2W
     @classmethod
     def create_with_canvas(
         cls,
-        canvas_class: type[_FigureCanvasWxBase],
+        canvas_class: type[_WxManagerCanvasT],
         figure: Figure,
         num: int | str,
-    ) -> FigureManagerWx: ...
+    ) -> Self: ...
 
-class NavigationToolbar2Wx(NavigationToolbar2[_FigureCanvasWxBase], _UntypedToolkitWidget):  # wx.ToolBar
+class NavigationToolbar2Wx(NavigationToolbar2[_WxToolbarCanvasT], _UntypedToolkitWidget):  # wx.ToolBar
     def __init__(
         self,
-        canvas: _FigureCanvasWxBase,
+        canvas: _WxToolbarCanvasT,
         coordinates: bool = ...,
         *,
         style: Any = ...,  # wx.TB_* flag

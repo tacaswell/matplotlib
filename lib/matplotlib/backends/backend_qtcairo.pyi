@@ -6,13 +6,16 @@ from matplotlib.backends.backend_cairo import FigureCanvasCairo
 from matplotlib.backends.backend_qt import (
     FigureCanvasQT,
     FigureManagerQT,
-    NavigationToolbar2QT,
-    TimerQT,
+    QtManagerT,
+    QtTimerT,
+    QtToolbarT,
     _BackendQT,
 )
 
 class FigureCanvasQTCairo(
-    FigureCanvasCairo[NavigationToolbar2QT, FigureManagerQT, TimerQT], FigureCanvasQT
+    # Both bases get the same type arguments (see ``FigureCanvasQTAgg``).
+    FigureCanvasCairo[QtToolbarT, QtManagerT, QtTimerT],
+    FigureCanvasQT[QtToolbarT, QtManagerT, QtTimerT],
 ):
     def paintEvent(self, event: Any) -> None: ...
 

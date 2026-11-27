@@ -7,16 +7,19 @@ from matplotlib.backends.backend_qt import (
     FigureCanvasQT,
     FigureManagerQT as FigureManagerQT,
     NavigationToolbar2QT as NavigationToolbar2QT,
-    TimerQT,
+    QtManagerT,
+    QtTimerT,
+    QtToolbarT,
     _BackendQT,
 )
 
 class FigureCanvasQTAgg(
-    # this needs to get specialized here to match the specialization
-    # done by FigureCavasBaseQt or the type checkers may explode with
-    # inconsistent resolution of the generic types in the diamond.
-    FigureCanvasAgg[NavigationToolbar2QT, FigureManagerQT, TimerQT],
-    FigureCanvasQT,
+    # Both bases derive from ``FigureCanvasBase``, so they must get the same
+    # type arguments or the checkers see two inconsistent specializations of
+    # it.  The Qt parameters are passed through, not fixed, so that this class
+    # can itself be re-parameterized by a subclass.
+    FigureCanvasAgg[QtToolbarT, QtManagerT, QtTimerT],
+    FigureCanvasQT[QtToolbarT, QtManagerT, QtTimerT],
 ):
     def paintEvent(self, event: Any) -> None: ...
 

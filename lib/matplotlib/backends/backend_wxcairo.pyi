@@ -9,13 +9,17 @@ from .backend_wx import (
     _FigureCanvasWxBase,
     FigureManagerWx,
     NavigationToolbar2Wx,
-    TimerWx,
+    WxManagerT,
+    WxTimerT,
+    WxToolbarT,
 )
 
 NavigationToolbar2WxCairo = NavigationToolbar2Wx
 
 class FigureCanvasWxCairo(
-    FigureCanvasCairo[NavigationToolbar2Wx, FigureManagerWx, TimerWx], _FigureCanvasWxBase
+    # Both bases get the same type arguments (see ``FigureCanvasQTAgg``).
+    FigureCanvasCairo[WxToolbarT, WxManagerT, WxTimerT],
+    _FigureCanvasWxBase[WxToolbarT, WxManagerT, WxTimerT],
 ):
     def draw(self, drawDC: object = ...) -> None: ...
 

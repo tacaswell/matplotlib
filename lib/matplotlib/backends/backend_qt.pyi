@@ -1,4 +1,5 @@
 from typing import Any
+from typing_extensions import TypeVar
 
 from matplotlib import backend_tools
 from matplotlib._pylab_helpers import Gcf as Gcf
@@ -31,8 +32,61 @@ def _create_qApp() -> Any: ...
 
 class TimerQT(TimerBase): ...
 
+# The Qt canvas, toolbar and manager are generic over each other in the same
+# way as their ``backend_bases`` parents.  This is what lets a downstream
+# backend that layers a mixin on top of the Qt classes, e.g. ::
+#
+#     class MyCanvas(MyCanvasMixin[MyToolbar, MyManager, TimerQT],
+#                    FigureCanvasQT[MyToolbar, MyManager, TimerQT]): ...
+#
+# give both paths to the shared ``FigureCanvasBase`` the *same* type
+# arguments.  With the arguments fixed here instead, the two paths disagree:
+# pyright rejects the class ("base classes are mutually incompatible") and
+# the subclass has to redeclare ``toolbar`` / ``canvas``, which pyright also
+# rejects because the attributes are mutable.
+#
+# * Bounds keep the parameters inside the Qt family: these classes call Qt
+#   widget methods on each other.
+# * Defaults are the stock Qt classes, so a bare ``FigureCanvasQT``,
+#   ``NavigationToolbar2QT`` or ``FigureManagerQT`` is the stock backend.
+#   They spell out one level of the stock classes because a default cannot
+#   name its own, still unparameterized, class.
+# * Each class has its own type variables.  Sharing one between two of these
+#   mutually-referencing classes makes pyright mis-resolve them: depending on
+#   which class a module touches first, it reports the others as taking
+#   fewer type arguments than declared.
+#
+# The other GUI toolkits (Tk, GTK3, GTK4, wx, macOS) follow the same scheme.
+QtToolbarT = TypeVar(
+    "QtToolbarT",
+    bound="NavigationToolbar2QT[Any]",
+    default="NavigationToolbar2QT[FigureCanvasQT[NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT]]",
+)
+QtManagerT = TypeVar(
+    "QtManagerT",
+    bound="FigureManagerQT[Any, Any]",
+    default="FigureManagerQT[FigureCanvasQT[NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT], NavigationToolbar2QT[FigureCanvasQT[NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT]]]",
+)
+QtTimerT = TypeVar("QtTimerT", bound=TimerQT, default=TimerQT)
+# The toolbar's canvas, the manager's canvas and the manager's toolbar.
+_QtToolbarCanvasT = TypeVar(
+    "_QtToolbarCanvasT",
+    bound="FigureCanvasQT[Any, Any, Any]",
+    default="FigureCanvasQT[NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT]",
+)
+_QtManagerCanvasT = TypeVar(
+    "_QtManagerCanvasT",
+    bound="FigureCanvasQT[Any, Any, Any]",
+    default="FigureCanvasQT[NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT]",
+)
+_QtManagerToolbarT = TypeVar(
+    "_QtManagerToolbarT",
+    bound="NavigationToolbar2QT[Any]",
+    default="NavigationToolbar2QT[FigureCanvasQT[NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT]]",
+)
+
 class FigureCanvasQT(  # QtWidgets.QWidget
-    FigureCanvasBase[NavigationToolbar2QT, FigureManagerQT, TimerQT],
+    FigureCanvasBase[QtToolbarT, QtManagerT, QtTimerT],
     _UntypedToolkitWidget,
 ):
     buttond: dict[Any, MouseButton]
@@ -55,9 +109,9 @@ class FigureCanvasQT(  # QtWidgets.QWidget
 
 class MainWindow(_UntypedToolkitWidget): ...  # QtWidgets.QMainWindow
 
-class FigureManagerQT(FigureManagerBase[FigureCanvasQT, NavigationToolbar2QT]):
+class FigureManagerQT(FigureManagerBase[_QtManagerCanvasT, _QtManagerToolbarT]):
     window: Any
-    def __init__(self, canvas: FigureCanvasQT, num: int | str) -> None: ...
+    def __init__(self, canvas: _QtManagerCanvasT, num: int | str) -> None: ...
     # Runtime names the parameters ``width, height`` while the base uses
     # ``w, h``; the base only ever calls this positionally.
     def resize(  # pyright: ignore[reportIncompatibleMethodOverride]
@@ -66,7 +120,7 @@ class FigureManagerQT(FigureManagerBase[FigureCanvasQT, NavigationToolbar2QT]):
     def destroy(self, *args: Any) -> None: ...
 
 class NavigationToolbar2QT(
-    NavigationToolbar2[FigureCanvasQT], _UntypedToolkitWidget
+    NavigationToolbar2[_QtToolbarCanvasT], _UntypedToolkitWidget
 ):  # QtWidgets.QToolBar
     coordinates: bool
     locLabel: Any
@@ -75,7 +129,7 @@ class NavigationToolbar2QT(
     _actions: dict[str, Any]
     def __init__(
         self,
-        canvas: FigureCanvasQT,
+        canvas: _QtToolbarCanvasT,
         parent: Any = ...,
         coordinates: bool = ...,
     ) -> None: ...

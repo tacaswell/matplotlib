@@ -6,13 +6,16 @@ from matplotlib.backends.backend_cairo import FigureCanvasCairo
 from matplotlib.backends._backend_tk import (
     FigureCanvasTk,
     FigureManagerTk,
-    NavigationToolbar2Tk,
-    TimerTk,
+    TkManagerT,
+    TkTimerT,
+    TkToolbarT,
     _BackendTk,
 )
 
 class FigureCanvasTkCairo(
-    FigureCanvasCairo[NavigationToolbar2Tk, FigureManagerTk, TimerTk], FigureCanvasTk
+    # Both bases get the same type arguments (see ``FigureCanvasQTAgg``).
+    FigureCanvasCairo[TkToolbarT, TkManagerT, TkTimerT],
+    FigureCanvasTk[TkToolbarT, TkManagerT, TkTimerT],
 ): ...
 class _BackendTkCairo(_BackendTk): ...
 

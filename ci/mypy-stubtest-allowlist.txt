@@ -55,6 +55,9 @@ matplotlib\.backend_bases\.CanvasClassT
 matplotlib\.backend_bases\.ToolbarT
 matplotlib\.backend_bases\.ManagerT
 matplotlib\.backend_bases\.TimerT
+# Type parameters of the Tk canvas, toolbar and manager.  The other GUI
+# toolkits' parameters are covered by the module patterns below.
+matplotlib\.backends\._backend_tk\.Tk(Toolbar|Manager|Timer)T
 # __class_getitem__ is set explicitly at runtime via classmethod(types.GenericAlias)
 # for subscriptability; Generic already provides this in stubs
 matplotlib\.backend_bases\.RendererBase\.__class_getitem__

@@ -1,4 +1,5 @@
 from typing import Any
+from typing_extensions import TypeVar
 
 from matplotlib import backend_tools
 from matplotlib.backend_bases import ShowBase, ToolContainerBase, _UntypedToolkitWidget
@@ -25,8 +26,39 @@ TimerGTK3 = TimerGTK
 # for the native base: downstream subclasses see the widget API (as ``Any``)
 # exactly as they would from the runtime module.
 
+# Type parameters of the GTK3 canvas, toolbar and manager.  See the comment in
+# ``backend_qt.pyi`` for why these classes are generic and how the bounds,
+# defaults and per-class variables are chosen.  There is no timer parameter:
+# ``_FigureCanvasGTK`` fixes ``TimerGTK`` for every GTK version.
+GTK3ToolbarT = TypeVar(
+    "GTK3ToolbarT",
+    bound="NavigationToolbar2GTK3[Any]",
+    default="NavigationToolbar2GTK3[FigureCanvasGTK3[NavigationToolbar2GTK3[Any], FigureManagerGTK3[Any, Any]]]",
+)
+GTK3ManagerT = TypeVar(
+    "GTK3ManagerT",
+    bound="FigureManagerGTK3[Any, Any]",
+    default="FigureManagerGTK3[FigureCanvasGTK3[NavigationToolbar2GTK3[Any], FigureManagerGTK3[Any, Any]], NavigationToolbar2GTK3[FigureCanvasGTK3[NavigationToolbar2GTK3[Any], FigureManagerGTK3[Any, Any]]]]",
+)
+# The toolbar's canvas, the manager's canvas and the manager's toolbar.
+_GTK3ToolbarCanvasT = TypeVar(
+    "_GTK3ToolbarCanvasT",
+    bound="FigureCanvasGTK3[Any, Any]",
+    default="FigureCanvasGTK3[NavigationToolbar2GTK3[Any], FigureManagerGTK3[Any, Any]]",
+)
+_GTK3ManagerCanvasT = TypeVar(
+    "_GTK3ManagerCanvasT",
+    bound="FigureCanvasGTK3[Any, Any]",
+    default="FigureCanvasGTK3[NavigationToolbar2GTK3[Any], FigureManagerGTK3[Any, Any]]",
+)
+_GTK3ManagerToolbarT = TypeVar(
+    "_GTK3ManagerToolbarT",
+    bound="NavigationToolbar2GTK3[Any]",
+    default="NavigationToolbar2GTK3[FigureCanvasGTK3[NavigationToolbar2GTK3[Any], FigureManagerGTK3[Any, Any]]]",
+)
+
 class FigureCanvasGTK3(  # Gtk.DrawingArea
-    _FigureCanvasGTK["NavigationToolbar2GTK3", "FigureManagerGTK3"], _UntypedToolkitWidget
+    _FigureCanvasGTK[GTK3ToolbarT, GTK3ManagerT], _UntypedToolkitWidget
 ):
     # GTK signal-handler methods (new; not base overrides):
     def scroll_event(self, widget: Any, event: Any) -> bool: ...
@@ -42,7 +74,7 @@ class FigureCanvasGTK3(  # Gtk.DrawingArea
     def on_draw_event(self, widget: Any, ctx: Any) -> bool: ...
 
 class NavigationToolbar2GTK3(  # Gtk.Toolbar
-    _NavigationToolbar2GTK[FigureCanvasGTK3], _UntypedToolkitWidget
+    _NavigationToolbar2GTK[_GTK3ToolbarCanvasT], _UntypedToolkitWidget
 ): ...
 
 class ToolbarGTK3(ToolContainerBase, _UntypedToolkitWidget):  # Gtk.Box
@@ -73,7 +105,7 @@ class ToolCopyToClipboardGTK3(backend_tools.ToolCopyToClipboardBase):
         self, *args: Any, **kwargs: Any
     ) -> None: ...
 
-class FigureManagerGTK3(_FigureManagerGTK[FigureCanvasGTK3, NavigationToolbar2GTK3]):
+class FigureManagerGTK3(_FigureManagerGTK[_GTK3ManagerCanvasT, _GTK3ManagerToolbarT]):
     ...
 
 class _BackendGTK3(_BackendGTK): ...

@@ -1,4 +1,5 @@
 from typing import Any
+from typing_extensions import TypeVar
 
 from matplotlib import backend_tools
 from matplotlib.backend_bases import ShowBase, ToolContainerBase, _UntypedToolkitWidget
@@ -25,8 +26,39 @@ TimerGTK4 = TimerGTK
 # for the native base: downstream subclasses see the widget API (as ``Any``)
 # exactly as they would from the runtime module.
 
+# Type parameters of the GTK4 canvas, toolbar and manager.  See the comment in
+# ``backend_qt.pyi`` for why these classes are generic and how the bounds,
+# defaults and per-class variables are chosen.  There is no timer parameter:
+# ``_FigureCanvasGTK`` fixes ``TimerGTK`` for every GTK version.
+GTK4ToolbarT = TypeVar(
+    "GTK4ToolbarT",
+    bound="NavigationToolbar2GTK4[Any]",
+    default="NavigationToolbar2GTK4[FigureCanvasGTK4[NavigationToolbar2GTK4[Any], FigureManagerGTK4[Any, Any]]]",
+)
+GTK4ManagerT = TypeVar(
+    "GTK4ManagerT",
+    bound="FigureManagerGTK4[Any, Any]",
+    default="FigureManagerGTK4[FigureCanvasGTK4[NavigationToolbar2GTK4[Any], FigureManagerGTK4[Any, Any]], NavigationToolbar2GTK4[FigureCanvasGTK4[NavigationToolbar2GTK4[Any], FigureManagerGTK4[Any, Any]]]]",
+)
+# The toolbar's canvas, the manager's canvas and the manager's toolbar.
+_GTK4ToolbarCanvasT = TypeVar(
+    "_GTK4ToolbarCanvasT",
+    bound="FigureCanvasGTK4[Any, Any]",
+    default="FigureCanvasGTK4[NavigationToolbar2GTK4[Any], FigureManagerGTK4[Any, Any]]",
+)
+_GTK4ManagerCanvasT = TypeVar(
+    "_GTK4ManagerCanvasT",
+    bound="FigureCanvasGTK4[Any, Any]",
+    default="FigureCanvasGTK4[NavigationToolbar2GTK4[Any], FigureManagerGTK4[Any, Any]]",
+)
+_GTK4ManagerToolbarT = TypeVar(
+    "_GTK4ManagerToolbarT",
+    bound="NavigationToolbar2GTK4[Any]",
+    default="NavigationToolbar2GTK4[FigureCanvasGTK4[NavigationToolbar2GTK4[Any], FigureManagerGTK4[Any, Any]]]",
+)
+
 class FigureCanvasGTK4(  # Gtk.DrawingArea
-    _FigureCanvasGTK["NavigationToolbar2GTK4", "FigureManagerGTK4"], _UntypedToolkitWidget
+    _FigureCanvasGTK[GTK4ToolbarT, GTK4ManagerT], _UntypedToolkitWidget
 ):
     # GTK4 event-controller signal-handler methods (new; not base overrides):
     def scroll_event(self, controller: Any, dx: float, dy: float) -> bool: ...
@@ -49,7 +81,7 @@ class FigureCanvasGTK4(  # Gtk.DrawingArea
     def on_draw_event(self, widget: Any, ctx: Any) -> bool: ...
 
 class NavigationToolbar2GTK4(  # Gtk.Box
-    _NavigationToolbar2GTK[FigureCanvasGTK4], _UntypedToolkitWidget
+    _NavigationToolbar2GTK[_GTK4ToolbarCanvasT], _UntypedToolkitWidget
 ): ...
 
 class ToolbarGTK4(ToolContainerBase, _UntypedToolkitWidget):  # Gtk.Box
@@ -80,7 +112,7 @@ class ToolCopyToClipboardGTK4(backend_tools.ToolCopyToClipboardBase):
         self, *args: Any, **kwargs: Any
     ) -> None: ...
 
-class FigureManagerGTK4(_FigureManagerGTK[FigureCanvasGTK4, NavigationToolbar2GTK4]):
+class FigureManagerGTK4(_FigureManagerGTK[_GTK4ManagerCanvasT, _GTK4ManagerToolbarT]):
     ...
 
 class _BackendGTK4(_BackendGTK): ...

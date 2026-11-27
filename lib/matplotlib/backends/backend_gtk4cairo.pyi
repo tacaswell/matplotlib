@@ -8,13 +8,15 @@ from ._backend_gtk import TimerGTK
 from .backend_gtk4 import (
     FigureCanvasGTK4,
     FigureManagerGTK4,
-    NavigationToolbar2GTK4,
+    GTK4ManagerT,
+    GTK4ToolbarT,
     _BackendGTK4,
 )
 
 class FigureCanvasGTK4Cairo(
-    FigureCanvasCairo[NavigationToolbar2GTK4, FigureManagerGTK4, TimerGTK],
-    FigureCanvasGTK4,
+    # Both bases get the same type arguments (see ``FigureCanvasQTAgg``).
+    FigureCanvasCairo[GTK4ToolbarT, GTK4ManagerT, TimerGTK],
+    FigureCanvasGTK4[GTK4ToolbarT, GTK4ManagerT],
 ):
     def on_draw_event(self, widget: Any, ctx: Any) -> bool: ...
 
