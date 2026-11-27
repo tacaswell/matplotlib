@@ -49,9 +49,9 @@ from .typing import (
 #       .new_timer() -> TimerT
 #   NavigationToolbar2[CanvasT]
 #       .canvas -> CanvasT
-#   FigureManagerBase[CanvasT, ToolbarT]
-#       .canvas -> CanvasT
-#       .toolbar -> ToolbarT | ToolContainerBase | None
+#   FigureManagerBase[_ManagerCanvasT, _ManagerToolbarT]
+#       .canvas -> _ManagerCanvasT
+#       .toolbar -> _ManagerToolbarT | ToolContainerBase | None
 #
 # A backend declares its concrete set once, e.g.::
 #
@@ -64,13 +64,21 @@ from .typing import (
 # and every cross-reference then resolves to the concrete type without
 # redeclaring the (invariant, mutable) attributes in the subclass.
 #
-# CanvasT intentionally has no default: its recursive invariant bound would
-# overconstrain concrete toolbar and manager subclasses.  The remaining type
-# variables default to ``Any`` specializations of their bounds so that bare
-# ``FigureCanvasBase`` / ``FigureManagerBase`` remain usable and accept any
-# concrete backend.  General-purpose consumers (``Figure.canvas``, events,
-# handlers) should spell this out as ``FigureCanvasBase[Any, Any, Any]``.
-# ``None`` is in the annotation, not the TypeVar.
+# Each of the three classes has its own type variables: the manager does not
+# reuse the toolbar's ``CanvasT`` or the canvas's ``ToolbarT``.  Sharing one
+# between two of these mutually-referencing classes makes pyright mis-resolve
+# them: unless a module happens to import the canvas class first, attributes
+# such as ``toolbar.canvas`` and ``manager.canvas`` are left unspecialized and
+# fall back to ``FigureCanvasBase``.
+#
+# CanvasT and _ManagerCanvasT intentionally have no default: their recursive
+# invariant bound would overconstrain concrete toolbar and manager subclasses.
+# The remaining type variables default to ``Any`` specializations of their
+# bounds so that bare ``FigureCanvasBase`` / ``FigureManagerBase`` remain
+# usable and accept any concrete backend.  General-purpose consumers
+# (``Figure.canvas``, events, handlers) should spell this out as
+# ``FigureCanvasBase[Any, Any, Any]``.  ``None`` is in the annotation, not the
+# TypeVar.
 CanvasT = TypeVar("CanvasT", bound="FigureCanvasBase[Any, Any, Any]")
 
 class _UntypedToolkitWidget:
@@ -112,6 +120,14 @@ GCT = TypeVar("GCT", bound="GraphicsContextBase", default="GraphicsContextBase")
 # TimerT lets FigureCanvasBase subclasses declare the concrete TimerBase
 # subclass returned by new_timer().
 TimerT = TypeVar("TimerT", bound="TimerBase", default="TimerBase")
+# The manager's canvas and the manager's toolbar (see above for why these are
+# not ``CanvasT`` and ``ToolbarT``).
+_ManagerCanvasT = TypeVar("_ManagerCanvasT", bound="FigureCanvasBase[Any, Any, Any]")
+_ManagerToolbarT = TypeVar(
+    "_ManagerToolbarT",
+    bound="NavigationToolbar2[Any]",
+    default="NavigationToolbar2[Any]",
+)
 
 def register_backend(
     format: str,
@@ -533,20 +549,20 @@ def scroll_handler(
 
 class NonGuiException(Exception): ...
 
-class FigureManagerBase(Generic[CanvasT, ToolbarT]):
-    canvas: CanvasT
+class FigureManagerBase(Generic[_ManagerCanvasT, _ManagerToolbarT]):
+    canvas: _ManagerCanvasT
     num: int | str
     key_press_handler_id: int | None
     button_press_handler_id: int | None
     scroll_handler_id: int | None
     toolmanager: ToolManager | None
-    toolbar: ToolbarT | ToolContainerBase | None
-    _toolbar2_class: type[ToolbarT] | None
+    toolbar: _ManagerToolbarT | ToolContainerBase | None
+    _toolbar2_class: type[_ManagerToolbarT] | None
     _toolmanager_toolbar_class: type[ToolContainerBase] | None
-    def __init__(self, canvas: CanvasT, num: int | str) -> None: ...
+    def __init__(self, canvas: _ManagerCanvasT, num: int | str) -> None: ...
     @classmethod
     def create_with_canvas(
-        cls, canvas_class: type[CanvasT], figure: Figure, num: int | str
+        cls, canvas_class: type[_ManagerCanvasT], figure: Figure, num: int | str
     ) -> Self: ...
     @classmethod
     def start_main_loop(cls) -> None: ...
