@@ -18,7 +18,9 @@ from matplotlib.testing.decorators import image_comparison
 
 try:
     # Import the same cairo (pycairo or cairocffi) that is used by the backend
-    from matplotlib.backends.backend_cairo import RendererCairo, cairo
+    from matplotlib.backends.backend_cairo import (
+        RendererCairo as _RendererCairo, cairo)
+    RendererCairo: type[_RendererCairo] | None = _RendererCairo
     cairo_version = cairo.cairo_version()
 except ImportError:
     RendererCairo = None

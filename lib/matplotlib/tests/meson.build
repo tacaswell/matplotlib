@@ -28,6 +28,7 @@ python_sources = [
   'test_backend_types.py',
   'test_backend_webagg.py',
   'test_backends_interactive.py',
+  'test_backends_rendering.py',
   'test_basic.py',
   'test_bbox_tight.py',
   'test_bezier.py',
