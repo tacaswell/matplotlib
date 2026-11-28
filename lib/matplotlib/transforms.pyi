@@ -199,6 +199,7 @@ class LockableBbox(BboxBase):
     def locked_y1(self, y1: float | None) -> None: ...
 
 class Transform(TransformNode):
+    def frozen(self) -> Transform: ...
 
     # Implemented as a standard attrs in base class, but functionally readonly and some subclasses implement as such
     @property
