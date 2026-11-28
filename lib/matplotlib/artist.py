@@ -1435,7 +1435,8 @@ Supported properties are
 
         """
         if match is None:  # always return True
-            def matchfunc(x):
+            # Each branch supplies one implementation of the filter.
+            def matchfunc(x):  # pyright: ignore[reportRedeclaration]
                 return True
         elif isinstance(match, type) and issubclass(match, Artist):
             def matchfunc(x):

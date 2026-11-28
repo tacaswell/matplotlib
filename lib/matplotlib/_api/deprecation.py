@@ -134,7 +134,8 @@ def deprecated(since, *, message='', name='', alternative='', pending=False,
             name = name or obj.__name__
             old_doc = obj.__doc__
 
-            def finalize(wrapper, new_doc):
+            # The mutually exclusive branches define different finalizers.
+            def finalize(wrapper, new_doc):  # pyright: ignore[reportRedeclaration]
                 try:
                     obj.__doc__ = new_doc
                 except AttributeError:  # Can't set on some extension objects.
@@ -173,7 +174,7 @@ def deprecated(since, *, message='', name='', alternative='', pending=False,
                     if name == "<lambda>":
                         name = set_name
 
-            def finalize(_, new_doc):
+            def finalize(_, new_doc):  # pyright: ignore[reportRedeclaration]
                 return _deprecated_property(
                     fget=obj.fget, fset=obj.fset, fdel=obj.fdel, doc=new_doc)
 

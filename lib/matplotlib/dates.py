@@ -1032,7 +1032,8 @@ class rrulewrapper:
         # There are two kinds of functions we care about - ones that return
         # dates and ones that return lists of dates.
         if not returns_list:
-            def inner_func(*args, **kwargs):
+            # Mutually exclusive branches wrap scalar and list results.
+            def inner_func(*args, **kwargs):  # pyright: ignore[reportRedeclaration]
                 args, kwargs = normalize_args(args, kwargs)
                 dt = f(*args, **kwargs)
                 return self._attach_tzinfo(dt, self._tzinfo)

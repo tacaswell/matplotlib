@@ -2838,7 +2838,9 @@ class CenteredNorm(Normalize):
             self.vmax = self.vcenter + abs(halfrange)
 
 
-def make_norm_from_scale(scale_cls, base_norm_cls=None, *, init=None):
+def make_norm_from_scale(
+    scale_cls, base_norm_cls=None, *, init=None  # pyright: ignore[reportRedeclaration]
+):
     """
     Decorator for building a `.Normalize` subclass from a `~.scale.ScaleBase`
     subclass.
@@ -2880,6 +2882,7 @@ def make_norm_from_scale(scale_cls, base_norm_cls=None, *, init=None):
         scale_args = scale_kwargs_items = ()
 
     if init is None:
+        # Replace an omitted callable with the default constructor signature.
         def init(vmin=None, vmax=None, clip=False): pass
 
     return _make_norm_from_scale(
