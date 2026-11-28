@@ -1,5 +1,8 @@
 from matplotlib import cbook, colorbar, colors, artist
 
+from collections.abc import Sequence
+from typing import Any
+
 import numpy as np
 from numpy.typing import ArrayLike
 
@@ -10,6 +13,13 @@ class Colorizer:
         self,
         cmap: str | colors.Colormap | colors.BivarColormap | colors.MultivarColormap | None = ...,
         norm: str | colors.Norm | None = ...,
+    ) -> None: ...
+    def _scale_norm(
+        self,
+        norm: colors.Norm | str | Sequence[colors.Norm | str] | None,
+        vmin: float | tuple[float | None, ...] | None,
+        vmax: float | tuple[float | None, ...] | None,
+        A: ArrayLike | None,
     ) -> None: ...
     @property
     def norm(self) -> colors.Norm: ...
@@ -49,6 +59,12 @@ class _ColorizerInterface:
     cmap: colors.Colormap | colors.BivarColormap | colors.MultivarColormap
     colorbar: colorbar.Colorbar | None
     callbacks: cbook.CallbackRegistry
+    def _scale_norm(
+        self,
+        norm: colors.Norm | str | Sequence[colors.Norm | str] | None,
+        vmin: float | tuple[float | None, ...] | None,
+        vmax: float | tuple[float | None, ...] | None,
+    ) -> None: ...
     def to_rgba(
         self,
         x: np.ndarray,
@@ -70,6 +86,14 @@ class _ColorizerInterface:
     def autoscale_None(self) -> None: ...
 
 class _ScalarMappable(_ColorizerInterface):
+    @staticmethod
+    def _check_exclusionary_keywords(colorizer: object, **kwargs: Any) -> None: ...
+    @staticmethod
+    def _get_colorizer(
+        cmap: str | colors.Colormap | colors.BivarColormap | colors.MultivarColormap | None,
+        norm: colors.Norm | str | Sequence[colors.Norm | str] | None,
+        colorizer: Colorizer | None,
+    ) -> Colorizer: ...
     def __init__(
         self,
         norm: colors.Norm | None = ...,
@@ -84,6 +108,9 @@ class _ScalarMappable(_ColorizerInterface):
 
 class ColorizingArtist(_ScalarMappable, artist.Artist):
     callbacks: cbook.CallbackRegistry
+    def _set_colorizer_check_keywords(
+        self, colorizer: Colorizer, **kwargs: Any
+    ) -> None: ...
     def __init__(
         self,
         colorizer: Colorizer,
