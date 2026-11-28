@@ -270,8 +270,8 @@ class Norm(ABC):
     def autoscale_None(self, A: ArrayLike) -> None: ...
     @abstractmethod
     def scaled(self) -> bool: ...
-    @abstractmethod
     @property
+    @abstractmethod
     def n_components(self) -> int: ...
 
 class Normalize(Norm):
