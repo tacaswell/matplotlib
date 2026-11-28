@@ -9,15 +9,15 @@ from ._backend_gtk import TimerGTK
 from .backend_gtk3 import (
     FigureCanvasGTK3,
     FigureManagerGTK3,
-    GTK3ManagerT,
-    GTK3ToolbarT,
+    NavigationToolbar2GTK3,
     _BackendGTK3,
 )
 
 class FigureCanvasGTK3Agg(
-    # Both bases get the same type arguments (see ``FigureCanvasQTAgg``).
-    FigureCanvasAgg[GTK3ToolbarT, GTK3ManagerT, TimerGTK],
-    FigureCanvasGTK3[GTK3ToolbarT, GTK3ManagerT],
+    # A leaf class: the type arguments are fixed to the stock GTK3 classes
+    # (see ``FigureCanvasQTAgg``).
+    FigureCanvasAgg[NavigationToolbar2GTK3, FigureManagerGTK3, TimerGTK],
+    FigureCanvasGTK3[NavigationToolbar2GTK3, FigureManagerGTK3],
 ):
     def on_draw_event(self, widget: Any, ctx: Any) -> bool: ...
     def blit(self, bbox: BboxBase | None = ...) -> None: ...

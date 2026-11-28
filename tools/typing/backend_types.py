@@ -679,15 +679,23 @@ def _check_gui_canvas_types(  # pragma: no cover
                     NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT
                 ],
             )
-    # ``manager_class`` is read from a specialization, like every other use
-    # of a generic class in this module.  (mypy does not apply type-parameter
-    # defaults to a ``classproperty`` read from the *bare* class object.)
+    # On a generic class ``manager_class`` is read from a specialization, like
+    # every other use of a generic class in this module.  (mypy does not apply
+    # type-parameter defaults to a ``classproperty`` read from the *bare*
+    # class object.)
     assert_type(
-        FigureCanvasQTAgg[
+        FigureCanvasQT[
             NavigationToolbar2QT[Any], FigureManagerQT[Any, Any], TimerQT
         ].manager_class,
         type[FigureManagerQT[Any, Any]],
     )
+    # The combined canvases are not generic, so the class object needs no
+    # specialization.
+    assert_type(FigureCanvasQTAgg.manager_class, type[FigureManagerQT])
+    assert_type(FigureCanvasTkAgg.manager_class, type[FigureManagerTk])
+    assert_type(FigureCanvasGTK3Agg.manager_class, type[FigureManagerGTK3])
+    assert_type(FigureCanvasGTK4Cairo.manager_class, type[FigureManagerGTK4])
+    assert_type(FigureCanvasWxAgg.manager_class, type[FigureManagerWx])
     assert_type(qtagg_type.manager_class, type[FigureManagerQT])
     assert_type(qtcairo_type.manager_class, type[FigureManagerQT])
     assert_type(FigureCanvasQTAgg.new_manager(figure, 1), FigureManagerQT)
@@ -853,6 +861,17 @@ if TYPE_CHECKING:
             TimerQT,
         ]
     ):
+        pass
+
+    # The combined "rendering + toolkit" canvases are leaves: their type
+    # arguments are fixed to the stock toolkit classes, so they cannot be
+    # re-parameterized.  A backend with its own toolbar, manager or timer
+    # starts from the generic toolkit canvas (``FigureCanvasQT``), as the
+    # thin client above does.
+    class _QtLeaf(FigureCanvasQTAgg[Any, Any, Any]):  # type: ignore[type-arg]
+        pass
+
+    class _TkLeaf(FigureCanvasTkCairo[Any, Any, Any]):  # type: ignore[type-arg]
         pass
 
 

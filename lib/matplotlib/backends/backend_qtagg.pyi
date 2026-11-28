@@ -7,19 +7,22 @@ from matplotlib.backends.backend_qt import (
     FigureCanvasQT,
     FigureManagerQT as FigureManagerQT,
     NavigationToolbar2QT as NavigationToolbar2QT,
-    QtManagerT,
-    QtTimerT,
-    QtToolbarT,
+    TimerQT,
     _BackendQT,
 )
 
 class FigureCanvasQTAgg(
     # Both bases derive from ``FigureCanvasBase``, so they must get the same
     # type arguments or the checkers see two inconsistent specializations of
-    # it.  The Qt parameters are passed through, not fixed, so that this class
-    # can itself be re-parameterized by a subclass.
-    FigureCanvasAgg[QtToolbarT, QtManagerT, QtTimerT],
-    FigureCanvasQT[QtToolbarT, QtManagerT, QtTimerT],
+    # it.
+    #
+    # This class is a leaf: it joins a renderer to the Qt canvas and is not
+    # generic.  Its type arguments are fixed to the stock Qt classes, which
+    # are also what a bare ``FigureCanvasQT`` defaults to.  A backend with
+    # its own toolbar, manager or timer is built on the generic
+    # ``FigureCanvasQT``, not on this class.
+    FigureCanvasAgg[NavigationToolbar2QT, FigureManagerQT, TimerQT],
+    FigureCanvasQT[NavigationToolbar2QT, FigureManagerQT, TimerQT],
 ):
     def paintEvent(self, event: Any) -> None: ...
 

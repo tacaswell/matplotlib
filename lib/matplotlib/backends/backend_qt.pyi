@@ -55,6 +55,10 @@ class TimerQT(TimerBase): ...
 #   mutually-referencing classes makes pyright mis-resolve them: depending on
 #   which class a module touches first, it reports the others as taking
 #   fewer type arguments than declared.
+# * The classes that join a renderer to the Qt canvas (``FigureCanvasQTAgg``,
+#   ``FigureCanvasQTCairo``) are leaves and are *not* generic: they fix the
+#   parameters to the stock Qt classes.  A backend with its own toolbar,
+#   manager or timer is built on the generic classes in this module.
 #
 # The other GUI toolkits (Tk, GTK3, GTK4, wx, macOS) follow the same scheme.
 QtToolbarT = TypeVar(

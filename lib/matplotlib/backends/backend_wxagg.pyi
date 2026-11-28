@@ -10,17 +10,16 @@ from .backend_wx import (
     _FigureCanvasWxBase,
     FigureManagerWx,
     NavigationToolbar2Wx,
-    WxManagerT,
-    WxTimerT,
-    WxToolbarT,
+    TimerWx,
 )
 
 NavigationToolbar2WxAgg = NavigationToolbar2Wx
 
 class FigureCanvasWxAgg(
-    # Both bases get the same type arguments (see ``FigureCanvasQTAgg``).
-    FigureCanvasAgg[WxToolbarT, WxManagerT, WxTimerT],
-    _FigureCanvasWxBase[WxToolbarT, WxManagerT, WxTimerT],
+    # A leaf class: the type arguments are fixed to the stock wx classes
+    # (see ``FigureCanvasQTAgg``).
+    FigureCanvasAgg[NavigationToolbar2Wx, FigureManagerWx, TimerWx],
+    _FigureCanvasWxBase[NavigationToolbar2Wx, FigureManagerWx, TimerWx],
 ):
     def draw(self, drawDC: object = ...) -> None: ...
     def blit(self, bbox: BboxBase | None = ...) -> None: ...
