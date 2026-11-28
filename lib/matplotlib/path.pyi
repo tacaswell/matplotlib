@@ -8,6 +8,7 @@ from numpy.typing import ArrayLike
 from typing import Any, overload
 
 class Path:
+    _interpolation_steps: int
     code_type: type[np.uint8]
     STOP: np.uint8
     MOVETO: np.uint8
@@ -25,6 +26,17 @@ class Path:
         closed: bool = ...,
         readonly: bool = ...,
     ) -> None: ...
+    @classmethod
+    def _create_closed(cls, vertices: ArrayLike) -> Path: ...
+    @classmethod
+    def _fast_from_codes_and_verts(
+        cls,
+        verts: ArrayLike,
+        codes: np.ndarray | None,
+        internals_from: Path | None = ...,
+    ) -> Path: ...
+    def _iter_connected_components(self) -> Generator[Path, None, None]: ...
+    def _extent_vertices(self, **kwargs: Any) -> np.ndarray: ...
     @property
     def vertices(self) -> np.ndarray: ...
     @vertices.setter
