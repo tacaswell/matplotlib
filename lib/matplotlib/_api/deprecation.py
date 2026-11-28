@@ -146,7 +146,9 @@ def deprecated(since, *, message='', name='', alternative='', pending=False,
             if obj_type is None:
                 obj_type = "attribute"
             func = None
-            name = name or obj.fget.__name__
+            # Getter-less properties acquire their name through __set_name__,
+            # just like properties whose getter is a lambda.
+            name = name or (obj.fget.__name__ if obj.fget is not None else "<lambda>")
             old_doc = obj.__doc__
 
             class _deprecated_property(type(obj)):

@@ -68,6 +68,31 @@ def test_classproperty_deprecation() -> None:
         a.f
 
 
+@pytest.mark.parametrize("name", ["", "explicit_name"])
+def test_getterless_property_deprecation(name):
+    class A:
+        def set_value(self, value):
+            self._value = value
+
+        def delete_value(self):
+            del self._value
+
+        value = _api.deprecated("0.0.0", name=name)(
+            property(fset=set_value, fdel=delete_value))
+
+    a = A()
+    warning = f"The {name or 'value'} attribute"
+    with pytest.warns(mpl.MatplotlibDeprecationWarning, match=warning):
+        a.value = 42
+    assert a._value == 42
+    with pytest.warns(mpl.MatplotlibDeprecationWarning, match=warning):
+        with pytest.raises(AttributeError):
+            a.value
+    with pytest.warns(mpl.MatplotlibDeprecationWarning, match=warning):
+        del a.value
+    assert not hasattr(a, "_value")
+
+
 def test_warn_deprecated():
     with pytest.warns(mpl.MatplotlibDeprecationWarning,
                       match=r'foo was deprecated in Matplotlib 3\.10 and will be '
