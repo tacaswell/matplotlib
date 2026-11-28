@@ -21,3 +21,12 @@ explicit constructor value. The normal scalable-font path returns early.
 keys. Its current caller passes a dictionary. Investigate making the argument
 required or initializing a fresh direction dictionary when omitted; preserve
 the shared offsets used to position multiple colorbars.
+
+### Bounding-box point storage
+
+Some `BboxBase` methods in `lib/matplotlib/transforms.py` access `_points`
+directly, but subclasses need only implement `get_points()`. `TransformedBbox`
+starts its point cache at `None` and materializes it through `get_points()`.
+Investigate using the accessor where appropriate instead of assuming every
+base instance has an initialized ndarray backing field. Review invalidation
+and lazy-cache semantics before changing these accesses or silencing them.
