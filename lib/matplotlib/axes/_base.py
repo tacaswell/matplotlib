@@ -758,9 +758,10 @@ class _AxesBase(martist.Artist):
         self.set_navigate(True)
 
         if xscale:
-            self.set_xscale(xscale)
+            # _axis_method_wrapper replaces itself with a method in __set_name__.
+            self.set_xscale(xscale)  # pyright: ignore[reportCallIssue]
         if yscale:
-            self.set_yscale(yscale)
+            self.set_yscale(yscale)  # pyright: ignore[reportCallIssue]
 
         self._internal_update(kwargs)
 
@@ -2070,7 +2071,7 @@ class _AxesBase(martist.Artist):
             yc = 0.5 * (ymin + ymax)
             y0 = yc - Ysize / 2.0
             y1 = yc + Ysize / 2.0
-            if not self.get_autoscaley_on():
+            if not self.get_autoscaley_on():  # pyright: ignore[reportCallIssue]
                 _log.warning("Ignoring fixed y limits to fulfill fixed data aspect "
                              "with adjustable data limits.")
             self.set_ybound(y_trf.inverted().transform([y0, y1]))
@@ -2078,7 +2079,7 @@ class _AxesBase(martist.Artist):
             xc = 0.5 * (xmin + xmax)
             x0 = xc - Xsize / 2.0
             x1 = xc + Xsize / 2.0
-            if not self.get_autoscalex_on():
+            if not self.get_autoscalex_on():  # pyright: ignore[reportCallIssue]
                 _log.warning("Ignoring fixed x limits to fulfill fixed data aspect "
                              "with adjustable data limits.")
             self.set_xbound(x_trf.inverted().transform([x0, x1]))
@@ -3010,13 +3011,13 @@ class _AxesBase(martist.Artist):
             scaley = True
         else:
             if axis in ['x', 'both']:
-                self.set_autoscalex_on(bool(enable))
-                scalex = self.get_autoscalex_on()
+                self.set_autoscalex_on(bool(enable))  # pyright: ignore[reportCallIssue]
+                scalex = self.get_autoscalex_on()  # pyright: ignore[reportCallIssue]
             else:
                 scalex = False
             if axis in ['y', 'both']:
-                self.set_autoscaley_on(bool(enable))
-                scaley = self.get_autoscaley_on()
+                self.set_autoscaley_on(bool(enable))  # pyright: ignore[reportCallIssue]
+                scaley = self.get_autoscaley_on()  # pyright: ignore[reportCallIssue]
             else:
                 scaley = False
         if tight and scalex:
@@ -3075,7 +3076,7 @@ class _AxesBase(martist.Artist):
 
         x_stickies = y_stickies = np.array([])
         if self.use_sticky_edges:
-            if self._xmargin and scalex and self.get_autoscalex_on():
+            if self._xmargin and scalex and self.get_autoscalex_on():  # pyright: ignore[reportCallIssue]
                 x_sticky = []
                 for ax in x_shared_axes:
                     for artist in ax._get_data_children():
@@ -3084,7 +3085,7 @@ class _AxesBase(martist.Artist):
                             x_sticky.extend(sticky_edges.x)
                 if x_sticky:
                     x_stickies = np.sort(x_sticky)
-            if self._ymargin and scaley and self.get_autoscaley_on():
+            if self._ymargin and scaley and self.get_autoscaley_on():  # pyright: ignore[reportCallIssue]
                 y_sticky = []
                 for ax in y_shared_axes:
                     for artist in ax._get_data_children():
@@ -3093,9 +3094,9 @@ class _AxesBase(martist.Artist):
                             y_sticky.extend(sticky_edges.y)
                 if y_sticky:
                     y_stickies = np.sort(y_sticky)
-        if self.get_xscale() == 'log':
+        if self.get_xscale() == 'log':  # pyright: ignore[reportCallIssue]
             x_stickies = x_stickies[x_stickies > 0]
-        if self.get_yscale() == 'log':
+        if self.get_yscale() == 'log':  # pyright: ignore[reportCallIssue]
             y_stickies = y_stickies[y_stickies > 0]
 
         def handle_single_axis(
@@ -3808,7 +3809,7 @@ class _AxesBase(martist.Artist):
             upper = old_upper
 
         self.set_xlim(sorted((lower, upper),
-                             reverse=bool(self.xaxis_inverted())),
+                             reverse=bool(self.xaxis_inverted())),  # pyright: ignore[reportCallIssue]
                       auto=None)
 
     def get_xlim(self):
@@ -4076,7 +4077,7 @@ class _AxesBase(martist.Artist):
             upper = old_upper
 
         self.set_ylim(sorted((lower, upper),
-                             reverse=bool(self.yaxis_inverted())),
+                             reverse=bool(self.yaxis_inverted())),  # pyright: ignore[reportCallIssue]
                       auto=None)
 
     def get_ylim(self):
@@ -4315,8 +4316,8 @@ class _AxesBase(martist.Artist):
         adjusted accordingly.
         """
         return {
-            "xlim": self.get_xlim(), "autoscalex_on": self.get_autoscalex_on(),
-            "ylim": self.get_ylim(), "autoscaley_on": self.get_autoscaley_on(),
+            "xlim": self.get_xlim(), "autoscalex_on": self.get_autoscalex_on(),  # pyright: ignore[reportCallIssue]
+            "ylim": self.get_ylim(), "autoscaley_on": self.get_autoscaley_on(),  # pyright: ignore[reportCallIssue]
         }
 
     def _set_view(self, view):
@@ -4451,10 +4452,10 @@ class _AxesBase(martist.Artist):
             bbox, direction=direction, mode=mode, twinx=twinx, twiny=twiny)
         if not twinx and mode != "y":
             self.set_xbound(new_xbound)
-            self.set_autoscalex_on(False)
+            self.set_autoscalex_on(False)  # pyright: ignore[reportCallIssue]
         if not twiny and mode != "x":
             self.set_ybound(new_ybound)
-            self.set_autoscaley_on(False)
+            self.set_autoscaley_on(False)  # pyright: ignore[reportCallIssue]
 
     def start_pan(self, x, y, button):
         """
@@ -4840,7 +4841,7 @@ class _AxesBase(martist.Artist):
         ax2.yaxis.tick_right()
         ax2.yaxis.set_label_position('right')
         ax2.yaxis.set_offset_position('right')
-        ax2.set_autoscalex_on(self.get_autoscalex_on())
+        ax2.set_autoscalex_on(self.get_autoscalex_on())  # pyright: ignore[reportCallIssue]
         self.yaxis.tick_left()
         ax2.xaxis.set_visible(False)
         ax2.xaxis.units = self.xaxis.units
@@ -4893,7 +4894,7 @@ class _AxesBase(martist.Artist):
         ax2 = self._make_twin_axes(sharey=self, delta_zorder=delta_zorder, **kwargs)
         ax2.xaxis.tick_top()
         ax2.xaxis.set_label_position('top')
-        ax2.set_autoscaley_on(self.get_autoscaley_on())
+        ax2.set_autoscaley_on(self.get_autoscaley_on())  # pyright: ignore[reportCallIssue]
         self.xaxis.tick_bottom()
         ax2.yaxis.set_visible(False)
         ax2.yaxis.units = self.yaxis.units
