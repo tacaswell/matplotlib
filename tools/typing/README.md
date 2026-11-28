@@ -30,3 +30,12 @@ starts its point cache at `None` and materializes it through `get_points()`.
 Investigate using the accessor where appropriate instead of assuming every
 base instance has an initialized ndarray backing field. Review invalidation
 and lazy-cache semantics before changing these accesses or silencing them.
+
+### AFM header fields
+
+`FontMetricsHeader` in `lib/matplotlib/_afm.py` is a `total=False` TypedDict.
+The parser skips invalid or absent fields, while accessors index those fields
+directly. Investigate whether missing-field `KeyError` is the intended contract
+or whether required fields should be validated after parsing. Do not add
+`Required[...]` blindly: the parser also uses the annotations as its runtime
+conversion schema, so typing wrappers would need to be unwrapped there.
