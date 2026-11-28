@@ -373,6 +373,7 @@ exclude = [
 files = [
   "lib/matplotlib",
   "lib/matplotlib/tests/test_backend_types.py",
+  "tools/typing/backend_types.py",
 ]
 follow_imports = "silent"
 warn_unreachable = true
@@ -381,8 +382,37 @@ warn_unreachable = true
 # The negative type checks in this module are written as ``# type: ignore``
 # comments; an unused ignore means a declaration stopped rejecting invalid
 # usage, so treat it as an error.
-module = "matplotlib.tests.test_backend_types"
+module = "backend_types"
 warn_unused_ignores = true
+
+[tool.pyright]
+include = ["lib/matplotlib", "tools/typing/backend_types.py"]
+exclude = [
+  "lib/matplotlib/sphinxext",
+  "lib/matplotlib/pylab.py",
+  "lib/matplotlib/testing/jpl_units",
+  "lib/matplotlib/tests",
+  "**/tinypages",
+  # Exclude GUI implementations, while still checking their .pyi stubs.
+  "lib/matplotlib/backends/backend_qt.py",
+  "lib/matplotlib/backends/backend_qtagg.py",
+  "lib/matplotlib/backends/backend_qtcairo.py",
+  "lib/matplotlib/backends/qt_compat.py",
+  "lib/matplotlib/backends/qt_editor",
+  "lib/matplotlib/backends/backend_gtk*.py",
+  "lib/matplotlib/backends/_backend_gtk.py",
+  "lib/matplotlib/backends/backend_macosx.py",
+  "lib/matplotlib/backends/backend_wx*.py",
+]
+# Resolve the source-layout package as matplotlib.*, not lib.matplotlib.*.
+extraPaths = ["lib"]
+executionEnvironments = [{ root = "lib" }]
+venvPath = ".pixi/envs"
+venv = "typing"
+typeCheckingMode = "basic"
+reportMissingImports = "none"
+reportMissingModuleSource = "none"
+reportUnreachable = "error"
 
 [tool.rstcheck]
 ignore_directives = [

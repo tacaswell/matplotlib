@@ -76,6 +76,7 @@ xarray = '*'
 
 [feature.typing.dependencies]
 mypy = ">=1.14"
+pyright = ">=1.1.414"
 # Extra stubs distributed separately from the main pypi package
 pandas-stubs = '*'
 sphinx = '*'
@@ -85,6 +86,11 @@ types-psutil = '*'
 pytest = "!=4.6.0,!=5.4.0,!=8.1.0"
 types-python-dateutil = '*'
 typing-extensions = ">=4.6"
+
+[feature.typing.tasks.pyright]
+# Explicitly check the runtime fixtures despite the tests discovery exclusion.
+cmd = "pyright lib/matplotlib tools/typing/backend_types.py lib/matplotlib/tests/test_backend_types.py"
+description = "Run Pyright on the library and backend typing checks"
 
 [feature.typing.tasks.stubtest]
 # Replacement for `tox -e stubtest`.  The environment must be installed with

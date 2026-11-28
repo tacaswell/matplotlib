@@ -39,8 +39,12 @@ repos:
           - types-psutil
           - types-docutils
           - types-PyYAML
-        args: ["--config-file=pyproject.toml", "lib/matplotlib", "lib/matplotlib/tests/test_backend_types.py"]
-        files: lib/matplotlib  # Only run when files in lib/matplotlib are changed.
+        args:
+          - --config-file=pyproject.toml
+          - lib/matplotlib
+          - lib/matplotlib/tests/test_backend_types.py
+          - tools/typing/backend_types.py
+        files: ^(lib/matplotlib|tools/typing)/
         pass_filenames: false
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
