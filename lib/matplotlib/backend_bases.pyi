@@ -23,7 +23,7 @@ from matplotlib.transforms import Bbox, BboxBase, Transform, TransformedPath
 from collections.abc import Callable, Iterable, Sequence
 from typing import Any, Generic, IO, Literal, NamedTuple, Self, overload
 from typing_extensions import TypeVar
-from numpy.typing import ArrayLike
+from numpy.typing import ArrayLike, NDArray
 from .typing import (
     BlendModeType,
     CapStyleType,
@@ -211,7 +211,7 @@ class RendererBase(Generic[GCT]):
         gc: GCT,
         x: float,
         y: float,
-        im: ArrayLike,
+        im: NDArray[Any],
         transform: transforms.Affine2DBase | None = ...,
     ) -> None: ...
     def option_image_nocomposite(self) -> bool: ...
