@@ -32,7 +32,8 @@ class PolarTransform(mtransforms.Transform):
     arcs as long as ``path._interpolation_steps > 1``.
     """
 
-    input_dims = output_dims = 2
+    # Fixed dimensions intentionally replace the base properties.
+    input_dims = output_dims = 2  # pyright: ignore[reportAssignmentType]
 
     @_api.delete_parameter('3.11', 'apply_theta_transforms')
     def __init__(self, axis=None, use_rmin=True, *,
@@ -183,7 +184,7 @@ class InvertedPolarTransform(mtransforms.Transform):
     The inverse of the polar transform, mapping Cartesian
     coordinate space *x* and *y* back to *theta* and *r*.
     """
-    input_dims = output_dims = 2
+    input_dims = output_dims = 2  # pyright: ignore[reportAssignmentType]
 
     @_api.delete_parameter('3.11', 'apply_theta_transforms')
     def __init__(self, axis=None, use_rmin=True,

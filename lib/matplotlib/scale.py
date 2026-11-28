@@ -236,7 +236,8 @@ class FuncTransform(Transform):
     forward and inverse transform.
     """
 
-    input_dims = output_dims = 1
+    # Fixed dimensions intentionally replace the base properties.
+    input_dims = output_dims = 1  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, forward, inverse):
         """
@@ -316,7 +317,7 @@ class FuncScale(ScaleBase):
 
 
 class LogTransform(Transform):
-    input_dims = output_dims = 1
+    input_dims = output_dims = 1  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, base, nonpositive='clip'):
         super().__init__()
@@ -357,7 +358,7 @@ class LogTransform(Transform):
 
 
 class InvertedLogTransform(Transform):
-    input_dims = output_dims = 1
+    input_dims = output_dims = 1  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, base):
         super().__init__()
@@ -490,7 +491,7 @@ class FuncScaleLog(LogScale):
 
 
 class SymmetricalLogTransform(Transform):
-    input_dims = output_dims = 1
+    input_dims = output_dims = 1  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, base, linthresh, linscale):
         super().__init__()
@@ -525,7 +526,7 @@ class SymmetricalLogTransform(Transform):
 
 
 class InvertedSymmetricalLogTransform(Transform):
-    input_dims = output_dims = 1
+    input_dims = output_dims = 1  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, base, linthresh, linscale):
         super().__init__()
@@ -643,7 +644,7 @@ class SymmetricalLogScale(ScaleBase):
 
 class AsinhTransform(Transform):
     """Inverse hyperbolic-sine transformation used by `.AsinhScale`"""
-    input_dims = output_dims = 1
+    input_dims = output_dims = 1  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, linear_width):
         super().__init__()
@@ -661,7 +662,7 @@ class AsinhTransform(Transform):
 
 class InvertedAsinhTransform(Transform):
     """Hyperbolic sine transformation used by `.AsinhScale`"""
-    input_dims = output_dims = 1
+    input_dims = output_dims = 1  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, linear_width):
         super().__init__()
@@ -778,7 +779,7 @@ class AsinhScale(ScaleBase):
 
 
 class LogitTransform(Transform):
-    input_dims = output_dims = 1
+    input_dims = output_dims = 1  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, nonpositive='mask'):
         super().__init__()
@@ -803,7 +804,7 @@ class LogitTransform(Transform):
 
 
 class LogisticTransform(Transform):
-    input_dims = output_dims = 1
+    input_dims = output_dims = 1  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, nonpositive='mask'):
         super().__init__()

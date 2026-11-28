@@ -231,7 +231,8 @@ class GeoAxes(Axes):
 
 class _GeoTransform(Transform):
     # Factoring out some common functionality.
-    input_dims = output_dims = 2
+    # Fixed dimensions intentionally replace the base properties.
+    input_dims = output_dims = 2  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, resolution):
         """

@@ -2350,7 +2350,8 @@ class BlendedAffine2D(_BlendedMixin, Affine2DBase):
     transforms are of type `Affine2DBase`.
     """
 
-    is_separable = True
+    # Constant separability intentionally replaces the base property.
+    is_separable = True  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, x_transform, y_transform, **kwargs):
         """
@@ -2607,7 +2608,7 @@ class BboxTransform(Affine2DBase):
     `BboxTransform` linearly transforms points from one `Bbox` to another.
     """
 
-    is_separable = True
+    is_separable = True  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, boxin, boxout, **kwargs):
         """
@@ -2650,7 +2651,7 @@ class BboxTransformTo(Affine2DBase):
     the unit bounding box to a given `Bbox`.
     """
 
-    is_separable = True
+    is_separable = True  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, boxout, **kwargs):
         """
@@ -2687,7 +2688,7 @@ class BboxTransformFrom(Affine2DBase):
     `BboxTransformFrom` linearly transforms points from a given `Bbox` to the
     unit bounding box.
     """
-    is_separable = True
+    is_separable = True  # pyright: ignore[reportAssignmentType]
 
     def __init__(self, boxin, **kwargs):
         _api.check_isinstance(BboxBase, boxin=boxin)
