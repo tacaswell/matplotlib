@@ -30,6 +30,7 @@ class SouthEastHatch(HatchPatternBase):
     def set_vertices_and_codes(self, vertices: ArrayLike, codes: ArrayLike) -> None: ...
 
 class Shapes(HatchPatternBase):
+    num_rows: int
     filled: bool
     num_shapes: int
     num_vertices: int

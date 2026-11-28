@@ -47,3 +47,11 @@ stub expects `Axes`, even with `lib/` configured as the canonical import root.
 This appears to be a source/stub nominal-identity limitation rather than a
 cross-backend type error. Reduce one such case to a checker reproducer before
 introducing casts or exceptions; do not widen public class parameters to `Any`.
+
+### Subclass-provided storage in implementations
+
+The stubs declare colormap lookup tables, the colorizer backing object, hatch
+row counts, and docstring substitution parameters. Pyright may still report
+missing members inside the implementations when subclasses or external helpers
+initialize them. These implementation-local contracts are deferred: fixing
+them through source annotations would put types in runtime code.

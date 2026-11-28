@@ -66,6 +66,7 @@ class ColorConverter:
 colorConverter: ColorConverter
 
 class Colormap:
+    _lut: np.ndarray
     name: str
     N: int
     colorbar_extend: bool
@@ -192,6 +193,7 @@ class MultivarColormap:
     def _repr_png_(self) -> bytes: ...
 
 class BivarColormap:
+    _lut: np.ndarray
     name: str
     N: int
     M: int

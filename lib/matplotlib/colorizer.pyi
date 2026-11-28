@@ -45,6 +45,7 @@ class Colorizer:
     def clip(self, value: ArrayLike | bool | tuple[bool, ...]) -> None: ...
 
 class _ColorizerInterface:
+    _colorizer: Colorizer
     cmap: colors.Colormap | colors.BivarColormap | colors.MultivarColormap
     colorbar: colorbar.Colorbar | None
     callbacks: cbook.CallbackRegistry
