@@ -2,6 +2,7 @@ from .artist import Artist
 from .axes import Axes
 from .backend_bases import MouseEvent, FigureCanvasBase
 from .path import Path
+from .markers import MarkerStyle
 from .transforms import Bbox
 
 from collections.abc import Callable, Sequence
@@ -23,6 +24,7 @@ def segment_hits(
 ) -> ArrayLike: ...
 
 class Line2D(Artist):
+    _marker: MarkerStyle
     lineStyles: dict[str, str]
     drawStyles: dict[str, str]
     drawStyleKeys: list[str]
