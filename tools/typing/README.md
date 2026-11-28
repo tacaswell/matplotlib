@@ -39,3 +39,11 @@ directly. Investigate whether missing-field `KeyError` is the intended contract
 or whether required fields should be validated after parsing. Do not add
 `Required[...]` blindly: the parser also uses the annotations as its runtime
 conversion schema, so typing wrappers would need to be unwrapped there.
+
+### Source and stub class identity
+
+Pyright can reject `Self@Axes` from an implementation when another module's
+stub expects `Axes`, even with `lib/` configured as the canonical import root.
+This appears to be a source/stub nominal-identity limitation rather than a
+cross-backend type error. Reduce one such case to a checker reproducer before
+introducing casts or exceptions; do not widen public class parameters to `Any`.
