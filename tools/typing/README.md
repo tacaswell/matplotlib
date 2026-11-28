@@ -13,3 +13,11 @@ Run the checks with `pixi run -e typing pyright` or mypy using `pyproject.toml`.
 `default_size` to be `None`, so relative-size scoring against a non-scalable font
 can fail. Investigate resolving the effective default size without overriding an
 explicit constructor value. The normal scalable-font path returns early.
+
+### Constrained-layout colorbar offsets
+
+`reposition_colorbar` in `lib/matplotlib/_constrained_layout.py` defaults
+`offset` to `None`, then unconditionally indexes and updates its four direction
+keys. Its current caller passes a dictionary. Investigate making the argument
+required or initializing a fresh direction dictionary when omitted; preserve
+the shared offsets used to position multiple colorbars.
