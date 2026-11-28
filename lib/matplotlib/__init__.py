@@ -685,7 +685,9 @@ def matplotlib_fname():
                        "install is broken")
 
 
-class RcParams(MutableMapping, dict):
+# Runtime dict does not inherit MutableMapping, unlike its typeshed declaration.
+# Keep this base order: the MutableMapping methods must precede dict's methods.
+class RcParams(MutableMapping, dict):  # pyright: ignore[reportGeneralTypeIssues]
     """
     A dict-like key-value store for config parameters, including validation.
 
@@ -938,7 +940,8 @@ def _rc_params_in_file(fname, transform=lambda x: x, fail_on_error=False):
                          fname)
             raise
 
-    config = RcParams()
+    # dict construction permits this class despite the abstract mapping method.
+    config = RcParams()  # pyright: ignore[reportAbstractUsage]
 
     for key, (val, line, line_no) in rc_temp.items():
         if key in rcsetup._validators:
@@ -986,7 +989,7 @@ def rc_params_from_file(fname, fail_on_error=False, use_default_template=True):
         return config_from_file
 
     with _api.suppress_matplotlib_deprecation_warning():
-        config = RcParams({**rcParamsDefault, **config_from_file})
+        config = RcParams({**rcParamsDefault, **config_from_file})  # pyright: ignore[reportAbstractUsage]
 
     if "".join(config['text.latex.preamble']):
         _log.info("""
@@ -1008,7 +1011,8 @@ rcParamsDefault = _rc_params_in_file(
     fail_on_error=True)
 rcParamsDefault._update_raw(rcsetup._hardcoded_defaults)
 
-rcParams = RcParams()  # The global instance.
+# The global instance; preserve the existing dict-based construction semantics.
+rcParams = RcParams()  # pyright: ignore[reportAbstractUsage]
 rcParams._update_raw(rcParamsDefault)
 rcParams._update_raw(_rc_params_in_file(matplotlib_fname()))
 rcParamsOrig = rcParams.copy()
@@ -1389,7 +1393,7 @@ def _init_tests():
 
     # Generate a shortcut for classic testing style.
     from matplotlib.style import _base_library, library
-    _base_library['_classic_test'] = library['_classic_test'] = RcParams(
+    _base_library['_classic_test'] = library['_classic_test'] = RcParams(  # pyright: ignore[reportAbstractUsage]
             _base_library['classic'] | _base_library['_classic_test_patch'])
 
 
