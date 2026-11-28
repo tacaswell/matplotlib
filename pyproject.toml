@@ -151,6 +151,7 @@ test-extra = [
 # Extra pip requirements for the GitHub Actions mypy build
 typing = [
     "mypy>=1.14",
+    "pyrefly==1.5.*",
     # Extra stubs distributed separately from the main pypi package
     "pandas-stubs",
     "sphinx",
@@ -413,6 +414,32 @@ typeCheckingMode = "basic"
 reportMissingImports = "none"
 reportMissingModuleSource = "none"
 reportUnreachable = "error"
+
+# Keep the interpreter and Python version tied to the active Pixi environment.
+[tool.pyrefly]
+project-includes = ["lib/matplotlib", "tools/typing/backend_types.py"]
+project-excludes = [
+  "lib/matplotlib/sphinxext",
+  "lib/matplotlib/pylab.py",
+  "lib/matplotlib/testing/jpl_units",
+  "lib/matplotlib/tests",
+  "**/tinypages",
+  # Exclude GUI implementations, while still checking their .pyi stubs.
+  "lib/matplotlib/backends/backend_qt.py",
+  "lib/matplotlib/backends/backend_qtagg.py",
+  "lib/matplotlib/backends/backend_qtcairo.py",
+  "lib/matplotlib/backends/qt_compat.py",
+  "lib/matplotlib/backends/qt_editor",
+  "lib/matplotlib/backends/backend_gtk*.py",
+  "lib/matplotlib/backends/_backend_gtk.py",
+  "lib/matplotlib/backends/backend_macosx.py",
+  "lib/matplotlib/backends/backend_wx*.py",
+]
+search-path = ["lib"]
+preset = "legacy"
+check-unannotated-defs = true
+infer-return-types = "never"
+ignore-missing-imports = ["*"]
 
 [tool.rstcheck]
 ignore_directives = [

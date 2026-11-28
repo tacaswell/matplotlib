@@ -77,6 +77,7 @@ xarray = '*'
 [feature.typing.dependencies]
 mypy = ">=1.14"
 pyright = ">=1.1.414"
+pyrefly = "1.5.*"
 # Extra stubs distributed separately from the main pypi package
 pandas-stubs = '*'
 sphinx = '*'
@@ -91,6 +92,15 @@ typing-extensions = ">=4.6"
 # Explicitly check the runtime fixtures despite the tests discovery exclusion.
 cmd = "pyright lib/matplotlib tools/typing/backend_types.py lib/matplotlib/tests/test_backend_types.py"
 description = "Run Pyright on the library and backend typing checks"
+
+[feature.typing.tasks.pyrefly]
+# Use the interpreter from the selected typing environment.
+cmd = "pyrefly check --python-interpreter-path $CONDA_PREFIX/bin/python lib/matplotlib tools/typing/backend_types.py lib/matplotlib/tests/test_backend_types.py"
+description = "Run Pyrefly on the library and backend typing checks"
+
+[feature.typing.target.win-64.tasks.pyrefly]
+cmd = "pyrefly check --python-interpreter-path $CONDA_PREFIX/python.exe lib/matplotlib tools/typing/backend_types.py lib/matplotlib/tests/test_backend_types.py"
+description = "Run Pyrefly on the library and backend typing checks"
 
 [feature.typing.tasks.stubtest]
 # Replacement for `tox -e stubtest`.  The environment must be installed with
